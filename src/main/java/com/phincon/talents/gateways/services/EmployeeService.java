@@ -1,0 +1,46 @@
+package com.phincon.talents.gateways.services;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.phincon.talents.gateways.model.Employee;
+import com.phincon.talents.gateways.repository.EmployeeRepository;
+
+/**
+ *
+ * Business service for User entity related operations
+ *
+ */
+@Service
+public class EmployeeService {
+
+	@Autowired
+	EmployeeRepository employeeRepository;
+
+	@Transactional
+	public Employee findEmployee(Long id) {
+		return employeeRepository.findOne(id);
+	}
+	
+	
+	@Transactional
+	public Employee findByExtId(String extId) {
+		return employeeRepository.findByExtId(extId);
+	}
+	
+	
+	@Transactional
+	public Iterable<Employee> findAll() {
+		return employeeRepository.findAll();
+	}
+
+	@Transactional
+	public void save(Employee obj) {
+		employeeRepository.save(obj);
+	}
+
+
+
+}
