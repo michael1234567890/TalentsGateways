@@ -1,0 +1,668 @@
+-- phpMyAdmin SQL Dump
+-- version 4.5.1
+-- http://www.phpmyadmin.net
+--
+-- Host: 127.0.0.1
+-- Generation Time: Apr 04, 2017 at 01:51 PM
+-- Server version: 10.1.16-MariaDB
+-- PHP Version: 5.6.24
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `talent`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `city`
+--
+
+CREATE TABLE `city` (
+  `id` bigint(20) NOT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `ext_id` varchar(100) DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `uuid` varchar(255) DEFAULT NULL,
+  `version` bigint(20) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `company`
+--
+
+CREATE TABLE `company` (
+  `id` bigint(20) NOT NULL,
+  `uuid` varchar(255) DEFAULT NULL,
+  `version` bigint(20) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `code` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `ext_id` varchar(100) DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `connected_app_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `company`
+--
+
+INSERT INTO `company` (`id`, `uuid`, `version`, `address`, `code`, `name`, `created_date`, `ext_id`, `modified_date`, `connected_app_id`) VALUES
+(1, NULL, NULL, NULL, '100', 'Phincon', NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `connected_app`
+--
+
+CREATE TABLE `connected_app` (
+  `id` bigint(20) NOT NULL,
+  `uuid` varchar(255) DEFAULT NULL,
+  `version` bigint(20) DEFAULT NULL,
+  `consumer_key` varchar(255) DEFAULT NULL,
+  `consumer_secret` varchar(255) DEFAULT NULL,
+  `instance_url` varchar(255) DEFAULT NULL,
+  `login_url` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `security_token` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `company_id` bigint(20) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `ext_id` varchar(100) DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `country`
+--
+
+CREATE TABLE `country` (
+  `id` bigint(20) NOT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `ext_id` varchar(100) DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `uuid` varchar(255) DEFAULT NULL,
+  `version` bigint(20) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hr_address`
+--
+
+CREATE TABLE `hr_address` (
+  `id` bigint(20) NOT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `ext_id` varchar(100) DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `uuid` varchar(255) DEFAULT NULL,
+  `version` bigint(20) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `address_status` varchar(30) DEFAULT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `country` varchar(50) DEFAULT NULL,
+  `distance` varchar(10) DEFAULT NULL,
+  `district` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `province` varchar(50) DEFAULT NULL,
+  `residence` varchar(255) DEFAULT NULL,
+  `rt` varchar(10) DEFAULT NULL,
+  `rw` varchar(10) DEFAULT NULL,
+  `stay_status` varchar(30) DEFAULT NULL,
+  `subdistrict` varchar(100) DEFAULT NULL,
+  `type` varchar(30) DEFAULT NULL,
+  `zip_code` varchar(15) DEFAULT NULL,
+  `employee_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hr_address`
+--
+
+INSERT INTO `hr_address` (`id`, `created_date`, `ext_id`, `modified_date`, `uuid`, `version`, `address`, `address_status`, `city`, `country`, `distance`, `district`, `phone`, `province`, `residence`, `rt`, `rw`, `stay_status`, `subdistrict`, `type`, `zip_code`, `employee_id`) VALUES
+(1, NULL, NULL, NULL, '8d822f24-ad87-4e79-b1d3-4bb21bf2b5e4', 0, 'Address', NULL, 'Jakarta Selatan', 'Indonesia', NULL, NULL, '021893', 'DKI Jakarta', NULL, NULL, NULL, 'Owned', NULL, NULL, '45463', 1),
+(2, NULL, NULL, NULL, '20a1bf3c-fbb6-4250-a34c-6e51d6cdef12', 0, 'Perumahan awani residence blok G no 17', NULL, 'Jakarta Utara', 'Indonesia', NULL, NULL, '08596423', 'DKI Jakarta', NULL, NULL, NULL, 'Contract', NULL, NULL, '45463', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hr_certification`
+--
+
+CREATE TABLE `hr_certification` (
+  `id` bigint(20) NOT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `ext_id` varchar(100) DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `uuid` varchar(255) DEFAULT NULL,
+  `version` bigint(20) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `expired` date DEFAULT NULL,
+  `full` longtext,
+  `name` varchar(100) DEFAULT NULL,
+  `no` varchar(100) DEFAULT NULL,
+  `principle` varchar(255) DEFAULT NULL,
+  `type` varchar(100) DEFAULT NULL,
+  `year` varchar(15) DEFAULT NULL,
+  `employee_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hr_certification`
+--
+
+INSERT INTO `hr_certification` (`id`, `created_date`, `ext_id`, `modified_date`, `uuid`, `version`, `date`, `description`, `expired`, `full`, `name`, `no`, `principle`, `type`, `year`, `employee_id`) VALUES
+(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Certification Bla Bla', 'Certification 1', 'B78326', 'PT. Phincon Indonesia', NULL, NULL, 1),
+(2, NULL, NULL, NULL, 'bf7ce633-1c5d-44b1-a8a7-424f2ad48ae8', 0, NULL, NULL, NULL, NULL, 'Certificate Name', 'SC 3256', 'Oracle', 'Certificate Type', NULL, 1),
+(3, NULL, NULL, NULL, '91bcf14d-d1d0-4d11-abd1-c26f1152969f', 0, '2017-09-08', NULL, '2019-09-08', NULL, 'Oracle Certified', 'OCA 21356', 'Oracle', NULL, NULL, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hr_employee`
+--
+
+CREATE TABLE `hr_employee` (
+  `id` bigint(20) NOT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `ext_id` varchar(100) DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `uuid` varchar(255) DEFAULT NULL,
+  `version` bigint(20) DEFAULT NULL,
+  `age` varchar(5) DEFAULT NULL,
+  `anniversary_date` date DEFAULT NULL,
+  `applicant_no` varchar(50) DEFAULT NULL,
+  `attendance_code` varchar(30) DEFAULT NULL,
+  `authorized` varchar(30) DEFAULT NULL,
+  `birth_date` date DEFAULT NULL,
+  `birth_place` varchar(100) DEFAULT NULL,
+  `blood_type` varchar(10) DEFAULT NULL,
+  `bpjs_kesehatan_date` date DEFAULT NULL,
+  `bpjs_kesehatan_no` varchar(100) DEFAULT NULL,
+  `bpjs_tk_date` date DEFAULT NULL,
+  `bpjs_tk_no` varchar(50) DEFAULT NULL,
+  `cloth_size` varchar(5) DEFAULT NULL,
+  `dialect` varchar(50) DEFAULT NULL,
+  `disability` varchar(30) DEFAULT NULL,
+  `education_title_1` varchar(30) DEFAULT NULL,
+  `education_title_2` varchar(30) DEFAULT NULL,
+  `effective_date` datetime DEFAULT NULL,
+  `eligible_for_rehire` bit(1) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `emergency_contact_address` varchar(255) DEFAULT NULL,
+  `emergency_contact_city` varchar(255) DEFAULT NULL,
+  `emergency_contact_country` varchar(255) DEFAULT NULL,
+  `emergency_contact_district` varchar(255) DEFAULT NULL,
+  `emergency_contact_name` varchar(255) DEFAULT NULL,
+  `emergency_contact_other_phone` varchar(20) DEFAULT NULL,
+  `emergency_contact_phone` varchar(20) DEFAULT NULL,
+  `emergency_contact_relationship` varchar(30) DEFAULT NULL,
+  `emergency_contact_rt` varchar(5) DEFAULT NULL,
+  `emergency_contact_rw` varchar(5) DEFAULT NULL,
+  `emergency_contact_state_province` varchar(50) DEFAULT NULL,
+  `emergency_contact_subdistrict` varchar(50) DEFAULT NULL,
+  `emergency_contact_zip_code` varchar(20) DEFAULT NULL,
+  `employee_status` varchar(20) DEFAULT NULL,
+  `end_date_contract` datetime DEFAULT NULL,
+  `family_card_no` varchar(20) DEFAULT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  `full_name_title` varchar(255) DEFAULT NULL,
+  `gender` varchar(15) DEFAULT NULL,
+  `head_size` varchar(10) DEFAULT NULL,
+  `height` varchar(5) DEFAULT NULL,
+  `hire_date` date DEFAULT NULL,
+  `hoby` varchar(255) DEFAULT NULL,
+  `initial_name` varchar(5) DEFAULT NULL,
+  `interest` longtext,
+  `job_title_name` varchar(50) DEFAULT NULL,
+  `ktp_name` varchar(200) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `letter_date` date DEFAULT NULL,
+  `letter_no` varchar(50) DEFAULT NULL,
+  `license_driving_date_1` date DEFAULT NULL,
+  `license_driving_date_2` date DEFAULT NULL,
+  `license_driving_no_1` varchar(50) DEFAULT NULL,
+  `license_driving_no_2` varchar(50) DEFAULT NULL,
+  `license_expired_driving1` date DEFAULT NULL,
+  `license_expired_driving_2` date DEFAULT NULL,
+  `marital_status` varchar(30) DEFAULT NULL,
+  `married_date` date DEFAULT NULL,
+  `married_place` varchar(50) DEFAULT NULL,
+  `middle_name` varchar(50) DEFAULT NULL,
+  `mobile_phone` varchar(20) DEFAULT NULL,
+  `mobile_phone_1` varchar(20) DEFAULT NULL,
+  `mobile_phone_2` varchar(20) DEFAULT NULL,
+  `mobile_phone_3` varchar(20) DEFAULT NULL,
+  `nationality` varchar(30) DEFAULT NULL,
+  `next_birth_date` date DEFAULT NULL,
+  `nickname` varchar(30) DEFAULT NULL,
+  `nirc_date` date DEFAULT NULL,
+  `nirc_expiration_date` date DEFAULT NULL,
+  `nirc_no` varchar(255) DEFAULT NULL,
+  `npwp_date` date DEFAULT NULL,
+  `npwp_no` varchar(50) DEFAULT NULL,
+  `office_mail` varchar(100) DEFAULT NULL,
+  `official_end_date` date DEFAULT NULL,
+  `pant_size` varchar(10) DEFAULT NULL,
+  `passport_id` varchar(200) DEFAULT NULL,
+  `passport_date` date DEFAULT NULL,
+  `passport_expiry_date` date DEFAULT NULL,
+  `passport_no` varchar(200) DEFAULT NULL,
+  `pension_date` date DEFAULT NULL,
+  `pension_reminder_day` int(11) DEFAULT NULL,
+  `pension_reminder_months` date DEFAULT NULL,
+  `permanent_date` date DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `phone_ext` varchar(10) DEFAULT NULL,
+  `pre_pension_date` date DEFAULT NULL,
+  `religion` varchar(50) DEFAULT NULL,
+  `resignation` varchar(50) DEFAULT NULL,
+  `salution` varchar(10) DEFAULT NULL,
+  `shoe_size` varchar(5) DEFAULT NULL,
+  `skill` longtext,
+  `skill_level` varchar(5) DEFAULT NULL,
+  `strong_point` longtext,
+  `termination_notes` longtext,
+  `termination_date` date DEFAULT NULL,
+  `tools` longtext,
+  `weak_point` longtext,
+  `wear_glasses` varchar(255) DEFAULT NULL,
+  `weight` varchar(5) DEFAULT NULL,
+  `work_interest` varchar(255) DEFAULT NULL,
+  `company_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hr_employee`
+--
+
+INSERT INTO `hr_employee` (`id`, `created_date`, `ext_id`, `modified_date`, `uuid`, `version`, `age`, `anniversary_date`, `applicant_no`, `attendance_code`, `authorized`, `birth_date`, `birth_place`, `blood_type`, `bpjs_kesehatan_date`, `bpjs_kesehatan_no`, `bpjs_tk_date`, `bpjs_tk_no`, `cloth_size`, `dialect`, `disability`, `education_title_1`, `education_title_2`, `effective_date`, `eligible_for_rehire`, `email`, `emergency_contact_address`, `emergency_contact_city`, `emergency_contact_country`, `emergency_contact_district`, `emergency_contact_name`, `emergency_contact_other_phone`, `emergency_contact_phone`, `emergency_contact_relationship`, `emergency_contact_rt`, `emergency_contact_rw`, `emergency_contact_state_province`, `emergency_contact_subdistrict`, `emergency_contact_zip_code`, `employee_status`, `end_date_contract`, `family_card_no`, `first_name`, `full_name_title`, `gender`, `head_size`, `height`, `hire_date`, `hoby`, `initial_name`, `interest`, `job_title_name`, `ktp_name`, `last_name`, `letter_date`, `letter_no`, `license_driving_date_1`, `license_driving_date_2`, `license_driving_no_1`, `license_driving_no_2`, `license_expired_driving1`, `license_expired_driving_2`, `marital_status`, `married_date`, `married_place`, `middle_name`, `mobile_phone`, `mobile_phone_1`, `mobile_phone_2`, `mobile_phone_3`, `nationality`, `next_birth_date`, `nickname`, `nirc_date`, `nirc_expiration_date`, `nirc_no`, `npwp_date`, `npwp_no`, `office_mail`, `official_end_date`, `pant_size`, `passport_id`, `passport_date`, `passport_expiry_date`, `passport_no`, `pension_date`, `pension_reminder_day`, `pension_reminder_months`, `permanent_date`, `phone`, `phone_ext`, `pre_pension_date`, `religion`, `resignation`, `salution`, `shoe_size`, `skill`, `skill_level`, `strong_point`, `termination_notes`, `termination_date`, `tools`, `weak_point`, `wear_glasses`, `weight`, `work_interest`, `company_id`) VALUES
+(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-03-02', 'Jakarta', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Hendra', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Ramdhan', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '081809649293', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'hendra.ramdhan@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(43, NULL, 'a0H4C000001dPtaUAE', NULL, 'a17da73d-d488-44ff-9af3-6b6e081d8aaa', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'dami', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44, NULL, 'a0H4C000000mSnoUAE', NULL, '96c0c063-6baa-4cf7-a8f4-5066f8e4e362', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Hanna', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(45, NULL, 'a0H4C000000mSneUAE', NULL, '4908fdc7-a684-4baf-b2c1-4f37c94b367c', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Niki', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(46, NULL, 'a0H4C000000mSntUAE', NULL, '74fbc380-74f6-46f9-9974-95ab340fc41b', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Felicia', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(47, NULL, 'a0H4C000000mSo8UAE', NULL, 'bb37db32-afba-4be3-bd1f-161f63b29215', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Teja', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(48, NULL, 'a0H4C000000mSnyUAE', NULL, '2ffb1160-139e-4d1d-ab42-6f7a43e24af9', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Irina', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(49, NULL, 'a0H4C000000mSoDUAU', NULL, '05a2fc2a-ee4a-4e83-a000-16c7f6fcb136', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Stefani', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(50, NULL, 'a0H4C000000mSo3UAE', NULL, 'cc48920d-9696-4334-a739-e69783d48d2d', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Akbar', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51, NULL, 'a0H4C000000mSnjUAE', NULL, '4bd0fffb-3a09-4a4d-ad10-4cc0fd6db6e7', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Natasha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(52, NULL, 'a0H4C000000oGDgUAM', NULL, 'b6759515-8615-49a7-a0b7-92e7e4352d5c', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Data', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hr_family`
+--
+
+CREATE TABLE `hr_family` (
+  `id` bigint(20) NOT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `ext_id` varchar(100) DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `uuid` varchar(255) DEFAULT NULL,
+  `version` bigint(20) DEFAULT NULL,
+  `address` longtext,
+  `alive_status` varchar(255) DEFAULT NULL,
+  `birth_date` date DEFAULT NULL,
+  `birth_place` varchar(100) DEFAULT NULL,
+  `blood_type` varchar(10) DEFAULT NULL,
+  `decease_date` date DEFAULT NULL,
+  `dependent` varchar(20) DEFAULT NULL,
+  `gender` varchar(30) DEFAULT NULL,
+  `last_education` varchar(255) DEFAULT NULL,
+  `letter_no` varchar(255) DEFAULT NULL,
+  `marital_status` varchar(255) DEFAULT NULL,
+  `medical_status` varchar(255) DEFAULT NULL,
+  `occupation` varchar(255) DEFAULT NULL,
+  `phone` varchar(30) DEFAULT NULL,
+  `relationship` varchar(30) DEFAULT NULL,
+  `employee_id` bigint(20) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hr_family`
+--
+
+INSERT INTO `hr_family` (`id`, `created_date`, `ext_id`, `modified_date`, `uuid`, `version`, `address`, `alive_status`, `birth_date`, `birth_place`, `blood_type`, `decease_date`, `dependent`, `gender`, `last_education`, `letter_no`, `marital_status`, `medical_status`, `occupation`, `phone`, `relationship`, `employee_id`, `name`) VALUES
+(2, NULL, NULL, NULL, 'eef6ba2d-66e6-40a8-a07e-f7469ba3b2c8', 0, NULL, NULL, '2013-09-12', 'Jakarta', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '081809659394', NULL, 1, 'Hendra'),
+(3, NULL, NULL, NULL, 'b562ef2e-8e80-4bbc-90f4-47cfbb408087', 0, NULL, NULL, '2016-09-10', 'Jakarta', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '081809659394', NULL, 1, 'Anak'),
+(5, NULL, NULL, NULL, '91c1d4de-f147-401d-8e5c-8bd0502a1be6', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL),
+(6, NULL, NULL, NULL, '4edc3b61-570d-4894-a7a5-d81925a40d60', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '03217832', NULL, 1, 'Hendrik'),
+(7, NULL, NULL, NULL, 'bc57b5f0-ec39-4239-9309-678d6f37c7b4', 0, NULL, NULL, NULL, 'Surabaya', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0818032', NULL, 1, 'Hendrik Firmansyah'),
+(8, NULL, NULL, NULL, '1e69519c-fe83-4f11-8a31-0d778a03a440', 0, NULL, NULL, '1986-03-10', 'Majalengka', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0818.86', NULL, 1, 'Justin Aulia'),
+(9, NULL, NULL, NULL, '15e86481-d754-4171-b8f9-381333deb4e7', 0, NULL, NULL, '2017-03-29', 'Jakarta', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0818096423', NULL, 1, 'Ayah');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_access_token`
+--
+
+CREATE TABLE `oauth_access_token` (
+  `token_id` varchar(256) DEFAULT NULL,
+  `token` blob,
+  `authentication_id` varchar(256) DEFAULT NULL,
+  `user_name` varchar(256) DEFAULT NULL,
+  `client_id` varchar(256) DEFAULT NULL,
+  `authentication` blob,
+  `refresh_token` varchar(256) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `oauth_access_token`
+--
+
+INSERT INTO `oauth_access_token` (`token_id`, `token`, `authentication_id`, `user_name`, `client_id`, `authentication`, `refresh_token`) VALUES
+('77d42a8e3f5b66044118f0fe72ce659f', 0xaced0005737200436f72672e737072696e676672616d65776f726b2e73656375726974792e6f61757468322e636f6d6d6f6e2e44656661756c744f4175746832416363657373546f6b656e0cb29e361b24face0200064c00156164646974696f6e616c496e666f726d6174696f6e74000f4c6a6176612f7574696c2f4d61703b4c000a65787069726174696f6e7400104c6a6176612f7574696c2f446174653b4c000c72656672657368546f6b656e74003f4c6f72672f737072696e676672616d65776f726b2f73656375726974792f6f61757468322f636f6d6d6f6e2f4f417574683252656672657368546f6b656e3b4c000573636f706574000f4c6a6176612f7574696c2f5365743b4c0009746f6b656e547970657400124c6a6176612f6c616e672f537472696e673b4c000576616c756571007e000578707372001e6a6176612e7574696c2e436f6c6c656374696f6e7324456d7074794d6170593614855adce7d002000078707372000e6a6176612e7574696c2e44617465686a81014b597419030000787077080000015b2329c3e0787372004c6f72672e737072696e676672616d65776f726b2e73656375726974792e6f61757468322e636f6d6d6f6e2e44656661756c744578706972696e674f417574683252656672657368546f6b656e2fdf47639dd0c9b70200014c000a65787069726174696f6e71007e0002787200446f72672e737072696e676672616d65776f726b2e73656375726974792e6f61757468322e636f6d6d6f6e2e44656661756c744f417574683252656672657368546f6b656e73e10e0a6354d45e0200014c000576616c756571007e0005787074002434633634386636392d353135382d343236302d613437662d6537373933633661393532657371007e000977080000015b8b4c8cd078737200256a6176612e7574696c2e436f6c6c656374696f6e7324556e6d6f6469666961626c65536574801d92d18f9b80550200007872002c6a6176612e7574696c2e436f6c6c656374696f6e7324556e6d6f6469666961626c65436f6c6c656374696f6e19420080cb5ef71e0200014c0001637400164c6a6176612f7574696c2f436f6c6c656374696f6e3b7870737200176a6176612e7574696c2e4c696e6b656448617368536574d86cd75a95dd2a1e020000787200116a6176612e7574696c2e48617368536574ba44859596b8b7340300007870770c000000103f400000000000027400047265616474000577726974657874000662656172657274002461376565643266312d393366382d346430392d393961312d623935613831613664343261, '9c366de05636ce207484d6aeb231dcb1', 'hendra', 'talents', 0xaced0005737200416f72672e737072696e676672616d65776f726b2e73656375726974792e6f61757468322e70726f76696465722e4f417574683241757468656e7469636174696f6ebd400b02166252130200024c000d73746f7265645265717565737474003c4c6f72672f737072696e676672616d65776f726b2f73656375726974792f6f61757468322f70726f76696465722f4f4175746832526571756573743b4c00127573657241757468656e7469636174696f6e7400324c6f72672f737072696e676672616d65776f726b2f73656375726974792f636f72652f41757468656e7469636174696f6e3b787200476f72672e737072696e676672616d65776f726b2e73656375726974792e61757468656e7469636174696f6e2e416273747261637441757468656e7469636174696f6e546f6b656ed3aa287e6e47640e0200035a000d61757468656e746963617465644c000b617574686f7269746965737400164c6a6176612f7574696c2f436f6c6c656374696f6e3b4c000764657461696c737400124c6a6176612f6c616e672f4f626a6563743b787000737200266a6176612e7574696c2e436f6c6c656374696f6e7324556e6d6f6469666961626c654c697374fc0f2531b5ec8e100200014c00046c6973747400104c6a6176612f7574696c2f4c6973743b7872002c6a6176612e7574696c2e436f6c6c656374696f6e7324556e6d6f6469666961626c65436f6c6c656374696f6e19420080cb5ef71e0200014c00016371007e00047870737200136a6176612e7574696c2e41727261794c6973747881d21d99c7619d03000149000473697a657870000000007704000000007871007e000c707372003a6f72672e737072696e676672616d65776f726b2e73656375726974792e6f61757468322e70726f76696465722e4f41757468325265717565737400000000000000010200065a0008617070726f7665644c000b617574686f72697469657371007e00044c000a657874656e73696f6e7374000f4c6a6176612f7574696c2f4d61703b4c000b72656469726563745572697400124c6a6176612f6c616e672f537472696e673b4c000b7265736f7572636549647374000f4c6a6176612f7574696c2f5365743b4c000d726573706f6e7365547970657371007e0010787200386f72672e737072696e676672616d65776f726b2e73656375726974792e6f61757468322e70726f76696465722e426173655265717565737436287a3ea37169bd0200034c0008636c69656e74496471007e000f4c001172657175657374506172616d657465727371007e000e4c000573636f706571007e0010787074000774616c656e7473737200256a6176612e7574696c2e436f6c6c656374696f6e7324556e6d6f6469666961626c654d6170f1a5a8fe74f507420200014c00016d71007e000e7870737200116a6176612e7574696c2e486173684d61700507dac1c31660d103000246000a6c6f6164466163746f724900097468726573686f6c6478703f400000000000067708000000080000000274000a6772616e745f7479706574000870617373776f7264740008757365726e616d6574000668656e64726178737200256a6176612e7574696c2e436f6c6c656374696f6e7324556e6d6f6469666961626c65536574801d92d18f9b80550200007871007e0009737200176a6176612e7574696c2e4c696e6b656448617368536574d86cd75a95dd2a1e020000787200116a6176612e7574696c2e48617368536574ba44859596b8b7340300007870770c000000103f4000000000000274000472656164740005777269746578017371007e001f770c000000103f40000000000002737200426f72672e737072696e676672616d65776f726b2e73656375726974792e636f72652e617574686f726974792e53696d706c654772616e746564417574686f7269747900000000000001400200014c0004726f6c6571007e000f7870740009524f4c455f555345527371007e002474000a524f4c455f41444d494e787371007e00163f40000000000000770800000010000000007870707371007e001f770c000000103f40000000000000787372004f6f72672e737072696e676672616d65776f726b2e73656375726974792e61757468656e7469636174696f6e2e557365726e616d6550617373776f726441757468656e7469636174696f6e546f6b656e00000000000001400200024c000b63726564656e7469616c7371007e00054c00097072696e636970616c71007e00057871007e0003017371007e00077371007e000b000000007704000000007871007e002e7070737200326f72672e737072696e676672616d65776f726b2e73656375726974792e636f72652e7573657264657461696c732e5573657200000000000001400200075a00116163636f756e744e6f6e457870697265645a00106163636f756e744e6f6e4c6f636b65645a001563726564656e7469616c734e6f6e457870697265645a0007656e61626c65644c000b617574686f72697469657371007e00104c000870617373776f726471007e000f4c0008757365726e616d6571007e000f7870010101017371007e001c737200116a6176612e7574696c2e54726565536574dd98509395ed875b0300007870737200466f72672e737072696e676672616d65776f726b2e73656375726974792e636f72652e7573657264657461696c732e5573657224417574686f72697479436f6d70617261746f7200000000000001400200007870770400000000787074000668656e647261, '8f49579a9340b780e0310865cd474d9e');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_refresh_token`
+--
+
+CREATE TABLE `oauth_refresh_token` (
+  `token_id` varchar(256) DEFAULT NULL,
+  `token` blob,
+  `authentication` blob
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `oauth_refresh_token`
+--
+
+INSERT INTO `oauth_refresh_token` (`token_id`, `token`, `authentication`) VALUES
+('8f49579a9340b780e0310865cd474d9e', 0xaced00057372004c6f72672e737072696e676672616d65776f726b2e73656375726974792e6f61757468322e636f6d6d6f6e2e44656661756c744578706972696e674f417574683252656672657368546f6b656e2fdf47639dd0c9b70200014c000a65787069726174696f6e7400104c6a6176612f7574696c2f446174653b787200446f72672e737072696e676672616d65776f726b2e73656375726974792e6f61757468322e636f6d6d6f6e2e44656661756c744f417574683252656672657368546f6b656e73e10e0a6354d45e0200014c000576616c75657400124c6a6176612f6c616e672f537472696e673b787074002434633634386636392d353135382d343236302d613437662d6537373933633661393532657372000e6a6176612e7574696c2e44617465686a81014b597419030000787077080000015b8b4c8cd078, 0xaced0005737200416f72672e737072696e676672616d65776f726b2e73656375726974792e6f61757468322e70726f76696465722e4f417574683241757468656e7469636174696f6ebd400b02166252130200024c000d73746f7265645265717565737474003c4c6f72672f737072696e676672616d65776f726b2f73656375726974792f6f61757468322f70726f76696465722f4f4175746832526571756573743b4c00127573657241757468656e7469636174696f6e7400324c6f72672f737072696e676672616d65776f726b2f73656375726974792f636f72652f41757468656e7469636174696f6e3b787200476f72672e737072696e676672616d65776f726b2e73656375726974792e61757468656e7469636174696f6e2e416273747261637441757468656e7469636174696f6e546f6b656ed3aa287e6e47640e0200035a000d61757468656e746963617465644c000b617574686f7269746965737400164c6a6176612f7574696c2f436f6c6c656374696f6e3b4c000764657461696c737400124c6a6176612f6c616e672f4f626a6563743b787000737200266a6176612e7574696c2e436f6c6c656374696f6e7324556e6d6f6469666961626c654c697374fc0f2531b5ec8e100200014c00046c6973747400104c6a6176612f7574696c2f4c6973743b7872002c6a6176612e7574696c2e436f6c6c656374696f6e7324556e6d6f6469666961626c65436f6c6c656374696f6e19420080cb5ef71e0200014c00016371007e00047870737200136a6176612e7574696c2e41727261794c6973747881d21d99c7619d03000149000473697a657870000000007704000000007871007e000c707372003a6f72672e737072696e676672616d65776f726b2e73656375726974792e6f61757468322e70726f76696465722e4f41757468325265717565737400000000000000010200065a0008617070726f7665644c000b617574686f72697469657371007e00044c000a657874656e73696f6e7374000f4c6a6176612f7574696c2f4d61703b4c000b72656469726563745572697400124c6a6176612f6c616e672f537472696e673b4c000b7265736f7572636549647374000f4c6a6176612f7574696c2f5365743b4c000d726573706f6e7365547970657371007e0010787200386f72672e737072696e676672616d65776f726b2e73656375726974792e6f61757468322e70726f76696465722e426173655265717565737436287a3ea37169bd0200034c0008636c69656e74496471007e000f4c001172657175657374506172616d657465727371007e000e4c000573636f706571007e0010787074000774616c656e7473737200256a6176612e7574696c2e436f6c6c656374696f6e7324556e6d6f6469666961626c654d6170f1a5a8fe74f507420200014c00016d71007e000e7870737200116a6176612e7574696c2e486173684d61700507dac1c31660d103000246000a6c6f6164466163746f724900097468726573686f6c6478703f400000000000067708000000080000000274000a6772616e745f7479706574000870617373776f7264740008757365726e616d6574000668656e64726178737200256a6176612e7574696c2e436f6c6c656374696f6e7324556e6d6f6469666961626c65536574801d92d18f9b80550200007871007e0009737200176a6176612e7574696c2e4c696e6b656448617368536574d86cd75a95dd2a1e020000787200116a6176612e7574696c2e48617368536574ba44859596b8b7340300007870770c000000103f4000000000000274000472656164740005777269746578017371007e001f770c000000103f40000000000002737200426f72672e737072696e676672616d65776f726b2e73656375726974792e636f72652e617574686f726974792e53696d706c654772616e746564417574686f7269747900000000000001400200014c0004726f6c6571007e000f7870740009524f4c455f555345527371007e002474000a524f4c455f41444d494e787371007e00163f40000000000000770800000010000000007870707371007e001f770c000000103f40000000000000787372004f6f72672e737072696e676672616d65776f726b2e73656375726974792e61757468656e7469636174696f6e2e557365726e616d6550617373776f726441757468656e7469636174696f6e546f6b656e00000000000001400200024c000b63726564656e7469616c7371007e00054c00097072696e636970616c71007e00057871007e0003017371007e00077371007e000b000000007704000000007871007e002e7070737200326f72672e737072696e676672616d65776f726b2e73656375726974792e636f72652e7573657264657461696c732e5573657200000000000001400200075a00116163636f756e744e6f6e457870697265645a00106163636f756e744e6f6e4c6f636b65645a001563726564656e7469616c734e6f6e457870697265645a0007656e61626c65644c000b617574686f72697469657371007e00104c000870617373776f726471007e000f4c0008757365726e616d6571007e000f7870010101017371007e001c737200116a6176612e7574696c2e54726565536574dd98509395ed875b0300007870737200466f72672e737072696e676672616d65776f726b2e73656375726974792e636f72652e7573657264657461696c732e5573657224417574686f72697479436f6d70617261746f7200000000000001400200007870770400000000787074000668656e647261);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `province`
+--
+
+CREATE TABLE `province` (
+  `id` bigint(20) NOT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `ext_id` varchar(100) DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `uuid` varchar(255) DEFAULT NULL,
+  `version` bigint(20) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `role`
+--
+
+CREATE TABLE `role` (
+  `id` bigint(20) NOT NULL,
+  `uuid` varchar(255) DEFAULT NULL,
+  `version` bigint(20) DEFAULT NULL,
+  `apikey` varchar(200) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `ext_id` varchar(100) DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` bigint(20) NOT NULL,
+  `uuid` varchar(100) NOT NULL,
+  `username` varchar(100) DEFAULT NULL,
+  `version` int(11) DEFAULT NULL,
+  `apikey` varchar(200) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `ext_id` varchar(100) DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `activated` bit(1) NOT NULL,
+  `reset_password_key` varchar(100) DEFAULT NULL,
+  `activation_key` varchar(100) DEFAULT NULL,
+  `employee_id` bigint(20) DEFAULT NULL,
+  `first_name` varchar(100) DEFAULT NULL,
+  `last_name` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `uuid`, `username`, `version`, `apikey`, `email`, `password`, `created_date`, `ext_id`, `modified_date`, `activated`, `reset_password_key`, `activation_key`, `employee_id`, `first_name`, `last_name`) VALUES
+(2, '2d942be7-abf6-464c-912f-9662c7795204', 'hendra', 1, NULL, NULL, 'hendra123', NULL, NULL, NULL, b'1', NULL, NULL, 1, 'hendra', 'ramdhan'),
+(5, '95d0f5c1-5193-4215-b507-1a47a4714d85', NULL, 0, NULL, 'register@office.com', 'dsa', NULL, NULL, NULL, b'0', NULL, NULL, 2, 'Register', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_role`
+--
+
+CREATE TABLE `user_role` (
+  `user_id` bigint(20) NOT NULL,
+  `role_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `city`
+--
+ALTER TABLE `city`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `company`
+--
+ALTER TABLE `company`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_qrpxuivieok5yqtwb8biki5o7` (`connected_app_id`);
+
+--
+-- Indexes for table `connected_app`
+--
+ALTER TABLE `connected_app`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FKpydi3p1t35enwobi89vaj2vta` (`company_id`);
+
+--
+-- Indexes for table `country`
+--
+ALTER TABLE `country`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hr_address`
+--
+ALTER TABLE `hr_address`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_gie9y9b8dn2chs3e34ksy6fqt` (`employee_id`);
+
+--
+-- Indexes for table `hr_certification`
+--
+ALTER TABLE `hr_certification`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FKrmj230qprohanif5be8yotbp0` (`employee_id`);
+
+--
+-- Indexes for table `hr_employee`
+--
+ALTER TABLE `hr_employee`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FKo0o7cci4amhsiihw2c5laxo5m` (`company_id`);
+
+--
+-- Indexes for table `hr_family`
+--
+ALTER TABLE `hr_family`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FKrux3ra68qi85m1cphg0i3qrj8` (`employee_id`);
+
+--
+-- Indexes for table `province`
+--
+ALTER TABLE `province`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `role`
+--
+ALTER TABLE `role`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user_role`
+--
+ALTER TABLE `user_role`
+  ADD PRIMARY KEY (`user_id`,`role_id`),
+  ADD KEY `FKa68196081fvovjhkek5m97n3y` (`role_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `city`
+--
+ALTER TABLE `city`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `company`
+--
+ALTER TABLE `company`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `connected_app`
+--
+ALTER TABLE `connected_app`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `country`
+--
+ALTER TABLE `country`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `hr_address`
+--
+ALTER TABLE `hr_address`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `hr_certification`
+--
+ALTER TABLE `hr_certification`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `hr_employee`
+--
+ALTER TABLE `hr_employee`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+--
+-- AUTO_INCREMENT for table `hr_family`
+--
+ALTER TABLE `hr_family`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+--
+-- AUTO_INCREMENT for table `province`
+--
+ALTER TABLE `province`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `role`
+--
+ALTER TABLE `role`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `company`
+--
+ALTER TABLE `company`
+  ADD CONSTRAINT `FK_qrpxuivieok5yqtwb8biki5o7` FOREIGN KEY (`connected_app_id`) REFERENCES `connected_app` (`id`);
+
+--
+-- Constraints for table `connected_app`
+--
+ALTER TABLE `connected_app`
+  ADD CONSTRAINT `FKpydi3p1t35enwobi89vaj2vta` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`);
+
+--
+-- Constraints for table `hr_address`
+--
+ALTER TABLE `hr_address`
+  ADD CONSTRAINT `FK_gie9y9b8dn2chs3e34ksy6fqt` FOREIGN KEY (`employee_id`) REFERENCES `hr_employee` (`id`);
+
+--
+-- Constraints for table `hr_certification`
+--
+ALTER TABLE `hr_certification`
+  ADD CONSTRAINT `FKrmj230qprohanif5be8yotbp0` FOREIGN KEY (`employee_id`) REFERENCES `hr_employee` (`id`);
+
+--
+-- Constraints for table `hr_employee`
+--
+ALTER TABLE `hr_employee`
+  ADD CONSTRAINT `FKo0o7cci4amhsiihw2c5laxo5m` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`);
+
+--
+-- Constraints for table `hr_family`
+--
+ALTER TABLE `hr_family`
+  ADD CONSTRAINT `FKrux3ra68qi85m1cphg0i3qrj8` FOREIGN KEY (`employee_id`) REFERENCES `hr_employee` (`id`);
+
+--
+-- Constraints for table `user_role`
+--
+ALTER TABLE `user_role`
+  ADD CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
+  ADD CONSTRAINT `FKj345gk1bovqvfame88rcx7yyx` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
