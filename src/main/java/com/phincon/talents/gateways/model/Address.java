@@ -1,4 +1,4 @@
-package com.phincon.talents.app.model.hr;
+package com.phincon.talents.gateways.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,12 +6,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.phincon.talents.app.model.AbstractEntity;
-import com.phincon.talents.app.model.City;
-import com.phincon.talents.app.model.Country;
-import com.phincon.talents.app.model.Province;
-
 @Entity
 @Table(name="hr_address")
 public class Address extends AbstractEntity {
