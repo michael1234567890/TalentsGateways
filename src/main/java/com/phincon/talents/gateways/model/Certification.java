@@ -1,4 +1,4 @@
-package com.phincon.talents.app.model.hr;
+package com.phincon.talents.gateways.model;
 
 import java.util.Date;
 
@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.phincon.talents.app.model.AbstractEntity;
+import com.phincon.talents.gateways.model.AbstractEntity;
 
 @Entity
 @Table(name="hr_certification")
