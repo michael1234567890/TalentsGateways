@@ -73,6 +73,10 @@ public class Family extends AbstractEntity {
 
 	@Column(name = "employee_id")
 	private Long employee;
+	
+	@Column(name = "employee_ext_id", length=100)
+	private String employeeExtId;
+	
 
 	public String getAliveStatus() {
 		return aliveStatus;
@@ -209,5 +213,15 @@ public class Family extends AbstractEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public String getEmployeeExtId() {
+		return employeeExtId;
+	}
+
+	public void setEmployeeExtId(String employeeExtId) {
+		this.employeeExtId = employeeExtId;
+	}
+	
+	
 
 }

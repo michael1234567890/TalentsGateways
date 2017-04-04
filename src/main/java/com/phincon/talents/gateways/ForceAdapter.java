@@ -118,6 +118,8 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		String urlQuery = instanceUrl
 				+ "/services/data/v36.0/query?q=" + this.query;
 		
+		System.out.println(urlQuery);
+		
 		
 		MultiValueMap<String, String> multiValueHeaders = new LinkedMultiValueMap<String, String>();
 		String strAuthorization = tokenType + " " + accessToken;
