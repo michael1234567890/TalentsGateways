@@ -1,7 +1,5 @@
-package com.phincon.talents.gateways;
+package com.phincon.talents.gateways.adapter.force;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +30,6 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 		String extId = (String) mapResult.get("Id");
 		String officeMail = (String) mapResult.get("Office_Email__c");
 		String lastName = (String) mapResult.get("Last_Name__c");
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date dateBirth = null;
 
 		if (mapResult.get("Date_of_Birth__c") != null)
@@ -46,12 +43,32 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 		String employeeNo = (String) mapResult.get("Employee_No__c");
 		String bloodType = (String) mapResult.get("Blood_Type__c");
 
-//		NRIC_No__c 
-//	   NRIC_Date__c,
-//		NRIC_Expiration_Date__c, 
-//		No_NPWP__c,
+//		 
+		String nircNo = (String) mapResult.get("NRIC_No__c");
+//	   ,
+		Date nircDate = null;
+		if(mapResult.get("NRIC_Date__c") != null){
+			nircDate = Utils.convertStringToDate((String) mapResult
+					.get("Date_of_Birth__c"));
+		}
+		
+//		, 
+		Date nircExpirationDate = null;
+		if(mapResult.get("NRIC_Expiration_Date__c") != null){
+			nircExpirationDate = Utils.convertStringToDate((String) mapResult
+					.get("NRIC_Expiration_Date__c"));
+		}
+		
+//		,
+		String npwpNo = (String) mapResult.get("No_NPWP__c");
 //		NPWP_Date__c,
-//		Nationality__c,
+		Date npwpDate = null;
+		if(mapResult.get("NPWP_Date__c") != null){
+			npwpDate = Utils.convertStringToDate((String) mapResult
+					.get("NPWP_Date__c"));
+		}
+//		,
+		String nationality = (String) mapResult.get("Nationality__c");
 //		Emergency_Contact_Address__c,
 //		Emergency_Contact_Name__c,
 //		Emergency_Contact_Phone__c,
@@ -84,7 +101,9 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 			// if exist doing update
 			if (empDb == null) {
 				empDb = new Employee();
+				empDb.setCreatedDate(new Date());
 			}
+			empDb.setModifiedDate(new Date());
 			empDb.setExtId(e.getExtId());
 			empDb.setFirstName(e.getFirstName());
 

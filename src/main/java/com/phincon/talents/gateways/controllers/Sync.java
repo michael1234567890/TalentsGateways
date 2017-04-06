@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.phincon.talents.gateways.EmployeeForceAdapter;
-import com.phincon.talents.gateways.FamilyForceAdapter;
+import com.phincon.talents.gateways.adapter.force.EmployeeForceAdapter;
+import com.phincon.talents.gateways.adapter.force.FamilyForceAdapter;
 
 @Controller
 @RequestMapping("/sync")

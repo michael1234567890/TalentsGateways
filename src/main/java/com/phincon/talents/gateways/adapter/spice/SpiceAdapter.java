@@ -1,15 +1,20 @@
-package com.phincon.talents.gateways;
+package com.phincon.talents.gateways.adapter.spice;
+
+import java.util.List;
+import java.util.Map;
+
+import com.phincon.talents.gateways.adapter.InterfaceAdapter;
 
 public class SpiceAdapter<E> implements InterfaceAdapter{
 
 	@Override
-	public void send() {
+	public void sendNewData() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void getData() {
+	public void sendUpdatedData() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -21,9 +26,11 @@ public class SpiceAdapter<E> implements InterfaceAdapter{
 	}
 
 	@Override
-	public void saveData() {
+	public void send(List<Map<String, Object>> listData) {
 		// TODO Auto-generated method stub
 		
 	}
+
+
 
 }

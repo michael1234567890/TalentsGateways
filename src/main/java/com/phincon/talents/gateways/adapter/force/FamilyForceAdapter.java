@@ -1,4 +1,4 @@
-package com.phincon.talents.gateways;
+package com.phincon.talents.gateways.adapter.force;
 
 import java.util.Date;
 import java.util.List;
@@ -115,8 +115,11 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 			family.setEmployeeExtId(e.getEmployeeExtId());
 			
 			Employee employee = employeeService.findByExtId(e.getEmployeeExtId());
-			if(employee != null)
+			if(employee != null){
 				family.setEmployee(employee.getId());
+				family.setCreatedDate(new Date());
+			}
+			family.setModifiedDate(new Date());
 			familyService.save(family);
 			System.out.println("Success Save Family");
 		}
