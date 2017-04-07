@@ -159,11 +159,13 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 				System.out.println("No " + (i + 1) + " : " + family.toString());
 				i++;
 			}
-			send(listMap);
+			if(listMap.size() > 0)
+				send(listMap);
 			System.out.println(i + " Task Already Sending ");
 		}
 	}
 	
+	@Autowired
 	@Override
 	public void updateExtId( String extId, Long id) {
 		System.out.println("ID " + id + " , ExtId " + extId);
