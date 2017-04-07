@@ -3,7 +3,6 @@ package com.phincon.talents.gateways.adapter.force;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +22,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phincon.talents.gateways.adapter.InterfaceAdapter;
+import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.utils.ForceResponse;
 
 public class ForceAdapter<E> implements InterfaceAdapter {
@@ -33,6 +33,7 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 	protected String username = "";
 	protected String password = "";
 	protected String query = "";
+	protected String forceModuleName = "";
 
 	RestTemplate restTemplate = new RestTemplate();
 	ObjectMapper objectMapper = new ObjectMapper();
@@ -48,6 +49,16 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		this.clientSecret = clientSecret;
 		this.username = username;
 		this.password = password;
+	}
+
+	public void setConfigure(ConnectedApp connectedApp, String moduleName) {
+		// super();
+		this.urlThirdParty = connectedApp.getInstanceUrl();
+		this.clientId = connectedApp.getConsumerKey();
+		this.clientSecret = connectedApp.getConsumerSecret();
+		this.username = connectedApp.getUsername();
+		this.password = connectedApp.getPassword();
+		this.forceModuleName = moduleName;
 	}
 
 	public ForceAdapter() {
@@ -98,8 +109,8 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		System.out.println("access_token : " + accessToken);
 		System.out.println("+++++++++++ REQUEST RESPONSE +++++++++++++++");
 
-		String urlQuery = instanceUrl
-				+ "/services/data/v38.0/sobjects/HRPERINFO__c";
+		String urlQuery = instanceUrl + "/services/data/v38.0/sobjects/"
+				+ this.forceModuleName;
 
 		System.out.println(urlQuery);
 		MultiValueMap<String, String> headersPost = new LinkedMultiValueMap<String, String>();
@@ -111,26 +122,45 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 				new MappingJackson2HttpMessageConverter());
 
 		// PREPARE POST DATA
+		for (Map<String, Object> mapPost : listData) {
 
-		Map<String, String> mapPost = new HashMap<String, String>();
-		mapPost.put("RecordTypeId", "012410000001mguAAA");
-		mapPost.put("Name", "Test From Talent Gateway");
-		mapPost.put("Applicant_No__c", "TEST-ddsdsadsa");
-		mapPost.put("First_Name__c", "Test From");
+			System.out.println(mapPost);
+			Long id = (Long) mapPost.get("id");
+			mapPost.remove("id");
+			try {
+				HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String, Object>>(
+						mapPost, headersPost);
+				String response = restTemplate.postForObject(urlQuery, request,
+						String.class);
 
-		try {
-			HttpEntity<Map<String, String>> request = new HttpEntity<Map<String, String>>(
-					mapPost, headersPost);
-			String response = restTemplate.postForObject(urlQuery, request,
-					String.class);
-			System.out.println("Reponse Post " + response);
-		} catch (HttpClientErrorException ex) {
-			System.out.println("Error HTTP Client " + ex.getMessage());
-		} catch (Exception ex) {
-			System.out.println("Error " + ex.getMessage());
+				System.out.println("Reponse Post " + response);
+				try {
+					mapObject = objectMapper.readValue(response,
+							new TypeReference<Map<String, Object>>() {
+							});
+				} catch (JsonParseException e) {
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				String extId = (String) mapObject.get("id");
+				updateExtId(extId,id);
 
+			} catch (HttpClientErrorException ex) {
+				System.out.println("Error HTTP Client " + ex.getMessage());
+			} catch (Exception ex) {
+				System.out.println("Error " + ex.getMessage());
+
+			}
 		}
 
+	}
+
+	public void updateExtId(String extId,Long id) {
+		
 	}
 
 	/*
@@ -139,9 +169,8 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 	@Override
 	public void sendUpdatedData() {
 		System.out.println("Get Updated Data Method");
-		
-	}
 
+	}
 
 	/*
 	 * receive data from host and save to Database
@@ -235,8 +264,6 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		return null;
 	}
 
-
-
 	public void saveListDate(List<E> listData) {
 
 	}
@@ -244,7 +271,7 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 	@Override
 	public void sendNewData() {
 		// get new Data from E class
-		List<Map<String,Object>> listMap = null ;
+		List<Map<String, Object>> listMap = null;
 		// calling send method
 		send(listMap);
 	}

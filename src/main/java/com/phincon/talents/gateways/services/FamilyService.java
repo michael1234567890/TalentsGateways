@@ -34,10 +34,20 @@ public class FamilyService {
 	public Iterable<Family> findAll() {
 		return familyRepository.findAll();
 	}
+	
+	@Transactional
+	public Iterable<Family> findAllExtIdNull() {
+		return familyRepository.findAllExtIdNull();
+	}
 
 	@Transactional
 	public void save(Family obj) {
 		familyRepository.save(obj);
+	}
+	
+	@Transactional
+	public void updateExtIdById(String extId, Long id) {
+		familyRepository.updateExtIdById(extId, id);
 	}
 
 }

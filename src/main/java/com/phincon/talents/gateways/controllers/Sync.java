@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.phincon.talents.gateways.adapter.force.EmployeeForceAdapter;
 import com.phincon.talents.gateways.adapter.force.FamilyForceAdapter;
+import com.phincon.talents.gateways.model.ConnectedApp;
+import com.phincon.talents.gateways.services.ConnectedAppService;
 
 @Controller
 @RequestMapping("/sync")
@@ -15,6 +17,8 @@ public class Sync {
 	@Autowired EmployeeForceAdapter employeeForceAdapter;
 	
 	@Autowired FamilyForceAdapter familyAdapter;
+	
+	@Autowired ConnectedAppService connectedAppService;
 	
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
@@ -44,6 +48,18 @@ public class Sync {
     	familyAdapter.receive();
         return "Hello User!";
     }
+    
+    @RequestMapping(value = "/family/send", method = RequestMethod.GET)
+    @ResponseBody
+	public String sendFamilies() {
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	System.out.println(connectedApp.toString());
+    	
+    	familyAdapter.setConfigure(connectedApp,"HRPERFAMILY__c");
+    	familyAdapter.sendNewData();
+        return "Hello User!";
+    }
+    
     
     
 
