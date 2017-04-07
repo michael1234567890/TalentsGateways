@@ -2,6 +2,7 @@ package com.phincon.talents.gateways.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +20,7 @@ public interface FamilyRepository extends PagingAndSortingRepository<Family,Long
 	  @Query("SELECT u FROM Family u WHERE u.extId is NULL")
 	 List<Family> findAllExtIdNull();
 	  
+	  @Modifying
 	  @Query("UPDATE Family SET extId=:extId WHERE id=:id")
 	  void updateExtIdById(@Param("extId") String extId,@Param("id")  Long id);
 		 
