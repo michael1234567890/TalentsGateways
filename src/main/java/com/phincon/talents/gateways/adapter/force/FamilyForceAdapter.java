@@ -165,7 +165,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 		}
 	}
 	
-	@Autowired
+	
 	@Override
 	public void updateExtId( String extId, Long id) {
 		System.out.println("ID " + id + " , ExtId " + extId);
