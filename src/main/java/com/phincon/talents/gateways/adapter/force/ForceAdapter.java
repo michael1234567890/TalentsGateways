@@ -214,8 +214,9 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		System.out.println("access_token : " + accessToken);
 		System.out.println("+++++++++++ REQUEST RESPONSE +++++++++++++++");
 
-		String urlQuery = instanceUrl + "/services/data/v36.0/query?q="
-				+ this.query;
+		/*String urlQuery = instanceUrl + "/services/data/v39.0/query?q="
+				+ this.query;*/
+		String urlQuery = instanceUrl + "/services/apexrest/" + this.query;
 
 		System.out.println(urlQuery);
 
@@ -233,9 +234,9 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 			ForceResponse forceResponse = (ForceResponse) objectMapper
 					.readValue(resultQuery.getBody(), ForceResponse.class);
 			if (forceResponse != null) {
-				System.out.println("Total Size : "
-						+ forceResponse.getTotalSize());
-				listResponse = convertToListObject(forceResponse.getRecords());
+				/*System.out.println("Total Size : "
+						+ forceResponse.getTotalSize());*/
+				listResponse = convertToListObject(forceResponse.getItems());
 
 				if (listResponse.size() > 0) {
 					// save into DB

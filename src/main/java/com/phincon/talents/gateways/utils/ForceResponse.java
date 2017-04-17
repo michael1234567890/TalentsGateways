@@ -4,32 +4,16 @@ import java.util.List;
 import java.util.Map;
 
 public class ForceResponse {
-	private int totalSize;
-	private List<Map<String, Object>> records;
-	private boolean done;
+	
+	private List<Map<String, Object>> items;
 
-	public int getTotalSize() {
-		return totalSize;
+	public List<Map<String, Object>> getItems() {
+		return items;
 	}
 
-	public void setTotalSize(int totalSize) {
-		this.totalSize = totalSize;
+	public void setItems(List<Map<String, Object>> items) {
+		this.items = items;
 	}
-
-	public List<Map<String, Object>> getRecords() {
-		return records;
-	}
-
-	public void setRecords(List<Map<String, Object>> records) {
-		this.records = records;
-	}
-
-	public boolean isDone() {
-		return done;
-	}
-
-	public void setDone(boolean done) {
-		this.done = done;
-	}
+	
 
 }
