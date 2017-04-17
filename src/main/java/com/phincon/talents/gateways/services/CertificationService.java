@@ -29,6 +29,16 @@ public class CertificationService {
 	}
 	
 	@Transactional
+	public Iterable<Certification> findAllExtIdNull(){
+		return certificationRepository.findAllExtIdNull();
+	}
+	
+	@Transactional
+	public void updateExtIdById(String extId, Long id){
+		certificationRepository.updateExtIdById(extId, id);
+	}
+	
+	@Transactional
 	public void save(Certification obj){
 		certificationRepository.save(obj);
 	}

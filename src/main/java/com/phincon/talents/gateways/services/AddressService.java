@@ -29,6 +29,16 @@ public class AddressService {
 	}
 	
 	@Transactional
+	public Iterable<Address> findAllExtIdNull(){
+		return addressRepository.findAllExtIdNull();
+	}
+	
+	@Transactional
+	public void updateExtIdById(String extId, Long id){
+		addressRepository.updateExtIdById(extId, id);
+	}
+	
+	@Transactional
 	public void save(Address obj){
 		addressRepository.save(obj);
 	}
