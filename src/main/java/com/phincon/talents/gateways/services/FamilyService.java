@@ -49,5 +49,10 @@ public class FamilyService {
 	public void updateExtIdById(String extId, Long id) {
 		familyRepository.updateExtIdById(extId, id);
 	}
+	
+	@Transactional
+	public void updateExtIdByUUID(String extId, String uuid) {
+		familyRepository.updateExtIdByUUID(extId, uuid);
+	}
 
 }

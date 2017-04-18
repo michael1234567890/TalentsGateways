@@ -28,10 +28,13 @@ public class Sync {
     	String cleintSecret = "5249588143570196746";
     	String username = "hendra.ramdhan@payroll.dev2.pysandbox1";
     	String password = "bismillah123454iNfyIRLbcB3bLYqVWDzCZ66";
+    	//Long companyId = 1L;
     	
-    	employeeForceAdapter.setConfigure(url,clientId, cleintSecret, username, password);
+    	//employeeForceAdapter.setConfigure(url,clientId, cleintSecret, username, password);
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	employeeForceAdapter.setConfigure(connectedApp,"GetAllHRPERINFO");
     	employeeForceAdapter.receive();
-        return "Hello User!";
+        return "Employee Pull Completed !";
     }
     
     
@@ -44,9 +47,12 @@ public class Sync {
     	String username = "hendra.ramdhan@payroll.dev2.pysandbox1";
     	String password = "bismillah123454iNfyIRLbcB3bLYqVWDzCZ66";
     	
-    	familyAdapter.setConfigure(url,clientId, cleintSecret, username, password);
+    	//familyAdapter.setConfigure(url,clientId, cleintSecret, username, password);
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	familyAdapter.setConfigure(connectedApp,"GetAllHRPERFAMILY");
+    	
     	familyAdapter.receive();
-        return "Hello User!";
+        return "Family pull completed !";
     }
     
     @RequestMapping(value = "/family/send", method = RequestMethod.GET)
@@ -55,9 +61,9 @@ public class Sync {
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	System.out.println(connectedApp.toString());
     	
-    	familyAdapter.setConfigure(connectedApp,"HRPERFAMILY__c");
+    	familyAdapter.setConfigure(connectedApp,"InsertUpdateHRPERFAMILY");
     	familyAdapter.sendNewData();
-        return "Hello User!";
+        return "Family Send Completed !";
     }
     
     

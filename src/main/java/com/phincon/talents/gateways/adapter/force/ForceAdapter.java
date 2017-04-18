@@ -3,6 +3,7 @@ package com.phincon.talents.gateways.adapter.force;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 	protected String password = "";
 	protected String query = "";
 	protected String forceModuleName = "";
+	protected Long companyid = 0L;
 
 	RestTemplate restTemplate = new RestTemplate();
 	ObjectMapper objectMapper = new ObjectMapper();
@@ -59,6 +61,7 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		this.username = connectedApp.getUsername();
 		this.password = connectedApp.getPassword();
 		this.forceModuleName = moduleName;
+		this.companyid = connectedApp.getCompany();
 	}
 
 	public ForceAdapter() {
@@ -109,7 +112,7 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		System.out.println("access_token : " + accessToken);
 		System.out.println("+++++++++++ REQUEST RESPONSE +++++++++++++++");
 
-		String urlQuery = instanceUrl + "/services/data/v38.0/sobjects/"
+		String urlQuery = instanceUrl + "/services/apexrest/"
 				+ this.forceModuleName;
 
 		System.out.println(urlQuery);
@@ -122,8 +125,9 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 				new MappingJackson2HttpMessageConverter());
 
 		// PREPARE POST DATA
-		for (Map<String, Object> mapPost : listData) {
-
+		//for (Map<String, Object> mapPost : listData) {
+			Map<String, Object> mapPost = new HashMap<String, Object>();
+			mapPost.put("items", listData);
 			System.out.println(mapPost);
 			Long id = (Long) mapPost.get("id");
 			mapPost.remove("id");
@@ -146,8 +150,7 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 					e.printStackTrace();
 				}
 				
-				String extId = (String) mapObject.get("id");
-				updateExtId(extId,id);
+				updateExtId(listData);
 
 			} catch (HttpClientErrorException ex) {
 				System.out.println("Error HTTP Client " + ex.getMessage());
@@ -155,11 +158,11 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 				System.out.println("Error " + ex.getMessage());
 
 			}
-		}
+	//	}
 
 	}
 
-	public void updateExtId(String extId,Long id) {
+	public void updateExtId(List<Map<String, Object>> list) {
 		
 	}
 
@@ -183,8 +186,6 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		HttpEntity<String> entity = new HttpEntity<String>("parameters",
 				headers);
 
-		// String url =
-		// "https://test.salesforce.com/services/oauth2/token?grant_type=password&client_id=3MVG9AJuBE3rTYDg6xqNgcfzIt0yKktBvgS_EGAKJUa3FUAE9Ehfq.kjP.d6sOU8loQaSGVsjT2BUu3CRc4Qt&client_secret=5249588143570196746&username=hendra.ramdhan@payroll.dev2.pysandbox1&password=bismillah123454iNfyIRLbcB3bLYqVWDzCZ66";
 		String url = this.urlThirdParty
 				+ "/services/oauth2/token?grant_type=password&client_id="
 				+ this.clientId + "&client_secret=" + this.clientSecret

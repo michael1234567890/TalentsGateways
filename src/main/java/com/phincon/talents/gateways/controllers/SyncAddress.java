@@ -11,7 +11,7 @@ import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.services.ConnectedAppService;
 
 @Controller
-@RequestMapping("/syncAddress")
+@RequestMapping("/sync")
 public class SyncAddress {
 	@Autowired
 	AddressForceAdapter addressForceAdapter;
@@ -19,28 +19,23 @@ public class SyncAddress {
 	@Autowired
 	ConnectedAppService connectedAppService;
 	
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "/address/pull", method = RequestMethod.GET)
 	@ResponseBody
-	public String sayHello(){
-		String url = "https://test.salesforce.com";
-    	String clientId = "3MVG9AJuBE3rTYDg6xqNgcfzIt0yKktBvgS_EGAKJUa3FUAE9Ehfq.kjP.d6sOU8loQaSGVsjT2BUu3CRc4Qt";
-    	String clientSecret = "5249588143570196746";
-    	String username = "hendra.ramdhan@payroll.dev2.pysandbox1";
-    	String password = "bismillah123454iNfyIRLbcB3bLYqVWDzCZ66";
+	public String addressPull(){
+		
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	addressForceAdapter.setConfigure(connectedApp,"GetAllHRPERADDRESS");
     	
-    	addressForceAdapter.setConfigure(url,clientId, clientSecret, username, password);
     	addressForceAdapter.receive();
-    	return "Hello User";
+    	return "Address Pull Completed !";
 	}
 	
-	@RequestMapping(value = "/send", method = RequestMethod.GET)
+	@RequestMapping(value = "/address/send", method = RequestMethod.GET)
 	@ResponseBody
 	public String sendAddress(){
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-		System.out.println(connectedApp.toString());
-		
-		addressForceAdapter.setConfigure(connectedApp, "HRPERADDRESS__c");
+		addressForceAdapter.setConfigure(connectedApp, "InsertUpdateHRPERADDRESS");
 		addressForceAdapter.sendNewData();
-		return "Hello User!";
+		return "Address Send Completed !";
 	}
 }

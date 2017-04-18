@@ -5,14 +5,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.phincon.talents.gateways.model.Employee;
 import com.phincon.talents.gateways.model.Family;
 import com.phincon.talents.gateways.services.EmployeeService;
 import com.phincon.talents.gateways.services.FamilyService;
+import com.phincon.talents.gateways.utils.ForceResponseGetId;
 import com.phincon.talents.gateways.utils.Utils;
 
 @Service
@@ -26,9 +32,10 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 
 	public FamilyForceAdapter() {
 		super();
-		query = "select Id,Name, Family_Address__c, Family_Birth_Place__c, Family_Blood_Type__c, Family_Date_of_Birth__c, "
-				+ "Family_Decease_Date__c, Family_Dependent__c, Family_Last_Education__c, Family_Medical_Status__c, Family_Occupation__c, Family_Phone__c, Family_Relationship__c, Gender__c, Letter_No__c, Marital_Status__c, name__c "
-				+ "from HRPERFAMILY__c limit 10";
+//		query = "select Id,Name, Family_Address__c, Family_Birth_Place__c, Family_Blood_Type__c, Family_Date_of_Birth__c, "
+//				+ "Family_Decease_Date__c, Family_Dependent__c, Family_Last_Education__c, Family_Medical_Status__c, Family_Occupation__c, Family_Phone__c, Family_Relationship__c, Gender__c, Letter_No__c, Marital_Status__c, name__c "
+//				+ "from HRPERFAMILY__c limit 10";
+		query = "GetAllHRPERFAMILY";
 	}
 
 	@Override
@@ -138,7 +145,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 			List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 			for (Family family : listFamily) {
 				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("id", family.getId());
+				//map.put("id", family.getId());
 				map.put("Name", family.getName());
 				map.put("Family_Address__c", family.getAddress());
 				map.put("Family_Birth_Place__c", family.getBirthPlace());
@@ -154,7 +161,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 				map.put("Gender__c", family.getGender());
 				map.put("Marital_Status__c", family.getMaritalStatus());
 				map.put("Letter_No__c", family.getLetterNo());
-				map.put("Name__c", "a0H4C000000o8KQUAY");
+				map.put("Name__c", family.getEmployeeExtId());
 				listMap.add(map);
 				System.out.println("No " + (i + 1) + " : " + family.toString());
 				i++;
@@ -167,9 +174,51 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 	
 	
 	@Override
-	public void updateExtId( String extId, Long id) {
-		System.out.println("ID " + id + " , ExtId " + extId);
-		familyService.updateExtIdById(extId, id);
+	public void updateExtId( List<Map<String, Object>> list) {
+		//System.out.println("ID " + id + " , ExtId " + extId);
+		List<Map<String, Object>> listMapUpdateId = new ArrayList();
+		for (Map<String, Object> map : list) {
+			Map<String, Object> mapUpdateId = new HashMap<String, Object>();
+			UUID uuid = (UUID) map.get("ExtId__c");
+			mapUpdateId.put("ExtId__c", uuid);
+			listMapUpdateId.add(mapUpdateId);
+			
+		}
+		
+		// prepare sending update Ext ID
+		Map<String, Object> mapPost = new HashMap<String, Object>();
+		mapPost.put("items", listMapUpdateId);
+		MultiValueMap<String, String> headersPost = new LinkedMultiValueMap<String, String>();
+		headersPost.add("Authorization", "Bearer " + accessToken);
+		headersPost.add("Content-Type", "application/json");
+		String urlQuery = this.instanceUrl + "/services/apexrest/GetIdbyExtId?SyncObject=HRPERFAMILY__C";
+		try {
+			HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String, Object>>(
+					mapPost, headersPost);
+			String response = restTemplate.postForObject(urlQuery, request,
+					String.class);
+
+			System.out.println("Reponse Post " + response);
+			
+			ForceResponseGetId forceResponseGetId = (ForceResponseGetId) objectMapper
+					.readValue(response, ForceResponseGetId.class);
+			List<Map<String,Object>> listResponseGetId = forceResponseGetId.getResults();
+			
+			for (Map<String, Object> map : listResponseGetId) {
+				String extId = (String) map.get("Id");
+				String uuid = (String) map.get("ExtId__c");
+				System.out.println("Ext Id "+ extId);
+				System.out.println("uuid " + uuid);
+				familyService.updateExtIdByUUID(extId, uuid);
+			}
+			
+		} catch (HttpClientErrorException ex) {
+			System.out.println("Error HTTP Client " + ex.getMessage());
+		} catch (Exception ex) {
+			System.out.println("Error " + ex.getMessage());
+
+		}
+		
 	}
 
 }

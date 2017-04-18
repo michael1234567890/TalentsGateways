@@ -19,9 +19,10 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 
 	public EmployeeForceAdapter() {
 		super();
-		query = "select Id,Employee_No__c, First_Name__c,Office_Email__c, Last_Name__c, Date_of_Birth__c,Birthplace__c,Mobile_Phone__c,Middle_Name__c,Religion__c, "
-				+ "Blood_Type__c,NRIC_No__c ,NRIC_Date__c,NRIC_Expiration_Date__c, No_NPWP__c,"
-				+ "NPWP_Date__c,Nationality__c,Emergency_Contact_Address__c,Emergency_Contact_Name__c,Emergency_Contact_Phone__c,Emergency_Contact_Other_Phone__c,Emergency_Contact_Relationship__c from HRPERINFO__c limit 10";
+//		query = "select Id,Employee_No__c, First_Name__c,Office_Email__c, Last_Name__c, Date_of_Birth__c,Birthplace__c,Mobile_Phone__c,Middle_Name__c,Religion__c, "
+//				+ "Blood_Type__c,NRIC_No__c ,NRIC_Date__c,NRIC_Expiration_Date__c, No_NPWP__c,"
+//				+ "NPWP_Date__c,Nationality__c,Emergency_Contact_Address__c,Emergency_Contact_Name__c,Emergency_Contact_Phone__c,Emergency_Contact_Other_Phone__c,Emergency_Contact_Relationship__c from HRPERINFO__c limit 10";
+		query = "GetAllHRPERINFO";
 	}
 
 	@Override
@@ -116,6 +117,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 			empDb.setEmployeeNo(e.getEmployeeNo());
 			empDb.setReligion(e.getReligion());
 			empDb.setMiddleName(e.getMiddleName());
+			empDb.setCompany(this.companyid);
 			employeeService.save(empDb);
 			System.out.println("Success Save Employee");
 		}

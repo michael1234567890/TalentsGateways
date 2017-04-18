@@ -439,11 +439,13 @@ public class Employee extends AbstractEntity {
 	private String employeeNo;
 	
 	
-//	
+	
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name="company_id")
 //	private Company company;
 	
+	@Column(name="company_id")
+	private Long company;
 	
 	@Column(name="work_interest")
 	private String workInterest;
@@ -1255,6 +1257,14 @@ public class Employee extends AbstractEntity {
 
 	public void setEmployeeNo(String employeeNo) {
 		this.employeeNo = employeeNo;
+	}
+
+	public Long getCompany() {
+		return company;
+	}
+
+	public void setCompany(Long company) {
+		this.company = company;
 	}
 	
 	

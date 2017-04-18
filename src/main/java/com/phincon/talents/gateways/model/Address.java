@@ -58,6 +58,10 @@ public class Address extends AbstractEntity {
 	
 	@Column(name="zip_code", length=15)
 	private String zipCode;
+	
+
+	@Column(name = "employee_ext_id", length=100)
+	private String employeeExtId;
 
 	public String getAddress() {
 		return address;
@@ -193,6 +197,16 @@ public class Address extends AbstractEntity {
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
 	}
+
+	public String getEmployeeExtId() {
+		return employeeExtId;
+	}
+
+	public void setEmployeeExtId(String employeeExtId) {
+		this.employeeExtId = employeeExtId;
+	}
+	
+	
 	
 	
 	

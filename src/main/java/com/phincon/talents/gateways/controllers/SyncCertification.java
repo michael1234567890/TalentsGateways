@@ -11,7 +11,7 @@ import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.services.ConnectedAppService;
 
 @Controller
-@RequestMapping("/syncCertification")
+@RequestMapping("/sync")
 public class SyncCertification {
 	@Autowired
 	CertificationForceAdapter certificationForceAdapter;
@@ -19,23 +19,24 @@ public class SyncCertification {
 	@Autowired
 	ConnectedAppService connectedAppService;
 	
-	@RequestMapping(method = RequestMethod.GET)
+	 @RequestMapping(value = "/certification/pull", method = RequestMethod.GET)
 	@ResponseBody
-	public String sayHello(){
+	public String certificationPull(){
 		String url = "https://test.salesforce.com";
 		String clientId = "3MVG9AJuBE3rTYDg6xqNgcfzIt0yKktBvgS_EGAKJUa3FUAE9Ehfq.kjP.d6sOU8loQaSGVsjT2BUu3CRc4Qt";
     	String clientSecret = "5249588143570196746";
     	String username = "hendra.ramdhan@payroll.dev2.pysandbox1";
     	String password = "bismillah123454iNfyIRLbcB3bLYqVWDzCZ66";
     	
-    	certificationForceAdapter.setConfigure(url,clientId, clientSecret, username, password);
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	certificationForceAdapter.setConfigure(connectedApp,"GetAllHRPERCERTIFICATION");
     	certificationForceAdapter.receive();
     	return "Hello User";
 	}
 	
-	@RequestMapping(value = "/send", method = RequestMethod.GET)
+	@RequestMapping(value = "/certification/send", method = RequestMethod.GET)
 	@ResponseBody
-	public String sendCertification(){
+	public String certificationSend(){
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
 		System.out.println(connectedApp.toString());
 		

@@ -42,4 +42,10 @@ public class AddressService {
 	public void save(Address obj){
 		addressRepository.save(obj);
 	}
+	
+
+	@Transactional
+	public void updateExtIdByUUID(String extId, String uuid) {
+		addressRepository.updateExtIdByUUID(extId, uuid);
+	}
 }

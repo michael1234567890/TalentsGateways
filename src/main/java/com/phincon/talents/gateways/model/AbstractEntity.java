@@ -45,6 +45,12 @@ public class AbstractEntity {
 	
 	@Column(name = "ext_id", length=100)
 	private String extId;
+	
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="sync_date")
+	private Date syncDate;
+	
 
 	@PrePersist
 	protected void prePersist() {
@@ -135,6 +141,14 @@ public class AbstractEntity {
 
 	public void setExtId(String extId) {
 		this.extId = extId;
+	}
+
+	public Date getSyncDate() {
+		return syncDate;
+	}
+
+	public void setSyncDate(Date syncDate) {
+		this.syncDate = syncDate;
 	}
 	
 	

@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phincon.talents.gateways.model.Certification;
+import com.phincon.talents.gateways.model.Employee;
 import com.phincon.talents.gateways.services.CertificationService;
+import com.phincon.talents.gateways.services.EmployeeService;
 import com.phincon.talents.gateways.utils.Utils;
 
 @Service
@@ -19,6 +21,9 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 
 	@Autowired
 	CertificationService certificationService;
+	
+	@Autowired
+	EmployeeService employeeService;
 	
 	public CertificationForceAdapter() {
 		super();
@@ -80,6 +85,10 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 			certificationType = null;
 		}
 		//String fullName = (String) mapResult.get("Full_Name__c");
+		String empExtId = null;
+		if(mapResult.get("Full_Name__c") != null)
+			empExtId = (String) mapResult.get("Full_Name__c");
+		
 		String principle = "";
 		if(mapResult.get("Principle__c") != null){
 			principle = (String) mapResult.get("Principle__c");
@@ -110,6 +119,7 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 		certification.setType(certificationType);
 		certification.setPrinciple(principle);
 		certification.setYear(yearCertified);
+		certification.setEmployeeExtId(empExtId);
 
 		return certification;
 	}
@@ -134,7 +144,14 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 			certDb.setType(e.getType());
 			certDb.setPrinciple(e.getPrinciple());
 			certDb.setYear(e.getYear());
-			
+			Employee employee = employeeService.findByExtId(e.getEmployeeExtId());
+			if (employee != null) {
+				certDb.setEmployee(employee);
+				
+			}
+			certDb.setEmployeeExtId(e.getEmployeeExtId());
+			certDb.setCreatedDate(new Date());
+			certDb.setModifiedDate(new Date());
 			certificationService.save(certDb);
 			System.out.println("Success Save Certification");
 		}
@@ -170,10 +187,6 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 		}
 	}
 	
-	@Override
-	public void updateExtId(String extId, Long id){
-		System.out.print("ID " + id + " , ExtId " + extId);
-		certificationService.updateExtIdById(extId, id);
-	}
+
 
 }

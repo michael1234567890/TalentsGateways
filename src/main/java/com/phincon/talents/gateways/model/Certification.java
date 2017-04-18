@@ -43,6 +43,11 @@ public class Certification extends AbstractEntity {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "employee_id")
 	private Employee employee;
+	
+	
+	@Column(name = "employee_ext_id", length=100)
+	private String employeeExtId;
+	
 
 	@Column(name = "principle")
 	private String principle;
@@ -129,6 +134,16 @@ public class Certification extends AbstractEntity {
 	public void setYear(String year) {
 		this.year = year;
 	}
+
+	public String getEmployeeExtId() {
+		return employeeExtId;
+	}
+
+	public void setEmployeeExtId(String employeeExtId) {
+		this.employeeExtId = employeeExtId;
+	}
+	
+	
 
 	
 }

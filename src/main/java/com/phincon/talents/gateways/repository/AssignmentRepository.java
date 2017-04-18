@@ -8,22 +8,19 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.phincon.talents.gateways.model.Address;
+import com.phincon.talents.gateways.model.Assignment;
 
 @Repository
-public interface AddressRepository extends PagingAndSortingRepository<Address, Long>{
+public interface AssignmentRepository extends PagingAndSortingRepository<Assignment, Long>{
 	
 	@Query
-	Address findByExtId(String extId);
+	Assignment findByExtId(String extId);
 	
-	@Query("SELECT u FROM Address u WHERE u.extId is NULL")
-	List<Address> findAllExtIdNull();
+	
+	@Query("SELECT u FROM Assignment u WHERE u.extId is NULL")
+	List<Assignment> findAllExtIdNull();
 	
 	@Modifying
-	@Query("UPDATE Address SET extId=:extId WHERE id=:id")
+	@Query("UPDATE Assignment SET extId=:extId WHERE id=:id")
 	void updateExtIdById(@Param("extId") String extId, @Param("id") Long id);
-	
-	  @Modifying
-	  @Query("UPDATE Address SET extId=:extId WHERE uuidStr=:uuid")
-	  void updateExtIdByUUID(@Param("extId") String extId,@Param("uuid")  String uuid);
 }
