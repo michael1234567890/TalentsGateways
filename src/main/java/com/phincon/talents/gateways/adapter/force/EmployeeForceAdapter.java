@@ -118,6 +118,8 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 			empDb.setReligion(e.getReligion());
 			empDb.setMiddleName(e.getMiddleName());
 			empDb.setCompany(this.companyid);
+			empDb.setModifiedBy("Talents Gateway");
+			empDb.setCreatedBy("Talents Gateway");
 			employeeService.save(empDb);
 			System.out.println("Success Save Employee");
 		}

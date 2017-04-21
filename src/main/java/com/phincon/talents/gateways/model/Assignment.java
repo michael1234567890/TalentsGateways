@@ -4,9 +4,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,15 +15,28 @@ public class Assignment extends AbstractEntity {
 	public static String MODEINDIRECT = "indirect";
 	public static String MODEOTHER = "other";
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "job_title")
-	private JobTitle jobTitle;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "job_title")
+//	private JobTitle jobTitle;
+	
+	@Column(name="job_title_id")
+	private Long jobTitle;
+	
+	@Column(name="job_title_ext_id")
+	private String jobTitleExtId;
+	
+	
+	@Column(name = "employment_id")
+	private Long employment;
 
-	@Column(name = "employee_id")
-	private Long employee;
-
-	@Column(name = "report_to_id")
-	private Long reportTo;
+	/*
+	 * 
+	 */
+	@Column(name = "employment_direct_to_id")
+	private Long employmentDirectTo;
+	
+	@Column(name = "employment_direct_to_ext_id")
+	private String employmentDirectToExtId;
 
 	@Column(name = "company_id")
 	private Long company;
@@ -48,6 +58,14 @@ public class Assignment extends AbstractEntity {
 	@Column(name = "deleted")
 	private Boolean deleted = false;
 
+	@Temporal(TemporalType.DATE)
+	@Column(name = "letter_date")
+	private Date letterDate;
+	
+	@Column(name = "letter_no", length = 100)
+	private String letterNo;
+	
+	
 	@Column(name = "work_location", length = 100)
 	private String workLocation;
 
@@ -56,6 +74,9 @@ public class Assignment extends AbstractEntity {
 
 	@Column(name = "department", length = 100)
 	private String deparment;
+	
+	@Column(name = "sub_department", length = 100)
+	private String subDeparment;
 
 	@Column(name = "division", length = 100)
 	private String division;
@@ -66,18 +87,19 @@ public class Assignment extends AbstractEntity {
 	@Column(name = "category", length = 100)
 	private String category;
 	
-	@Column(name = "type", length = 50)
-	private String type;
+	@Column(name = "employee_type", length = 50)
+	private String employeeType;
 	
-	@Column(name = "status", length = 50)
-	private String status;
+	@Column(name = "employee_status", length = 50)
+	private String employeeStatus;
 	
 	@Column(name = "name", length = 50)
 	private String name;
 	
+	
 
-	@Column(name = "employee_ext_id", length=100)
-	private String employeeExtId;
+	@Column(name = "employment_ext_id", length=100)
+	private String employmentExtId;
 	
 
 	public String getMode() {
@@ -168,20 +190,24 @@ public class Assignment extends AbstractEntity {
 		this.category = category;
 	}
 
-	public Long getEmployee() {
-		return employee;
+	
+
+	public Long getEmployment() {
+		return employment;
 	}
 
-	public void setEmployee(Long employee) {
-		this.employee = employee;
+	public void setEmployment(Long employment) {
+		this.employment = employment;
 	}
 
-	public Long getReportTo() {
-		return reportTo;
+	
+
+	public Long getEmploymentDirectTo() {
+		return employmentDirectTo;
 	}
 
-	public void setReportTo(Long reportTo) {
-		this.reportTo = reportTo;
+	public void setEmploymentDirectTo(Long employmentDirectTo) {
+		this.employmentDirectTo = employmentDirectTo;
 	}
 
 	public Long getCompany() {
@@ -192,28 +218,40 @@ public class Assignment extends AbstractEntity {
 		this.company = company;
 	}
 
-	public JobTitle getJobTitle() {
+	
+
+	
+
+	public Long getJobTitle() {
 		return jobTitle;
 	}
 
-	public void setJobTitle(JobTitle jobTitle) {
+	public void setJobTitle(Long jobTitle) {
 		this.jobTitle = jobTitle;
 	}
 
-	public String getType() {
-		return type;
+	public String getJobTitleExtId() {
+		return jobTitleExtId;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setJobTitleExtId(String jobTitleExtId) {
+		this.jobTitleExtId = jobTitleExtId;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getEmployeeType() {
+		return employeeType;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setEmployeeType(String employeeType) {
+		this.employeeType = employeeType;
+	}
+
+	public String getEmployeeStatus() {
+		return employeeStatus;
+	}
+
+	public void setEmployeeStatus(String employeeStatus) {
+		this.employeeStatus = employeeStatus;
 	}
 
 	public String getName() {
@@ -224,13 +262,48 @@ public class Assignment extends AbstractEntity {
 		this.name = name;
 	}
 
-	public String getEmployeeExtId() {
-		return employeeExtId;
+	public String getEmploymentExtId() {
+		return employmentExtId;
 	}
 
-	public void setEmployeeExtId(String employeeExtId) {
-		this.employeeExtId = employeeExtId;
+	public void setEmploymentExtId(String employmentExtId) {
+		this.employmentExtId = employmentExtId;
 	}
+
+	public Date getLetterDate() {
+		return letterDate;
+	}
+
+	public void setLetterDate(Date letterDate) {
+		this.letterDate = letterDate;
+	}
+
+	public String getLetterNo() {
+		return letterNo;
+	}
+
+	public void setLetterNo(String letterNo) {
+		this.letterNo = letterNo;
+	}
+
+	public String getSubDeparment() {
+		return subDeparment;
+	}
+
+	public void setSubDeparment(String subDeparment) {
+		this.subDeparment = subDeparment;
+	}
+
+	public String getEmploymentDirectToExtId() {
+		return employmentDirectToExtId;
+	}
+
+	public void setEmploymentDirectToExtId(String employmentDirectToExtId) {
+		this.employmentDirectToExtId = employmentDirectToExtId;
+	}
+
+	
+	
 	
 	
 

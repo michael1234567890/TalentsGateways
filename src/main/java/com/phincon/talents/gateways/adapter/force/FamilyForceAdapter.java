@@ -102,6 +102,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 			// if exist doing update
 			if (family == null) {
 				family = new Family();
+				family.setCreatedDate(new Date());
 			}
 
 			family.setAddress(e.getAddress());
@@ -127,9 +128,11 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 					.getEmployeeExtId());
 			if (employee != null) {
 				family.setEmployee(employee.getId());
-				family.setCreatedDate(new Date());
+				
 			}
 			family.setModifiedDate(new Date());
+			family.setModifiedBy("Talents Gateway");
+			family.setCreatedBy("Talents Gateway");
 			familyService.save(family);
 			System.out.println("Success Save Family");
 		}
@@ -146,6 +149,8 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 			for (Family family : listFamily) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				//map.put("id", family.getId());
+				
+				map.put("ExtId__c", family.getUuid());
 				map.put("Name", family.getName());
 				map.put("Family_Address__c", family.getAddress());
 				map.put("Family_Birth_Place__c", family.getBirthPlace());

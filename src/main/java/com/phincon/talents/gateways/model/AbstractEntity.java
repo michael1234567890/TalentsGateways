@@ -43,6 +43,12 @@ public class AbstractEntity {
 	@Column(name = "UUID")
 	private String uuidStr;
 	
+	@Column(name = "modified_by")
+	private String modifiedBy  = "Talents Gateway";;
+	
+	@Column(name = "created_by")
+	private String createdBy = "Talents Gateway";
+	
 	@Column(name = "ext_id", length=100)
 	private String extId;
 	
@@ -150,6 +156,23 @@ public class AbstractEntity {
 	public void setSyncDate(Date syncDate) {
 		this.syncDate = syncDate;
 	}
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+	
 	
 	
 	

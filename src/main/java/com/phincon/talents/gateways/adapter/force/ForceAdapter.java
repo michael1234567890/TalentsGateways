@@ -215,9 +215,8 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		System.out.println("access_token : " + accessToken);
 		System.out.println("+++++++++++ REQUEST RESPONSE +++++++++++++++");
 
-		/*String urlQuery = instanceUrl + "/services/data/v39.0/query?q="
-				+ this.query;*/
-		String urlQuery = instanceUrl + "/services/apexrest/" + this.query;
+		//String urlQuery = instanceUrl + "/services/apexrest/" + this.query;
+		String urlQuery = instanceUrl + "/services/apexrest/GetAll?SyncObject=" + this.query;
 
 		System.out.println(urlQuery);
 

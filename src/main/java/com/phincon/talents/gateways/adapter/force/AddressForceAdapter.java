@@ -171,6 +171,7 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 			
 			if(addrsDb == null){
 				addrsDb = new Address();
+				addrsDb.setCreatedDate(new Date());
 			}
 			addrsDb.setExtId(e.getExtId());
 			addrsDb.setAddress(e.getAddress());
@@ -195,8 +196,9 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 			}
 			
 			addrsDb.setEmployeeExtId(e.getEmployeeExtId());
-			addrsDb.setCreatedDate(new Date());
 			addrsDb.setModifiedDate(new Date());
+			addrsDb.setModifiedBy("Talents Gateway");
+			addrsDb.setCreatedBy("Talents Gateway");
 			addressService.save(addrsDb);
 			System.out.println("Success Save Address");
 		}

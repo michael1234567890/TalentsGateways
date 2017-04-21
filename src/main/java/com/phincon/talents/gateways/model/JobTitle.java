@@ -15,20 +15,25 @@ public class JobTitle extends AbstractEntity {
 	@Column(name = "company_id")
 	private Long company;
 
-	@Column(name = "job_title", length = 50)
-	private String jobTitle;
+	@Column(name = "name", length = 50)
+	private String name;
 
 	@Column(name = "description", length = 255)
 	private String description;
+	
+	@Column(name = "remark", length = 255)
+	private String remark;
 
-	@Column(name = "note", length = 100)
-	private String note;
+	
 
 	@Column(name = "type", length = 50)
 	private String type;
 
 	@Column(name = "total_budget")
-	private Double totalBudget;
+	private Integer totalBudget;
+	
+	@Column(name = "total_number")
+	private Integer totalNumber;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "start_date")
@@ -37,13 +42,14 @@ public class JobTitle extends AbstractEntity {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "end_date")
 	private Date endDate;
-
-	public String getJobTitle() {
-		return jobTitle;
+	
+	
+	public String getName() {
+		return name;
 	}
 
-	public void setJobTitle(String jobTitle) {
-		this.jobTitle = jobTitle;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getDescription() {
@@ -54,13 +60,6 @@ public class JobTitle extends AbstractEntity {
 		this.description = description;
 	}
 
-	public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
-	}
 
 	
 	public Long getCompany() {
@@ -79,11 +78,11 @@ public class JobTitle extends AbstractEntity {
 		this.type = type;
 	}
 
-	public Double getTotalBudget() {
+	public Integer getTotalBudget() {
 		return totalBudget;
 	}
 
-	public void setTotalBudget(Double totalBudget) {
+	public void setTotalBudget(Integer totalBudget) {
 		this.totalBudget = totalBudget;
 	}
 
@@ -102,5 +101,25 @@ public class JobTitle extends AbstractEntity {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Integer getTotalNumber() {
+		return totalNumber;
+	}
+
+	public void setTotalNumber(Integer totalNumber) {
+		this.totalNumber = totalNumber;
+	}
+	
+	
+	
+	
 
 }
