@@ -31,7 +31,7 @@ public class SyncCertification {
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	certificationForceAdapter.setConfigure(connectedApp,"GetAllHRPERCERTIFICATION");
     	certificationForceAdapter.receive();
-    	return "Hello User";
+    	return "Certification Pull Completed!";
 	}
 	
 	@RequestMapping(value = "/certification/send", method = RequestMethod.GET)
@@ -40,8 +40,8 @@ public class SyncCertification {
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
 		System.out.println(connectedApp.toString());
 		
-		certificationForceAdapter.setConfigure(connectedApp, "HRPERCERTIFICATION__c");
+		certificationForceAdapter.setConfigure(connectedApp, "InsertUpdateHRPERCERTIFICATION");
 		certificationForceAdapter.sendNewData();
-		return "Hello User!";
+		return "Certification Send Completed!";
 	}
 }

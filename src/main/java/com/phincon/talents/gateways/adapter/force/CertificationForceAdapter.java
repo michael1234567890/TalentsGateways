@@ -6,14 +6,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.phincon.talents.gateways.model.Certification;
 import com.phincon.talents.gateways.model.Employee;
 import com.phincon.talents.gateways.services.CertificationService;
 import com.phincon.talents.gateways.services.EmployeeService;
+import com.phincon.talents.gateways.utils.ForceResponseGetId;
 import com.phincon.talents.gateways.utils.Utils;
 
 @Service
@@ -167,7 +173,9 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 			List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 			for(Certification certification : listCertification){
 				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("Id", certification.getId());
+				map.put("Full_Name__c", certification.getEmployeeExtId());
+				map.put("ExtId__c", certification.getUuid());
+				//map.put("Id", certification.getId());
 				map.put("Name", certification.getName());
 				map.put("Certification_Date__c", certification.getDate());
 				map.put("Certification_Description__c", certification.getDescription());
@@ -185,6 +193,51 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 				send(listMap);
 			System.out.println(i + " Task Already Sending");
 		}
+	}
+	
+	public void updateExtId(List<Map<String, Object>> list){
+		List<Map<String, Object>> listMapUpdateId = new ArrayList<>();
+		for(Map<String, Object> map : list){
+			Map<String, Object> mapUpdateId = new HashMap<String, Object>();
+			UUID uuid = (UUID) map.get("ExtId__c");
+			mapUpdateId.put("ExtId__c", uuid);
+			listMapUpdateId.add(mapUpdateId);
+		}
+		
+		// prepare sending update Ext ID
+		Map<String, Object> mapPost = new HashMap<String, Object>();
+		mapPost.put("items", listMapUpdateId);
+		MultiValueMap<String, String> headerPost = new LinkedMultiValueMap<String, String>();
+		headerPost.add("Authorization", "Bearer " + accessToken );
+		headerPost.add("Content-Type", "application/json");
+		String urlQuery = this.instanceUrl + "/services/apexrest/GetIdbyExtId?SyncObject=HRPERCERTIFICATION__c";
+		System.out.println("URL Query : " + urlQuery);
+		
+		try{
+			HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String, Object>>(
+					mapPost, headerPost);
+			String response = restTemplate.postForObject(urlQuery, request,
+					String.class);
+			
+			System.out.println("Response Post Ext Id " + response);
+			
+			ForceResponseGetId forceResponseGetId = (ForceResponseGetId) objectMapper
+					.readValue(response, ForceResponseGetId.class);
+			List<Map<String,Object>> listResponseGetId = forceResponseGetId.getResults();
+			
+			for(Map<String, Object> map : listResponseGetId){
+				String extId = (String) map.get("Id");
+				String uuid = (String) map.get("ExtId__c");
+				System.out.println("Ext Id " + extId);
+				System.out.println("uuid " + uuid);
+				certificationService.updateExtIdByUUID(extId, uuid);
+			}
+		}catch(HttpClientErrorException ex){
+			System.out.println("Error HTTP Client : " + ex.getMessage());
+		}catch(Exception ex){
+			System.out.println("Error : " + ex.getMessage());
+		}
+		
 	}
 	
 

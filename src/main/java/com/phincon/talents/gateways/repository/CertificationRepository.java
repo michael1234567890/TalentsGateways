@@ -22,4 +22,8 @@ public interface CertificationRepository extends PagingAndSortingRepository<Cert
 	@Modifying
 	@Query("UPDATE Certification SET extId=:extId WHERE id=:id")
 	void updateExtIdById(@Param("extId") String extId, @Param("id") Long id);
+	
+	@Modifying
+	@Query("UPDATE Certification SET extId=:extId WHERE uuidStr=:uuid")
+	void updateExtIdByUUID(@Param("extId") String extId, @Param("uuid") String uuid);
 }

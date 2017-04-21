@@ -14,7 +14,7 @@ public class CertificationService {
 	CertificationRepository certificationRepository;
 	
 	@Transactional
-	public Certification findCertification(Long id){
+	public Certification findById(Long id){
 		return certificationRepository.findOne(id);
 	}
 	
@@ -41,5 +41,10 @@ public class CertificationService {
 	@Transactional
 	public void save(Certification obj){
 		certificationRepository.save(obj);
+	}
+	
+	@Transactional
+	public void updateExtIdByUUID(String extId, String uuid){
+		certificationRepository.updateExtIdByUUID(extId, uuid);
 	}
 }
