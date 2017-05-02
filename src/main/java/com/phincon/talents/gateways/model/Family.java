@@ -77,6 +77,8 @@ public class Family extends AbstractEntity {
 	@Column(name = "employee_ext_id", length=100)
 	private String employeeExtId;
 	
+	@Column(name = "company_id")
+	private Long company;
 
 	public String getAliveStatus() {
 		return aliveStatus;
@@ -220,6 +222,14 @@ public class Family extends AbstractEntity {
 
 	public void setEmployeeExtId(String employeeExtId) {
 		this.employeeExtId = employeeExtId;
+	}
+
+	public Long getCompany() {
+		return company;
+	}
+
+	public void setCompany(Long company) {
+		this.company = company;
 	}
 	
 	

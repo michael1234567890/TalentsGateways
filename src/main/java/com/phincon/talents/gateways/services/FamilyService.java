@@ -1,11 +1,12 @@
 package com.phincon.talents.gateways.services;
 
+import java.util.Date;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.phincon.talents.gateways.model.Employee;
 import com.phincon.talents.gateways.model.Family;
 import com.phincon.talents.gateways.repository.FamilyRepository;
 
@@ -38,6 +39,16 @@ public class FamilyService {
 	@Transactional
 	public Iterable<Family> findAllExtIdNull() {
 		return familyRepository.findAllExtIdNull();
+	}
+	
+	@Transactional
+	public Iterable<Family> getAllExtIdNotNull(){
+		return familyRepository.getAllExtIdNotNull();
+	}
+	
+	@Transactional
+	public Iterable<Family> getAllDataForUpdate(Date lastSync){
+		return familyRepository.getAllDataForUpdate(lastSync);
 	}
 
 	@Transactional

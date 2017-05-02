@@ -66,6 +66,17 @@ public class Sync {
         return "Family Send Completed !";
     }
     
+    @RequestMapping(value = "/family/update", method = RequestMethod.GET)
+    @ResponseBody
+    public String updateFamilies(){
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	System.out.println(connectedApp.toString());
+    	
+    	familyAdapter.setConfigure(connectedApp,"InsertUpdateHRPERFAMILY");
+    	familyAdapter.sendUpdatedData();
+    	return "Family Update Completed!";
+    }
+    
     
     
 

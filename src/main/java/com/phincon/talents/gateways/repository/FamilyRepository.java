@@ -1,5 +1,6 @@
 package com.phincon.talents.gateways.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,6 +20,12 @@ public interface FamilyRepository extends PagingAndSortingRepository<Family,Long
 	 
 	  @Query("SELECT u FROM Family u WHERE u.extId is NULL")
 	 List<Family> findAllExtIdNull();
+	  
+	  @Query("SELECT u FROM Family u WHERE u.extId is not NULL")
+	  List<Family> getAllExtIdNotNull();
+	  
+	  @Query("SELECT u FROM Family u WHERE u.modifiedDate >= :lastSync")
+	  List<Family> getAllDataForUpdate(@Param("lastSync") Date lastSync);
 	  
 	  @Modifying
 	  @Query("UPDATE Family SET extId=:extId WHERE id=:id")

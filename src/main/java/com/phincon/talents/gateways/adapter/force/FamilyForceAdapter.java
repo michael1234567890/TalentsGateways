@@ -16,8 +16,10 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import com.phincon.talents.gateways.model.Employee;
 import com.phincon.talents.gateways.model.Family;
+import com.phincon.talents.gateways.model.HistorySync;
 import com.phincon.talents.gateways.services.EmployeeService;
 import com.phincon.talents.gateways.services.FamilyService;
+import com.phincon.talents.gateways.services.HistorySyncService;
 import com.phincon.talents.gateways.utils.ForceResponseGetId;
 import com.phincon.talents.gateways.utils.Utils;
 
@@ -29,6 +31,9 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 
 	@Autowired
 	EmployeeService employeeService;
+	
+	@Autowired
+	HistorySyncService historySyncService;
 
 	public FamilyForceAdapter() {
 		super();
@@ -115,7 +120,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 			family.setGender(e.getGender());
 
 			family.setLastEducation(e.getLastEducation());
-			family.setRelationship(e.getLastEducation());
+			family.setRelationship(e.getRelationship());
 			family.setPhone(e.getPhone());
 			family.setOccupation(e.getOccupation());
 			family.setName(e.getName());
@@ -130,6 +135,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 				family.setEmployee(employee.getId());
 				
 			}
+			family.setCompany(employee.getCompany());
 			family.setModifiedDate(new Date());
 			family.setModifiedBy("Talents Gateway");
 			family.setCreatedBy("Talents Gateway");
@@ -137,18 +143,16 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 			System.out.println("Success Save Family");
 		}
 	}
-
-	@Override
-	public void sendNewData() {
-		// get data with ext id is null
-		System.out.println("Send New Data");
-		Iterable<Family> listFamily = familyService.findAllExtIdNull();
+	
+	public void listFamily(Iterable<Family> listFamily){
 		if (listFamily != null) {
 			int i = 0;
 			List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 			for (Family family : listFamily) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				//map.put("id", family.getId());
+				if(family.getExtId() != null)
+					map.put("Id", family.getExtId());
 				
 				map.put("ExtId__c", family.getUuid());
 				map.put("Name", family.getName());
@@ -175,6 +179,30 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 				send(listMap);
 			System.out.println(i + " Task Already Sending ");
 		}
+	}
+
+	@Override
+	public void sendNewData() {
+		// get data with ext id is null
+		System.out.println("Send New Data");
+		Iterable<Family> listFamily = familyService.findAllExtIdNull();
+		listFamily(listFamily);
+	}
+	
+	@Override
+	public void sendUpdatedData(){
+		System.out.println("Send Updated Data");
+		
+		
+		// ambil last sync sesuai dengan modul dan company
+		List<HistorySync> listHistory = historySyncService.findByModuleNameAndCompanyId("family", 1L);
+		Date lastSync = new Date();
+		if(listHistory != null && listHistory.size() > 0) {
+			HistorySync objHistorySync = listHistory.get(0);
+			lastSync = objHistorySync.getLastSync();
+		}
+		Iterable<Family> listFamily = familyService.getAllDataForUpdate(lastSync);
+		listFamily(listFamily);
 	}
 	
 	
