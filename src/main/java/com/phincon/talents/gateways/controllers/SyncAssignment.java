@@ -9,15 +9,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.phincon.talents.gateways.adapter.force.AssignmentForceAdapter;
 import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.services.ConnectedAppService;
+import com.phincon.talents.gateways.services.HistorySyncService;
 
 @Controller
 @RequestMapping("/sync")
 public class SyncAssignment {
+	private String moduleName = "HREMPASSIGNMENT";
 	@Autowired
 	AssignmentForceAdapter assignmentForceAdapter;
 	
 	@Autowired
 	ConnectedAppService connectedAppService;
+	
+
+	@Autowired
+	HistorySyncService historySyncService ;
 	
 	 @RequestMapping(value = "/assignment/pull", method = RequestMethod.GET)
 	@ResponseBody
@@ -25,8 +31,10 @@ public class SyncAssignment {
 		
     	
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-    	assignmentForceAdapter.setConfigure(connectedApp,"GetAllHREMPASSIGNMENT");
+    	assignmentForceAdapter.setConfigure(connectedApp,this.moduleName);
     	assignmentForceAdapter.receive();
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	
     	return "Successfully Pull Assignment";
 	}
 	

@@ -33,6 +33,9 @@ public class Certification extends AbstractEntity {
 
 	@Column(name = "full", length = 500)
 	private String full;
+	
+	@Column(name = "need_sync")
+	private Boolean needSync;
 
 	@Column(name = "no", length = 100)
 	private String no;
@@ -142,6 +145,16 @@ public class Certification extends AbstractEntity {
 	public void setEmployeeExtId(String employeeExtId) {
 		this.employeeExtId = employeeExtId;
 	}
+
+	public Boolean getNeedSync() {
+		return needSync;
+	}
+
+	public void setNeedSync(Boolean needSync) {
+		this.needSync = needSync;
+	}
+	
+	
 	
 	
 

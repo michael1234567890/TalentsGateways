@@ -9,12 +9,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.phincon.talents.gateways.adapter.force.CertificationForceAdapter;
 import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.services.ConnectedAppService;
+import com.phincon.talents.gateways.services.HistorySyncService;
 
 @Controller
 @RequestMapping("/sync")
 public class SyncCertification {
+	private String moduleName = "HRPERCERTIFICATION";
 	@Autowired
 	CertificationForceAdapter certificationForceAdapter;
+
+	@Autowired
+	HistorySyncService historySyncService ;
 	
 	@Autowired
 	ConnectedAppService connectedAppService;
@@ -22,15 +27,12 @@ public class SyncCertification {
 	 @RequestMapping(value = "/certification/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String certificationPull(){
-		String url = "https://test.salesforce.com";
-		String clientId = "3MVG9AJuBE3rTYDg6xqNgcfzIt0yKktBvgS_EGAKJUa3FUAE9Ehfq.kjP.d6sOU8loQaSGVsjT2BUu3CRc4Qt";
-    	String clientSecret = "5249588143570196746";
-    	String username = "hendra.ramdhan@payroll.dev2.pysandbox1";
-    	String password = "bismillah123454iNfyIRLbcB3bLYqVWDzCZ66";
-    	
+
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-    	certificationForceAdapter.setConfigure(connectedApp,"GetAllHRPERCERTIFICATION");
+    	certificationForceAdapter.setConfigure(connectedApp,this.moduleName);
     	certificationForceAdapter.receive();
+
+	 	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
     	return "Certification Pull Completed!";
 	}
 	

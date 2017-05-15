@@ -135,7 +135,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 				family.setEmployee(employee.getId());
 				
 			}
-			family.setCompany(employee.getCompany());
+			family.setCompany(this.companyid);
 			family.setModifiedDate(new Date());
 			family.setModifiedBy("Talents Gateway");
 			family.setCreatedBy("Talents Gateway");
@@ -185,7 +185,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 	public void sendNewData() {
 		// get data with ext id is null
 		System.out.println("Send New Data");
-		Iterable<Family> listFamily = familyService.findAllExtIdNull();
+		Iterable<Family> listFamily = familyService.findNeedSync();
 		listFamily(listFamily);
 	}
 	

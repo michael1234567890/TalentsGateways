@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import com.phincon.talents.gateways.model.Assignment;
 import com.phincon.talents.gateways.model.Employment;
 import com.phincon.talents.gateways.model.JobTitle;
+import com.phincon.talents.gateways.model.Position;
 import com.phincon.talents.gateways.services.AssignmentService;
 import com.phincon.talents.gateways.services.EmploymentService;
 import com.phincon.talents.gateways.services.JobTitleService;
+import com.phincon.talents.gateways.services.PositionService;
 import com.phincon.talents.gateways.utils.Utils;
 
 @Service
@@ -23,6 +25,9 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 
 	@Autowired
 	EmploymentService employmentService;
+	
+	@Autowired
+	PositionService positionService;
 
 	@Autowired
 	JobTitleService jobTitleService;
@@ -71,10 +76,11 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 
 		String subDepartment = (String) mapResult.get("Sub_Department__c");
 		String workLocation = (String) mapResult.get("Work_Location_Name__c");
-
+		String positionExtId = (String) mapResult.get("Position_Name__c");
+		
 		Assignment assignment = new Assignment();
-		assignment.setEmploymentExtId(employmentExtId);
-		;
+		assignment.setPositionExtId(positionExtId);
+		assignment.setEmploymentExtId(employmentExtId);;
 		assignment.setEmployeeType(type);
 		assignment.setEmployeeStatus(status);
 		assignment.setExtId(extId);
@@ -116,7 +122,7 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 			assignment.setEmployeeType(e.getEmployeeType());
 			assignment.setExtId(e.getExtId());
 			assignment.setEmploymentExtId(e.getEmploymentExtId());
-			;
+			assignment.setPositionExtId(e.getPositionExtId());
 
 			assignment.setExtId(e.getExtId());
 			assignment.setName(e.getName());
@@ -137,23 +143,41 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 			assignment.setLevel(e.getLevel());
 			assignment.setWorkLocation(e.getWorkLocation());
 
-			Employment employment = employmentService.findByExtId(e
-					.getEmploymentExtId());
-			if (employment != null) {
-				assignment.setEmployment(employment.getId());
+			if(e.getPositionExtId() != null){
+				Position position = positionService.findByExtId(e.getPositionExtId());
+				if (position != null) {
+					assignment.setPosition(position.getId());
+				}
+				
 			}
+			
+			
+			if(e.getEmploymentExtId() != null) {
+				Employment employment = employmentService.findByExtId(e
+						.getEmploymentExtId());
+				if (employment != null) {
+					assignment.setEmployment(employment.getId());
+				}
+			}
+			
 
-			JobTitle jobTitle = jobTitleService.findByExtId(e
-					.getJobTitleExtId());
-			if (jobTitle != null) {
-				assignment.setJobTitle(jobTitle.getId());
+			if(e.getJobTitleExtId() != null) {
+				JobTitle jobTitle = jobTitleService.findByExtId(e
+						.getJobTitleExtId());
+				if (jobTitle != null) {
+					assignment.setJobTitle(jobTitle.getId());
+				}
 			}
+			
 
-			Employment employmentDirectTo = employmentService.findByExtId(e
-					.getEmploymentDirectToExtId());
-			if (employmentDirectTo != null) {
-				assignment.setEmploymentDirectTo(employmentDirectTo.getId());
+			if(e.getEmploymentDirectToExtId() != null) {
+				Employment employmentDirectTo = employmentService.findByExtId(e
+						.getEmploymentDirectToExtId());
+				if (employmentDirectTo != null) {
+					assignment.setEmploymentDirectTo(employmentDirectTo.getId());
+				}
 			}
+			
 			assignment.setCompany(this.companyid);
 			assignment.setCreatedDate(new Date());
 			assignment.setModifiedDate(new Date());

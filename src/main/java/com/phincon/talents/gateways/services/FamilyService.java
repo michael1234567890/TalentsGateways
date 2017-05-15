@@ -1,12 +1,14 @@
 package com.phincon.talents.gateways.services;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.phincon.talents.gateways.model.Employee;
 import com.phincon.talents.gateways.model.Family;
 import com.phincon.talents.gateways.repository.FamilyRepository;
 
@@ -64,6 +66,12 @@ public class FamilyService {
 	@Transactional
 	public void updateExtIdByUUID(String extId, String uuid) {
 		familyRepository.updateExtIdByUUID(extId, uuid);
+	}
+	
+
+	@Transactional
+	public List<Family> findNeedSync() {
+		return familyRepository.findNeedSync();
 	}
 
 }

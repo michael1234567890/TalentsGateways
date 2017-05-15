@@ -8,26 +8,21 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.phincon.talents.gateways.model.Certification;
+import com.phincon.talents.gateways.model.Organization;
 
 @Repository
-public interface CertificationRepository extends PagingAndSortingRepository<Certification, Long> {
-	
+public interface OrganizationRepository extends PagingAndSortingRepository<Organization, Long>{
 	@Query
-	Certification findByExtId(String extId);
+	Organization findByExtId(String extId);
 	
-	@Query("SELECT u FROM Certification u WHERE u.extId is NULL")
-	List<Certification> findAllExtIdNull();
+	@Query("SELECT u FROM Organization u WHERE u.extId is NULL")
+	List<Organization> findAllExtIdNull();
 	
 	@Modifying
-	@Query("UPDATE Certification SET extId=:extId WHERE id=:id")
+	@Query("UPDATE Organization SET extId=:extId WHERE id=:id")
 	void updateExtIdById(@Param("extId") String extId, @Param("id") Long id);
 	
 	@Modifying
-	@Query("UPDATE Certification SET needSync=false, extId=:extId WHERE uuidStr=:uuid")
+	@Query("UPDATE Organization SET extId=:extId WHERE uuidStr=:uuid")
 	void updateExtIdByUUID(@Param("extId") String extId, @Param("uuid") String uuid);
-	
-
-	 @Query("SELECT u FROM Certification u WHERE u.needSync=true")
-	  List<Certification> findNeedSync();
 }

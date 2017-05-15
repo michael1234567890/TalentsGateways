@@ -1,22 +1,21 @@
 package com.phincon.talents.gateways.controllers;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.phincon.talents.gateways.adapter.force.AddressForceAdapter;
+import com.phincon.talents.gateways.adapter.force.EmployeeForceAdapter;
 import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.services.ConnectedAppService;
 import com.phincon.talents.gateways.services.HistorySyncService;
 
 @Controller
 @RequestMapping("/sync")
-public class SyncAddress {
-	private String moduleName = "HRPERADDRESS";
+public class SyncEmployee {
+	private String moduleName = "HRPERINFO";
 	@Autowired
-	AddressForceAdapter addressForceAdapter;
+	EmployeeForceAdapter employeeForceAdapter;
 	
 	@Autowired
 	ConnectedAppService connectedAppService;
@@ -24,25 +23,26 @@ public class SyncAddress {
 	@Autowired
 	HistorySyncService historySyncService ;
 	
-	@RequestMapping(value = "/address/pull", method = RequestMethod.GET)
-	@ResponseBody
-	public String addressPull(){
-		
-    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-    	addressForceAdapter.setConfigure(connectedApp,this.moduleName);
-    	
-    	addressForceAdapter.receive();
-    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
-       
-    	return "Address Pull Completed !";
-	}
 	
-	@RequestMapping(value = "/address/send", method = RequestMethod.GET)
-	@ResponseBody
-	public String sendAddress(){
-		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-		addressForceAdapter.setConfigure(connectedApp, "InsertUpdateHRPERADDRESS");
-		addressForceAdapter.sendNewData();
-		return "Address Send Completed !";
-	}
+    @RequestMapping(value="/employee/pull", method = RequestMethod.GET)
+    @ResponseBody
+	public String employeePull() {
+
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	employeeForceAdapter.setConfigure(connectedApp,this.moduleName);
+    	employeeForceAdapter.receive();
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+        return "Employee Pull Completed !";
+    }
+    
+    @RequestMapping(value = "/employee/send", method = RequestMethod.GET)
+    @ResponseBody
+	public String sendFamilies() {
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	employeeForceAdapter.setConfigure(connectedApp,"InsertUpdateHRPERINFO");
+    	employeeForceAdapter.sendNewData();
+        return "Employee Send Completed !";
+    }
+    
+
 }

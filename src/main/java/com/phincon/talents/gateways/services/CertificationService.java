@@ -1,11 +1,14 @@
 package com.phincon.talents.gateways.services;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phincon.talents.gateways.model.Certification;
+import com.phincon.talents.gateways.model.Employee;
 import com.phincon.talents.gateways.repository.CertificationRepository;
 
 @Service
@@ -21,6 +24,12 @@ public class CertificationService {
 	@Transactional
 	public Certification findByExtId(String extId){
 		return certificationRepository.findByExtId(extId);
+	}
+	
+	
+	@Transactional
+	public List<Certification> findNeedSync() {
+		return certificationRepository.findNeedSync();
 	}
 	
 	@Transactional

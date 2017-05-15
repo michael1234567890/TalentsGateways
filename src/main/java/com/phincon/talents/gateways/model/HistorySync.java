@@ -11,7 +11,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name="h_last_sync")
 public class HistorySync extends AbstractEntity{
-	
+	public final static int DIFF_SYNC = 60; // in sec
 	@Column(name="company_id", length=20)
 	private Long companyId;
 	
@@ -21,6 +21,14 @@ public class HistorySync extends AbstractEntity{
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="last_sync")
 	private Date lastSync;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="next_sync_time")
+	private Date nextSyncTime;
+	
+	
+	@Column(name="diff_next_sync")
+	private int diffNextSync = DIFF_SYNC; //in sec
 	
 	public Long getCompanyId() {
 		return companyId;
@@ -40,4 +48,20 @@ public class HistorySync extends AbstractEntity{
 	public void setLastSync(Date lastSync) {
 		this.lastSync = lastSync;
 	}
+	public int getDiffNextSync() {
+		return diffNextSync;
+	}
+	public void setDiffNextSync(int diffNextSync) {
+		this.diffNextSync = diffNextSync;
+	}
+	public Date getNextSyncTime() {
+		return nextSyncTime;
+	}
+	public void setNextSyncTime(Date nextSyncTime) {
+		this.nextSyncTime = nextSyncTime;
+	}
+	
+	
+	
+	
 }

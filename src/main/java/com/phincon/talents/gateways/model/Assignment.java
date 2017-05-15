@@ -26,6 +26,13 @@ public class Assignment extends AbstractEntity {
 	private String jobTitleExtId;
 	
 	
+	@Column(name="position_id")
+	private Long position;
+	
+	@Column(name="position_ext_id")
+	private String positionExtId;
+	
+	
 	@Column(name = "employment_id")
 	private Long employment;
 
@@ -300,6 +307,22 @@ public class Assignment extends AbstractEntity {
 
 	public void setEmploymentDirectToExtId(String employmentDirectToExtId) {
 		this.employmentDirectToExtId = employmentDirectToExtId;
+	}
+
+	public Long getPosition() {
+		return position;
+	}
+
+	public void setPosition(Long position) {
+		this.position = position;
+	}
+
+	public String getPositionExtId() {
+		return positionExtId;
+	}
+
+	public void setPositionExtId(String positionExtId) {
+		this.positionExtId = positionExtId;
 	}
 
 	

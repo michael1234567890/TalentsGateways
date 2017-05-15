@@ -22,6 +22,9 @@ public class Family extends AbstractEntity {
 
 	@Column(name = "address", length = 1000)
 	private String address;
+	
+	@Column(name = "need_sync")
+	private Boolean needSync;
 
 	@Column(name = "birth_place", length = 100)
 	private String birthPlace;
@@ -76,6 +79,11 @@ public class Family extends AbstractEntity {
 	
 	@Column(name = "employee_ext_id", length=100)
 	private String employeeExtId;
+	
+	@Column(name="status", length=30)
+	private String status;
+	
+	
 	
 	@Column(name = "company_id")
 	private Long company;
@@ -230,6 +238,22 @@ public class Family extends AbstractEntity {
 
 	public void setCompany(Long company) {
 		this.company = company;
+	}
+
+	public Boolean getNeedSync() {
+		return needSync;
+	}
+
+	public void setNeedSync(Boolean needSync) {
+		this.needSync = needSync;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	

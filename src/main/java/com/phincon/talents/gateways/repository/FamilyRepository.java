@@ -9,6 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.phincon.talents.gateways.model.Employee;
 import com.phincon.talents.gateways.model.Family;
 
 @Repository
@@ -32,10 +33,12 @@ public interface FamilyRepository extends PagingAndSortingRepository<Family,Long
 	  void updateExtIdById(@Param("extId") String extId,@Param("id")  Long id);
 	  
 	  @Modifying
-	  @Query("UPDATE Family SET extId=:extId WHERE uuidStr=:uuid")
+	  @Query("UPDATE Family SET needSync=false, extId=:extId WHERE uuidStr=:uuid")
 	  void updateExtIdByUUID(@Param("extId") String extId,@Param("uuid")  String uuid);
 		
-		 
+	  @Query("SELECT u FROM Family u WHERE u.needSync=true")
+	  List<Family> findNeedSync();
+	  
 	 
 	
 }

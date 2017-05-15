@@ -438,12 +438,25 @@ public class Employee extends AbstractEntity {
 	@Column(name="employee_no", length=50)
 	private String employeeNo;
 	
+
+	@Column(name="need_sync")
+	private Boolean needSync;
+	
+	
 	
 	
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name="company_id")
 //	private Company company;
 	
+	public Boolean getNeedSync() {
+		return needSync;
+	}
+
+	public void setNeedSync(Boolean needSync) {
+		this.needSync = needSync;
+	}
+
 	@Column(name="company_id")
 	private Long company;
 	

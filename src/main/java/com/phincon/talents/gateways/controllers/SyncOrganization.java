@@ -6,17 +6,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.phincon.talents.gateways.adapter.force.AddressForceAdapter;
+import com.phincon.talents.gateways.adapter.force.OrganizationForceAdapter;
 import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.services.ConnectedAppService;
 import com.phincon.talents.gateways.services.HistorySyncService;
 
 @Controller
 @RequestMapping("/sync")
-public class SyncAddress {
-	private String moduleName = "HRPERADDRESS";
+public class SyncOrganization {
+	private String moduleName = "wssetorganization";
 	@Autowired
-	AddressForceAdapter addressForceAdapter;
+	OrganizationForceAdapter organizationForceAdapter;
 	
 	@Autowired
 	ConnectedAppService connectedAppService;
@@ -24,25 +24,16 @@ public class SyncAddress {
 	@Autowired
 	HistorySyncService historySyncService ;
 	
-	@RequestMapping(value = "/address/pull", method = RequestMethod.GET)
+	@RequestMapping(value = "/organization/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String addressPull(){
 		
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-    	addressForceAdapter.setConfigure(connectedApp,this.moduleName);
+    	organizationForceAdapter.setConfigure(connectedApp,this.moduleName);
     	
-    	addressForceAdapter.receive();
+    	organizationForceAdapter.receive();
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
        
-    	return "Address Pull Completed !";
+    	return "Organization Pull Completed !";
 	}
-	
-	@RequestMapping(value = "/address/send", method = RequestMethod.GET)
-	@ResponseBody
-	public String sendAddress(){
-		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-		addressForceAdapter.setConfigure(connectedApp, "InsertUpdateHRPERADDRESS");
-		addressForceAdapter.sendNewData();
-		return "Address Send Completed !";
 	}
-}

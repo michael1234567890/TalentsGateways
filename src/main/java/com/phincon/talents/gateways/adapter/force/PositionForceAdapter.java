@@ -7,7 +7,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.phincon.talents.gateways.model.Organization;
 import com.phincon.talents.gateways.model.Position;
+import com.phincon.talents.gateways.services.OrganizationService;
 import com.phincon.talents.gateways.services.PositionService;
 import com.phincon.talents.gateways.utils.Utils;
 
@@ -16,6 +18,9 @@ public class PositionForceAdapter extends ForceAdapter<Position>{
 	
 	@Autowired
 	PositionService positionService;
+	
+	@Autowired
+	OrganizationService organizationService;
 	
 	public PositionForceAdapter(){
 		super();
@@ -65,6 +70,7 @@ public class PositionForceAdapter extends ForceAdapter<Position>{
 				
 		
 		Position position = new Position();
+		position.setOrganizationExtId(organizationName);
 		position.setExtId(extId);
 		position.setStartDate(startDate);
 		position.setEndDate(endDate);
@@ -99,6 +105,11 @@ public class PositionForceAdapter extends ForceAdapter<Position>{
 				position = new Position();
 				position.setCreatedDate(new Date());
 			}
+			
+			Organization organization = organizationService.findByExtId(e.getOrganizationExtId());
+			if(organization != null)
+				position.setOrganization(organization.getId());
+			
 			position.setExtId(e.getExtId());
 			position.setCompany(this.companyid);
 			position.setStartDate(e.getStartDate());

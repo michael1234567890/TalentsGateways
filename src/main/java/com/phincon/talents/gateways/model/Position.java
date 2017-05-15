@@ -4,6 +4,9 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -11,6 +14,17 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "hr_position")
 public class Position extends AbstractEntity{
+	
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "organization_id")
+//	private Organization organization;
+	
+	@Column(name = "organization_id")
+	private Long organization;
+	
+	@Column(name = "organization_ext_id", length = 50)
+	private String organizationExtId;
+	
 	@Column(name = "company_id")
 	private Long company;
 	
@@ -243,6 +257,24 @@ public class Position extends AbstractEntity{
 	public void setDirectPositionName(String directPositionName) {
 		this.directPositionName = directPositionName;
 	}
+
+	public Long getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(Long organization) {
+		this.organization = organization;
+	}
+
+	public String getOrganizationExtId() {
+		return organizationExtId;
+	}
+
+	public void setOrganizationExtId(String organizationExtId) {
+		this.organizationExtId = organizationExtId;
+	}
+	
+	
 	
 	
 }

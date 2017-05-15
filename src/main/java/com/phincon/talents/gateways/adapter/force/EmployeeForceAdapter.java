@@ -1,14 +1,23 @@
 package com.phincon.talents.gateways.adapter.force;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.phincon.talents.gateways.model.Employee;
+import com.phincon.talents.gateways.model.Family;
 import com.phincon.talents.gateways.services.EmployeeService;
+import com.phincon.talents.gateways.utils.ForceResponseGetId;
 import com.phincon.talents.gateways.utils.Utils;
 
 
@@ -460,6 +469,99 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 			employeeService.save(empDb);
 			System.out.println("Success Save Employee");
 		}
+	}
+	
+	@Override
+	public void sendNewData() {
+		// get data with ext id is null
+		System.out.println("Send New Data");
+		List<Employee> listEmployee = employeeService.findNeedSync();
+		listEmployee(listEmployee);
+	}
+	
+	
+	public void listEmployee(List<Employee> listEmployee){
+		if (listEmployee != null) {
+			int i = 0;
+			List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+			for (Employee employee : listEmployee) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				//map.put("id", family.getId());
+				if(employee.getExtId() != null)
+					map.put("Id", employee.getExtId());
+				
+				map.put("ExtId__c", employee.getUuid());
+				map.put("Birthplace__c", employee.getBirthPlace());
+				map.put("Blood_Type__c", employee.getBloodType());
+				map.put("Mobile_Phone__c", employee.getMobilePhone());
+				map.put("Office_Email__c", employee.getOfficeMail());
+				map.put("First_Name__c", employee.getFirstName());
+				map.put("Last_Name__c", employee.getLastName());
+				map.put("Marital_Status__c", employee.getMaritalStatus());
+				map.put("Date_of_Birth__c", employee.getBirthDate());
+				map.put("Middle_Name__c", employee.getMiddleName());
+				map.put("Religion__c", employee.getReligion());
+				map.put("Email__c", employee.getEmail());
+				
+				
+				
+				listMap.add(map);
+				i++;
+			}
+			if(listMap.size() > 0)
+				send(listMap);
+			System.out.println(i + " Task Already Sending ");
+		}
+	}
+	
+
+	
+	@Override
+	public void updateExtId( List<Map<String, Object>> list) {
+		//System.out.println("ID " + id + " , ExtId " + extId);
+		List<Map<String, Object>> listMapUpdateId = new ArrayList();
+		for (Map<String, Object> map : list) {
+			Map<String, Object> mapUpdateId = new HashMap<String, Object>();
+			UUID uuid = (UUID) map.get("ExtId__c");
+			mapUpdateId.put("ExtId__c", uuid);
+			listMapUpdateId.add(mapUpdateId);
+			
+		}
+		
+		// prepare sending update Ext ID
+		Map<String, Object> mapPost = new HashMap<String, Object>();
+		mapPost.put("items", listMapUpdateId);
+		MultiValueMap<String, String> headersPost = new LinkedMultiValueMap<String, String>();
+		headersPost.add("Authorization", "Bearer " + accessToken);
+		headersPost.add("Content-Type", "application/json");
+		String urlQuery = this.instanceUrl + "/services/apexrest/GetIdbyExtId?SyncObject=HRPERINFO__c";
+		try {
+			HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String, Object>>(
+					mapPost, headersPost);
+			String response = restTemplate.postForObject(urlQuery, request,
+					String.class);
+
+			System.out.println("Reponse Post " + response);
+			
+			ForceResponseGetId forceResponseGetId = (ForceResponseGetId) objectMapper
+					.readValue(response, ForceResponseGetId.class);
+			List<Map<String,Object>> listResponseGetId = forceResponseGetId.getResults();
+			
+			for (Map<String, Object> map : listResponseGetId) {
+				String extId = (String) map.get("Id");
+				String uuid = (String) map.get("ExtId__c");
+				System.out.println("Ext Id "+ extId);
+				System.out.println("uuid " + uuid);
+				employeeService.updateExtIdByUUID(extId, uuid);
+			}
+			
+		} catch (HttpClientErrorException ex) {
+			System.out.println("Error HTTP Client " + ex.getMessage());
+		} catch (Exception ex) {
+			System.out.println("Error " + ex.getMessage());
+
+		}
+		
 	}
 
 }

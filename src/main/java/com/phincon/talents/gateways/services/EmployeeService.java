@@ -1,5 +1,7 @@
 package com.phincon.talents.gateways.services;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +37,20 @@ public class EmployeeService {
 	public Iterable<Employee> findAll() {
 		return employeeRepository.findAll();
 	}
+	
+	@Transactional
+	public List<Employee> findNeedSync() {
+		return employeeRepository.findNeedSync();
+	}
 
 	@Transactional
 	public void save(Employee obj) {
 		employeeRepository.save(obj);
+	}
+	
+	@Transactional
+	public void updateExtIdByUUID(String extId, String uuid) {
+		employeeRepository.updateExtIdByUUID(extId, uuid);
 	}
 
 

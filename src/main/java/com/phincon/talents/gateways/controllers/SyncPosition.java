@@ -9,24 +9,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.phincon.talents.gateways.adapter.force.PositionForceAdapter;
 import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.services.ConnectedAppService;
+import com.phincon.talents.gateways.services.HistorySyncService;
 
 @Controller
 @RequestMapping("/sync")
 public class SyncPosition {
-	
+	private String moduleName = "wssetposition";
 	@Autowired
 	PositionForceAdapter positionForceAdaptor;
 	
 	@Autowired
 	ConnectedAppService connectedAppService;
-	
+
+	@Autowired
+	HistorySyncService historySyncService ;
 	@RequestMapping(value = "/position/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String positionPull(){
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-		positionForceAdaptor.setConfigure(connectedApp, "WSSETPOSITION__c");
+		positionForceAdaptor.setConfigure(connectedApp, this.moduleName);
 		positionForceAdaptor.receive();
-		
+		historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	
 		return "Position Pull Completed!";
 	}
 }

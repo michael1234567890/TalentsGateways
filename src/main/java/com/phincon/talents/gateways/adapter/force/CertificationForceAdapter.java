@@ -139,6 +139,7 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 			// if exist doing update
 			if(certDb == null){
 				certDb = new Certification();
+				certDb.setCreatedDate(new Date());
 			}
 			certDb.setExtId(e.getExtId());
 			certDb.setName(e.getName());
@@ -156,7 +157,7 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 				
 			}
 			certDb.setEmployeeExtId(e.getEmployeeExtId());
-			certDb.setCreatedDate(new Date());
+		
 			certDb.setModifiedDate(new Date());
 			certificationService.save(certDb);
 			System.out.println("Success Save Certification");
@@ -167,7 +168,7 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 	public void sendNewData(){
 		// get data with ext id is null
 		System.out.println("Send New Data");
-		Iterable<Certification> listCertification = certificationService.findAllExtIdNull();
+		Iterable<Certification> listCertification = certificationService.findNeedSync();
 		if(listCertification != null){
 			int i = 0;
 			List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();

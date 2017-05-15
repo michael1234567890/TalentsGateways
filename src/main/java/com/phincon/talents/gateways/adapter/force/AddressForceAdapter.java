@@ -192,7 +192,6 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 			Employee employee = employeeService.findByExtId(e.getEmployeeExtId());
 			if (employee != null) {
 				addrsDb.setEmployee(employee);
-				
 			}
 			
 			addrsDb.setEmployeeExtId(e.getEmployeeExtId());
