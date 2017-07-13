@@ -9,21 +9,27 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.phincon.talents.gateways.model.Address;
+import com.phincon.talents.gateways.model.Family;
 
 @Repository
-public interface AddressRepository extends PagingAndSortingRepository<Address, Long>{
-	
+public interface AddressRepository extends
+		PagingAndSortingRepository<Address, Long> {
+
 	@Query
 	Address findByExtId(String extId);
-	
+
 	@Query("SELECT u FROM Address u WHERE u.extId is NULL")
 	List<Address> findAllExtIdNull();
-	
+
 	@Modifying
 	@Query("UPDATE Address SET extId=:extId WHERE id=:id")
 	void updateExtIdById(@Param("extId") String extId, @Param("id") Long id);
-	
-	  @Modifying
-	  @Query("UPDATE Address SET extId=:extId WHERE uuidStr=:uuid")
-	  void updateExtIdByUUID(@Param("extId") String extId,@Param("uuid")  String uuid);
+
+	@Modifying
+	@Query("UPDATE Address SET needSync=false, extId=:extId WHERE uuidStr=:uuid")
+	void updateExtIdByUUID(@Param("extId") String extId,
+			@Param("uuid") String uuid);
+
+	@Query("SELECT u FROM Address u WHERE u.needSync=true")
+	List<Address> findNeedSync();
 }

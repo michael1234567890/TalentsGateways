@@ -97,7 +97,7 @@ public class PositionForceAdapter extends ForceAdapter<Position>{
 	}
 	
 	@Override
-	public void saveListDate(List<Position> listData){
+	public void saveListData(List<Position> listData){
 		for(Position e : listData){
 			Position position = positionService.findByExtId(e.getExtId());
 			

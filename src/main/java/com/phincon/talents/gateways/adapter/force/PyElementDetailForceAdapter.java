@@ -54,7 +54,7 @@ public class PyElementDetailForceAdapter extends ForceAdapter<PayrollElementDeta
 		String elementType =(String) mapResult.get("Element_Type__c"); 
 		Double elementValue =(Double) mapResult.get("Element_Value__c"); 
 		Boolean groupDisplay =(Boolean) mapResult.get("Group_Display__c"); 
-		Integer groupOrder =(Integer) mapResult.get("Group_Order__c"); 
+		Double groupOrder =(Double) mapResult.get("Group_Order__c"); 
 		Boolean isNet =(Boolean) mapResult.get("Is_Net__c");  
 		Boolean onPaySlip =(Boolean) mapResult.get("On_Pay_Slip__c"); 
 		String payrollElement =(String) mapResult.get("Payroll_Element__c");  
@@ -90,7 +90,7 @@ public class PyElementDetailForceAdapter extends ForceAdapter<PayrollElementDeta
 	}
 	
 	@Override
-	public void saveListDate(List<PayrollElementDetail> listData){
+	public void saveListData(List<PayrollElementDetail> listData){
 		for(PayrollElementDetail e : listData){
 		
 			PayrollElementDetail payrollElementDetail = payrollElementDetailService.findByExtId(e.getExtId());
@@ -121,9 +121,11 @@ public class PyElementDetailForceAdapter extends ForceAdapter<PayrollElementDeta
 			 payrollElementDetail.setRemark(e.getRemark());
 			 payrollElementDetail.setTax(e.getTax());
 			 payrollElementDetail.setTotalElement(e.getTotalElement());
+			 if(e.getPayrollElementHeaderExtId() != null){
+					PayrollElementHeader payrollElementHeader = payrollElementHeaderService.findByExtId(e.getPayrollElementHeaderExtId());
+					payrollElementDetail.setPayrollElementHeader(payrollElementHeader);
+			 }
 			 
-			PayrollElementHeader payrollElementHeader = payrollElementHeaderService.findByExtId(e.getPayrollElementHeaderExtId());
-			payrollElementDetail.setPayrollElementHeader(payrollElementHeader);
 			
 			
 			

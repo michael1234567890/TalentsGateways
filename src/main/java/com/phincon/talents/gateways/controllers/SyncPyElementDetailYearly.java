@@ -6,17 +6,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.phincon.talents.gateways.adapter.force.PyElementHeaderForceAdapter;
+import com.phincon.talents.gateways.adapter.force.PyElementDetailYearlyForceAdapter;
 import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.services.ConnectedAppService;
 import com.phincon.talents.gateways.services.HistorySyncService;
 
 @Controller
 @RequestMapping("/sync")
-public class SyncPyElementHeader {
-	private String moduleName = "pyelementheader";
+public class SyncPyElementDetailYearly {
+	private String moduleName = "payslipyearly";
 	@Autowired
-	PyElementHeaderForceAdapter pyElementHeaderForceAdapter;
+	PyElementDetailYearlyForceAdapter pyElementDetailYearlyForceAdapter;
 	
 	@Autowired
 	ConnectedAppService connectedAppService;
@@ -24,18 +24,17 @@ public class SyncPyElementHeader {
 	@Autowired
 	HistorySyncService historySyncService ;
 	
-	@RequestMapping(value = "/pyelementheader/pull", method = RequestMethod.GET)
+	@RequestMapping(value = "/pyelementdetailyearly/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String pyelementhedaerPull(){
 		
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-    	pyElementHeaderForceAdapter.setConfigure(connectedApp,"pyempelementheader");
-    	
-    	pyElementHeaderForceAdapter.receive();
+    	pyElementDetailYearlyForceAdapter.setConfigure(connectedApp,this.moduleName);
+    	pyElementDetailYearlyForceAdapter.receive();
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
     	
     	
-    	return "Pyelementhedaer Pull Completed !";
+    	return "PyElementDetailYearly Pull Completed !";
 	}
 	
 	

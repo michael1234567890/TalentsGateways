@@ -42,7 +42,7 @@ public class PayrollElementDetail extends AbstractEntity {
 	private Boolean groupDisplay;
 
 	@Column(name="group_order")
-	private Integer groupOrder;
+	private Double groupOrder;
 	
 
 	@Column(name="is_net")
@@ -158,12 +158,12 @@ public class PayrollElementDetail extends AbstractEntity {
 	}
 
 
-	public Integer getGroupOrder() {
+	public Double getGroupOrder() {
 		return groupOrder;
 	}
 
 
-	public void setGroupOrder(Integer groupOrder) {
+	public void setGroupOrder(Double groupOrder) {
 		this.groupOrder = groupOrder;
 	}
 

@@ -6,17 +6,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.phincon.talents.gateways.adapter.force.PyElementHeaderForceAdapter;
+import com.phincon.talents.gateways.adapter.force.TMRequestForceAdapter;
 import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.services.ConnectedAppService;
 import com.phincon.talents.gateways.services.HistorySyncService;
 
 @Controller
 @RequestMapping("/sync")
-public class SyncPyElementHeader {
-	private String moduleName = "pyelementheader";
+public class SyncTMRequest {
+	private String moduleName = "tmtranrequest";
+	
 	@Autowired
-	PyElementHeaderForceAdapter pyElementHeaderForceAdapter;
+	TMRequestForceAdapter tmRequestForceAdapter;
 	
 	@Autowired
 	ConnectedAppService connectedAppService;
@@ -24,19 +25,27 @@ public class SyncPyElementHeader {
 	@Autowired
 	HistorySyncService historySyncService ;
 	
-	@RequestMapping(value = "/pyelementheader/pull", method = RequestMethod.GET)
+	@RequestMapping(value = "/tmrequest/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String pyelementhedaerPull(){
 		
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-    	pyElementHeaderForceAdapter.setConfigure(connectedApp,"pyempelementheader");
-    	
-    	pyElementHeaderForceAdapter.receive();
+    	tmRequestForceAdapter.setConfigure(connectedApp,this.moduleName);
+    	tmRequestForceAdapter.receive();
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
-    	
-    	
-    	return "Pyelementhedaer Pull Completed !";
+    	return this.moduleName + " Pull Completed !";
 	}
+	
+	@RequestMapping(value = "/tmrequest/send", method = RequestMethod.GET)
+    @ResponseBody
+	public String sendRequest() {
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	System.out.println(connectedApp.toString());
+    	
+    	tmRequestForceAdapter.setConfigure(connectedApp,this.moduleName);
+    	tmRequestForceAdapter.sendNewData();
+        return "Family Send Completed !";
+    }
 	
 	
 }

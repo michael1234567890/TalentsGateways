@@ -6,37 +6,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.phincon.talents.gateways.adapter.force.PyElementHeaderForceAdapter;
+import com.phincon.talents.gateways.adapter.force.GradeForceAdapter;
 import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.services.ConnectedAppService;
 import com.phincon.talents.gateways.services.HistorySyncService;
 
 @Controller
 @RequestMapping("/sync")
-public class SyncPyElementHeader {
-	private String moduleName = "pyelementheader";
+public class SyncGrade {
+	private String moduleName = "WSSETGRADE";
 	@Autowired
-	PyElementHeaderForceAdapter pyElementHeaderForceAdapter;
+	GradeForceAdapter gradeForceAdapter;
 	
 	@Autowired
 	ConnectedAppService connectedAppService;
-	
+
 	@Autowired
 	HistorySyncService historySyncService ;
 	
-	@RequestMapping(value = "/pyelementheader/pull", method = RequestMethod.GET)
+	@RequestMapping(value = "/grade/pull", method = RequestMethod.GET)
 	@ResponseBody
-	public String pyelementhedaerPull(){
+	public String addressPull(){
 		
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-    	pyElementHeaderForceAdapter.setConfigure(connectedApp,"pyempelementheader");
+    	gradeForceAdapter.setConfigure(connectedApp,this.moduleName);
     	
-    	pyElementHeaderForceAdapter.receive();
+    	gradeForceAdapter.receive();
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
-    	
-    	
-    	return "Pyelementhedaer Pull Completed !";
+       
+    	return "Grade Pull Completed !";
 	}
-	
-	
-}
+	}

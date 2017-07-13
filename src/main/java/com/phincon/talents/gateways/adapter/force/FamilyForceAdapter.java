@@ -98,7 +98,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 	}
 
 	@Override
-	public void saveListDate(List<Family> listData) {
+	public void saveListData(List<Family> listData) {
 		for (Family e : listData) {
 			System.out.print("Employee : " + e.getExtId());
 			// check is id is exist
@@ -159,7 +159,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 				map.put("Family_Address__c", family.getAddress());
 				map.put("Family_Birth_Place__c", family.getBirthPlace());
 				map.put("Family_Blood_Type__c", family.getBloodType());
-				// map.put("Family_Date_of_Birth__c", family.getBirthDate());
+				map.put("Family_Date_of_Birth__c", family.getBirthDate());
 				// map.put("Family_Decease_Date__c", family.getDeceaseDate());
 				map.put("Family_Last_Education__c", family.getLastEducation());
 				// map.put("Family_Medical_Status__c",

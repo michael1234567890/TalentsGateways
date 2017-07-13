@@ -131,7 +131,7 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 	}
 	
 	@Override
-	public void saveListDate(List<Certification> listData){
+	public void saveListData(List<Certification> listData){
 		for(Certification e : listData){
 			System.out.println("Certification : " + e.getExtId());
 			// check is id is exist
@@ -151,11 +151,14 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 			certDb.setType(e.getType());
 			certDb.setPrinciple(e.getPrinciple());
 			certDb.setYear(e.getYear());
-			Employee employee = employeeService.findByExtId(e.getEmployeeExtId());
-			if (employee != null) {
-				certDb.setEmployee(employee);
-				
+			if(e.getEmployeeExtId() != null) {
+				Employee employee = employeeService.findByExtId(e.getEmployeeExtId());
+				System.out.println(employee.toString());
+				if (employee != null) {
+					certDb.setEmployee(employee);
+				}
 			}
+			
 			certDb.setEmployeeExtId(e.getEmployeeExtId());
 		
 			certDb.setModifiedDate(new Date());

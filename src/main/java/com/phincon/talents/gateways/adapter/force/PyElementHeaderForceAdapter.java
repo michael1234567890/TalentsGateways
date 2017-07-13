@@ -119,9 +119,15 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 		Double regNetIncomeyearly = (Double) mapResult.get("RegNet_Income_Yearly__c");  
 		Double regGrossIncomeyearly = (Double) mapResult.get("RegGross_Income_Yearly__c");  
 		String assignmentExtId = (String) mapResult.get("Assignment_No__c");  
-	
+		String bankAccount = (String) mapResult.get("Bank_Account__c");  
+		String bankBranch = (String) mapResult.get("Bank_Branch__c");  
+		String accountName = (String) mapResult.get("Account_Name__c");  
+		
 		
 		PayrollElementHeader obj = new PayrollElementHeader();
+		obj.setBankAccount(bankAccount);
+		obj.setBankBranch(bankBranch);
+		obj.setAccountName(accountName);
 		obj.setPtkp(ptkp);
 		obj.setOtherPtkp(otherPtkp);
 		obj.setOtherPtkpYearly(otherPtkpYearly);
@@ -176,7 +182,7 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 	}
 	
 	@Override
-	public void saveListDate(List<PayrollElementHeader> listData){
+	public void saveListData(List<PayrollElementHeader> listData){
 		for(PayrollElementHeader e : listData){
 			System.out.println("After Ext Id " + e.getExtId());
 			PayrollElementHeader payrollElementHeader = payrollElementHeaderService.findByExtId(e.getExtId());
@@ -187,6 +193,10 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 				payrollElementHeader.setCreatedBy("Talents Gateway");
 				payrollElementHeader.setExtId(e.getExtId());
 			}
+			
+			payrollElementHeader.setBankAccount(e.getBankAccount());
+			payrollElementHeader.setBankBranch(e.getBankBranch());
+			payrollElementHeader.setAccountName(e.getAccountName());
 			payrollElementHeader.setPkp(e.getPkp());
 			payrollElementHeader.setPtkp(e.getPtkp());
 			payrollElementHeader.setOtherPtkp(e.getOtherPtkp());

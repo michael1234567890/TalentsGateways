@@ -6,37 +6,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.phincon.talents.gateways.adapter.force.PyElementHeaderForceAdapter;
+import com.phincon.talents.gateways.adapter.force.PyElementDetailGroupingForceAdapter;
 import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.services.ConnectedAppService;
 import com.phincon.talents.gateways.services.HistorySyncService;
 
 @Controller
 @RequestMapping("/sync")
-public class SyncPyElementHeader {
-	private String moduleName = "pyelementheader";
+public class SyncPyElementDetailGrouping {
+	private String moduleName = "payslip";
+	
 	@Autowired
-	PyElementHeaderForceAdapter pyElementHeaderForceAdapter;
+	PyElementDetailGroupingForceAdapter pyElementDetailForceAdapter;
+
+	@Autowired
+	HistorySyncService historySyncService ;
 	
 	@Autowired
 	ConnectedAppService connectedAppService;
 	
-	@Autowired
-	HistorySyncService historySyncService ;
-	
-	@RequestMapping(value = "/pyelementheader/pull", method = RequestMethod.GET)
+	@RequestMapping(value = "/pyelementdetailgrouping/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String pyelementhedaerPull(){
 		
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-    	pyElementHeaderForceAdapter.setConfigure(connectedApp,"pyempelementheader");
+    	pyElementDetailForceAdapter.setConfigure(connectedApp,"payslip");
     	
-    	pyElementHeaderForceAdapter.receive();
+    	pyElementDetailForceAdapter.receive();
+
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
-    	
-    	
-    	return "Pyelementhedaer Pull Completed !";
+    	return "Pyempelementdetailgrouping Pull Completed !";
 	}
+	
+	
 	
 	
 }

@@ -26,8 +26,8 @@ public class AbstractEntity {
 	@GeneratedValue
 	private Long id;
 
-	@Version
-	private Long version;
+//	@Version
+//	private Long version;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_date")
@@ -117,9 +117,9 @@ public class AbstractEntity {
 		return getUuid() != null ? getUuid().hashCode() : 0;
 	}
 
-	public Long getVersion() {
-		return version;
-	}
+//	public Long getVersion() {
+//		return version;
+//	}
 
 	public String getUuidStr() {
 		return uuidStr;

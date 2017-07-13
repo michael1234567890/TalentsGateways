@@ -15,7 +15,7 @@ public class JobTitle extends AbstractEntity {
 	@Column(name = "company_id")
 	private Long company;
 
-	@Column(name = "name", length = 50)
+	@Column(name = "name", length = 255)
 	private String name;
 
 	@Column(name = "description", length = 255)

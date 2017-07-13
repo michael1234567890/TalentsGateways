@@ -19,15 +19,15 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phincon.talents.gateways.adapter.InterfaceAdapter;
 import com.phincon.talents.gateways.model.ConnectedApp;
+import com.phincon.talents.gateways.utils.ForcePyDetailGroupingResponse;
 import com.phincon.talents.gateways.utils.ForceResponse;
 
-public class ForceAdapter<E> implements InterfaceAdapter {
+public class ForceDetailGroupingAdapter<E> implements InterfaceAdapter {
 	protected String instanceUrl = "";
 	protected String urlThirdParty;
 	protected String clientId = "";
@@ -65,7 +65,7 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		this.companyid = connectedApp.getCompany();
 	}
 
-	public ForceAdapter() {
+	public ForceDetailGroupingAdapter() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -89,7 +89,6 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 				+ this.clientId + "&client_secret=" + this.clientSecret
 				+ "&username=" + this.username + "&password=" + this.password;
 		System.out.println(url);
-		
 		ResponseEntity<String> result = restTemplate.exchange(url,
 				HttpMethod.POST, entity, String.class);
 
@@ -114,9 +113,7 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		System.out.println("access_token : " + accessToken);
 		System.out.println("+++++++++++ REQUEST RESPONSE +++++++++++++++");
 
-//		String urlQuery = instanceUrl + "/services/apexrest/"
-//				+ this.forceModuleName;
-		String urlQuery = instanceUrl + "/services/apexrest/InsertUpdate?SyncObject="
+		String urlQuery = instanceUrl + "/services/apexrest/"
 				+ this.forceModuleName;
 
 		System.out.println(urlQuery);
@@ -132,14 +129,7 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		//for (Map<String, Object> mapPost : listData) {
 			Map<String, Object> mapPost = new HashMap<String, Object>();
 			mapPost.put("items", listData);
-			String mapPostJSON = null;
-			try {
-				mapPostJSON = this.objectMapper.writeValueAsString(mapPost);
-			} catch (JsonProcessingException e1) {
-				e1.printStackTrace();
-			}
-			System.out.println(mapPostJSON);
-			
+			System.out.println(mapPost);
 			Long id = (Long) mapPost.get("id");
 			mapPost.remove("id");
 			try {
@@ -242,8 +232,8 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 				HttpMethod.GET, entityQuery, String.class);
 		System.out.println(resultQuery.getBody());
 		try {
-			ForceResponse forceResponse = (ForceResponse) objectMapper
-					.readValue(resultQuery.getBody(), ForceResponse.class);
+			ForcePyDetailGroupingResponse forceResponse = (ForcePyDetailGroupingResponse) objectMapper
+					.readValue(resultQuery.getBody(), ForcePyDetailGroupingResponse.class);
 			if (forceResponse != null) {
 				/*System.out.println("Total Size : "
 						+ forceResponse.getTotalSize());*/
@@ -251,7 +241,7 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 
 				if (listResponse.size() > 0) {
 					// save into DB
-					saveListData(listResponse);
+					saveListDate(listResponse);
 				}
 				// convert response to List of Object
 
@@ -261,14 +251,15 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		}
 	}
 
-	public List<E> convertToListObject(List<Map<String, Object>> records) {
+	public List<E> convertToListObject(Map<String, Object> records) {
 		List<E> list = new ArrayList<E>();
-
-		for (Map<String, Object> mapResult : records) {
-			E e = convertMapResultToObject(mapResult);
-			if (e != null)
-				list.add(e);
-		}
+		System.out.println("Key " + records.entrySet());
+		
+//		for (Map<String, Object> mapResult : records) {
+//			E e = convertMapResultToObject(mapResult);
+//			if (e != null)
+//				list.add(e);
+//		}
 		return list;
 	}
 
@@ -276,16 +267,14 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		return null;
 	}
 
-	public void saveListData(List<E> listData) {
+	public void saveListDate(List<E> listData) {
 
 	}
 
 	@Override
 	public void sendNewData() {
-		// get new Data from E class
-		List<Map<String, Object>> listMap = null;
-		// calling send method
-		send(listMap);
+		// TODO Auto-generated method stub
+		
 	}
 
 }

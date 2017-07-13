@@ -64,7 +64,7 @@ public class JobTitleForceAdapter extends ForceAdapter<JobTitle> {
 	}
 	
 	@Override
-	public void saveListDate(List<JobTitle> listData){
+	public void saveListData(List<JobTitle> listData){
 		for(JobTitle e : listData){
 			JobTitle jobTitle = jobTitleService.findByExtId(e.getExtId());
 			

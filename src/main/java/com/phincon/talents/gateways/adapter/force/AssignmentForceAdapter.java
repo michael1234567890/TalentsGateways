@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.phincon.talents.gateways.model.Assignment;
 import com.phincon.talents.gateways.model.Employment;
+import com.phincon.talents.gateways.model.Grade;
 import com.phincon.talents.gateways.model.JobTitle;
 import com.phincon.talents.gateways.model.Position;
+import com.phincon.talents.gateways.repository.GradeRepository;
 import com.phincon.talents.gateways.services.AssignmentService;
 import com.phincon.talents.gateways.services.EmploymentService;
 import com.phincon.talents.gateways.services.JobTitleService;
@@ -25,6 +27,9 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 
 	@Autowired
 	EmploymentService employmentService;
+	
+	@Autowired
+	GradeRepository gradeRepository;
 	
 	@Autowired
 	PositionService positionService;
@@ -77,6 +82,8 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 		String subDepartment = (String) mapResult.get("Sub_Department__c");
 		String workLocation = (String) mapResult.get("Work_Location_Name__c");
 		String positionExtId = (String) mapResult.get("Position_Name__c");
+		String gradeExtId = (String) mapResult.get("Grade_Name__c");
+		
 		
 		Assignment assignment = new Assignment();
 		assignment.setPositionExtId(positionExtId);
@@ -102,13 +109,14 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 		assignment.setLetterNo(letterNo);
 		assignment.setLevel(level);
 		assignment.setWorkLocation(workLocation);
+		assignment.setGradeExtId(gradeExtId);
 
 		// assignment.setDeparment(department);
 		return assignment;
 	}
 
 	@Override
-	public void saveListDate(List<Assignment> listData) {
+	public void saveListData(List<Assignment> listData) {
 		for (Assignment e : listData) {
 			Assignment assignment = assignmentService.findByExtId(e.getExtId());
 
@@ -142,6 +150,7 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 			assignment.setLetterNo(e.getLetterNo());
 			assignment.setLevel(e.getLevel());
 			assignment.setWorkLocation(e.getWorkLocation());
+			assignment.setGradeExtId(e.getGradeExtId());
 
 			if(e.getPositionExtId() != null){
 				Position position = positionService.findByExtId(e.getPositionExtId());
@@ -166,6 +175,13 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 						.getJobTitleExtId());
 				if (jobTitle != null) {
 					assignment.setJobTitle(jobTitle.getId());
+				}
+			}
+			
+			if(e.getGradeExtId() != null) {
+				Grade grade = gradeRepository.findByExtId(e.getGradeExtId());
+				if (grade != null) {
+					assignment.setGrade(grade.getId());
 				}
 			}
 			

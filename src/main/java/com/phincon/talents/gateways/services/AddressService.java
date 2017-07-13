@@ -1,11 +1,14 @@
 package com.phincon.talents.gateways.services;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phincon.talents.gateways.model.Address;
+import com.phincon.talents.gateways.model.Family;
 import com.phincon.talents.gateways.repository.AddressRepository;
 
 @Service
@@ -31,6 +34,11 @@ public class AddressService {
 	@Transactional
 	public Iterable<Address> findAllExtIdNull(){
 		return addressRepository.findAllExtIdNull();
+	}
+	
+	@Transactional
+	public List<Address> findNeedSync() {
+		return addressRepository.findNeedSync();
 	}
 	
 	@Transactional

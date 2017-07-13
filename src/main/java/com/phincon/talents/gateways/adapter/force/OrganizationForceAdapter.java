@@ -69,7 +69,7 @@ public class OrganizationForceAdapter extends ForceAdapter<Organization> {
 	}
 	
 	@Override
-	public void saveListDate(List<Organization> listData){
+	public void saveListData(List<Organization> listData){
 		for(Organization e : listData){
 			System.out.println("After Ext Id " + e.getExtId());
 			Organization organization = organizationService.findByExtId(e.getExtId());

@@ -13,7 +13,7 @@ public class Address extends AbstractEntity {
 	@Column(name="address", length=255)
 	private String address;
 	
-	@Column(name="distance", length=10)
+	@Column(name="distance", length=255)
 	private String distance;
 	
 	@Column(name="address_status", length=30)
@@ -58,6 +58,9 @@ public class Address extends AbstractEntity {
 	
 	@Column(name="zip_code", length=15)
 	private String zipCode;
+	
+	@Column(name="need_sync")
+	private Boolean needSync;
 	
 
 	@Column(name = "employee_ext_id", length=100)
@@ -204,6 +207,14 @@ public class Address extends AbstractEntity {
 
 	public void setEmployeeExtId(String employeeExtId) {
 		this.employeeExtId = employeeExtId;
+	}
+
+	public Boolean getNeedSync() {
+		return needSync;
+	}
+
+	public void setNeedSync(Boolean needSync) {
+		this.needSync = needSync;
 	}
 	
 	

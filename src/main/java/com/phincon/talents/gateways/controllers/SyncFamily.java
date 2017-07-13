@@ -46,7 +46,7 @@ public class SyncFamily {
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	System.out.println(connectedApp.toString());
     	
-    	familyAdapter.setConfigure(connectedApp,"InsertUpdateHRPERFAMILY");
+    	familyAdapter.setConfigure(connectedApp,this.moduleName);
     	familyAdapter.sendNewData();
         return "Family Send Completed !";
     }

@@ -94,7 +94,7 @@ public class EmploymentForceAdapter extends ForceAdapter<Employment> {
 	}
 	
 	@Override
-	public void saveListDate(List<Employment> listData){
+	public void saveListData(List<Employment> listData){
 		for(Employment e : listData){
 			Employment employment = EmploymentService.findByExtId(e.getExtId());
 			

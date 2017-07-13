@@ -37,6 +37,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 
 	@Override
 	protected Employee convertMapResultToObject(Map<String, Object> mapResult) {
+		String name = (String) mapResult.get("Name");
 		String firstName = (String) mapResult.get("First_Name__c");
 		String extId = (String) mapResult.get("Id");
 		String officeMail = (String) mapResult.get("Office_Email__c");
@@ -118,7 +119,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 //		Date foreignLanguage = null;
 //		if(strForeignLanguage != null)
 //			foreignLanguage = Utils.convertStringToDate(strForeignLanguage);
-		Integer pensionReminderDay = (Integer) mapResult.get("Formula_Pension_Reminder_Days__c");
+		//Integer pensionReminderDay = (Integer) mapResult.get("Formula_Pension_Reminder_Days__c");
 //		Date pensionReminderDay = null;
 //		if(strPensionReminderDay != null)
 //			pensionReminderDay = Utils.convertStringToDate(strPensionReminderDay);
@@ -150,15 +151,14 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 		if(strDateLetter != null)
 			dateLetter = Utils.convertStringToDate(strDateLetter);
 		String letterNo = (String) mapResult.get("Letter_No__c");
-		//String lwd = (String) mapResult.get("LWD__c");
-		//String manyCompany = (String) mapResult.get("Many_Company__c");
+		
 		String maritalStatus = (String) mapResult.get("Marital_Status__c");
 		String strDateMarried = (String) mapResult.get("Married_Date__c");
 		Date dateMarried = null;
 		if(strDateMarried != null)
 			dateMarried = Utils.convertStringToDate(strDateMarried);
 		String marriedPlace = (String) mapResult.get("Married_Place__c");
-		//String medicalAware = (String) mapResult.get("Medical_Aware__c");
+	
 		String mobilePhone1 = (String) mapResult.get("Mobile_Phone1__c");
 		String mobilePhone2 = (String) mapResult.get("Mobile_Phone2__c");
 		String mobilePhone3 = (String) mapResult.get("Mobile_Phone3__c");
@@ -187,7 +187,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 		if(strDatePension != null)
 			datePension = Utils.convertStringToDate(strDatePension);
 		//String performValue = (String) mapResult.get("Perform_Value__c");
-		//String personalEmail = (String) mapResult.get("Email__c");
+		String personalEmail = (String) mapResult.get("Email__c");
 		String phone = (String) mapResult.get("Phone__c");
 		String phoneExt = (String) mapResult.get("Phone_Ext__c");
 		//String photo = (String) mapResult.get("Photo__c");
@@ -196,12 +196,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 		Date datePrePension = null;
 		if(strDatePrePension != null)
 			datePrePension = Utils.convertStringToDate(strDatePrePension);
-//		String qualification = (String) mapResult.get("Qualifications__c");
-//		String race = (String) mapResult.get("Race__c");
-//		String reason = (String) mapResult.get("Reason__c");
-//		String reportTo = (String) mapResult.get("Report_To__c");
-//		String reportToFormula = (String) mapResult.get("Report_To_Formulated__c");
-//		String resetBirthdayEmail = (String) mapResult.get("Reset_Birthday_Email_System__c");
+
 		String resignation = (String) mapResult.get("Resignation__c");
 		String salutation = (String) mapResult.get("Salutation__c");
 		String shoeSize = (String) mapResult.get("Shoe_Size__c");
@@ -215,7 +210,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 		String terminationNotes = (String) mapResult.get("Termination_Notes__c");
 		String toolsAndApplication = (String) mapResult.get("Tools__c");
 		String weakPoint = (String) mapResult.get("Weak_Point__c");
-		String wearGlasses = (String) mapResult.get("Wear_Glasses__c");
+		// String wearGlasses = (String) mapResult.get("Wear_Glasses__c");
 		String weight = (String) mapResult.get("Weight__c");
 		String workInterest = (String) mapResult.get("Work_Interest__c");
 
@@ -253,6 +248,8 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 		
 		
 		Employee employee = new Employee();
+		employee.setName(name);
+		employee.setEmail(personalEmail);
 		employee.setExtId(extId);
 		employee.setFirstName(firstName);
 		employee.setLastName(lastName);
@@ -264,6 +261,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 		employee.setEmployeeNo(employeeNo);
 		employee.setReligion(religion);
 		employee.setMiddleName(middleName);
+		System.out.println("Age " + age);
 		employee.setAge(age);
 		employee.setAnniversaryDate(dateAnniversary);
 		employee.setApplicantNo(applicantNo);
@@ -300,7 +298,6 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 		employee.setEmployeeStatus(employeeStatus);
 		employee.setFamilyCardNo(familyCardNo);
 		employee.setKtpName(fktpName);
-		employee.setPensionReminderDay(pensionReminderDay);
 		employee.setPensionReminderMonths(pensionReminderMonths);
 		employee.setFullNameTitle(fullNameTitle);
 		employee.setGender(gender);
@@ -346,7 +343,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 		employee.setTerminatioNotes(terminationNotes);
 		employee.setTools(toolsAndApplication);
 		employee.setWeakPoint(weakPoint);
-		employee.setWearGlasses(wearGlasses);
+		// employee.setWearGlasses(wearGlasses);
 		employee.setWeight(weight);
 		employee.setWorkInterest(workInterest);
 		employee.setNationality(nationality);
@@ -354,7 +351,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 	}
 
 	@Override
-	public void saveListDate(List<Employee> listData) {
+	public void saveListData(List<Employee> listData) {
 		for (Employee e : listData) {
 			System.out.print("Employee : " + e.getExtId());
 			// check is id is exist
@@ -365,10 +362,11 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 				empDb = new Employee();
 				empDb.setCreatedDate(new Date());
 			}
+			empDb.setEmail(e.getEmail());
 			empDb.setModifiedDate(new Date());
 			empDb.setExtId(e.getExtId());
 			empDb.setFirstName(e.getFirstName());
-
+			empDb.setName(e.getName());
 			empDb.setLastName(e.getLastName());
 			empDb.setOfficeMail(e.getOfficeMail());
 			empDb.setBirthDate(e.getBirthDate());
@@ -500,6 +498,10 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 				map.put("Marital_Status__c", employee.getMaritalStatus());
 				map.put("Date_of_Birth__c", employee.getBirthDate());
 				map.put("Middle_Name__c", employee.getMiddleName());
+				map.put("Married_Date__c", employee.getMarriedDate());
+				map.put("Married_Place__c", employee.getMarriedPlace());
+				map.put("Anniversary_Date__c", employee.getAnniversaryDate());
+				
 				map.put("Religion__c", employee.getReligion());
 				map.put("Email__c", employee.getEmail());
 				

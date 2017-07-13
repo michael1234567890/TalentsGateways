@@ -164,7 +164,7 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 	}
 	
 	@Override
-	public void saveListDate(List<Address> listData){
+	public void saveListData(List<Address> listData){
 		for(Address e : listData){
 			System.out.println("Address : " + e.getExtId());
 			Address addrsDb = addressService.findByExtId(e.getExtId());
@@ -206,12 +206,14 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 	public void sendNewData(){
 		// get data with ext id is null
 		System.out.println("Send New Data");
-		Iterable<Address> listAddress = addressService.findAllExtIdNull();
+		Iterable<Address> listAddress = addressService.findNeedSync();
 		if(listAddress != null){
 			int i = 0;
 			List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 			for(Address address : listAddress){
 				Map<String, Object> map = new HashMap<String, Object>();
+				if(address.getExtId() != null)
+					map.put("Id", address.getExtId());
 				map.put("Full_Name__c", address.getEmployeeExtId());
 				//map.put("Id", address.getId());
 				map.put("Address__c", address.getAddress());

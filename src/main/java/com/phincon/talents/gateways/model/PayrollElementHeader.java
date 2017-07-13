@@ -157,6 +157,10 @@ public class PayrollElementHeader extends AbstractEntity {
 
 	@Column(name = "bank_name", length = 50)
 	private String bankName;
+	
+	
+	@Column(name = "bank_branch", length = 100)
+	private String bankBranch;
 
 	@Column(name = "account_name", length = 50)
 	private String accountName;
@@ -537,6 +541,17 @@ public class PayrollElementHeader extends AbstractEntity {
 	public void setAssignmentExtId(String assignmentExtId) {
 		this.assignmentExtId = assignmentExtId;
 	}
+
+	
+	public String getBankBranch() {
+		return bankBranch;
+	}
+
+
+	public void setBankBranch(String bankBranch) {
+		this.bankBranch = bankBranch;
+	}
+
 
 	@Override
 	public String toString() {
