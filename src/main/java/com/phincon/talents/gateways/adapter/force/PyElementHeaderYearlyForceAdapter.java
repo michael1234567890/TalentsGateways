@@ -52,7 +52,9 @@ public class PyElementHeaderYearlyForceAdapter extends ForceAdapter<PayrollEleme
 		Double pph21DipotongDilunasi = (Double) mapResult.get("PPH21_telah_dipotong_dan_dilunasi__c");
 		String currentYear = (String) mapResult.get("Current_Year__c");
 		Double jumlahPhBruto = (Double) mapResult.get("Jumlah_Ph_Bruto__c");
-		Double totalDeduction = (Double) mapResult.get("Jumlah_Pengurangan__c");
+//		Double totalDeduction = (Double) mapResult.get("Jumlah_Pengurangan__c");
+		Double totalDeduction = (Double) mapResult.get("Total_Deduction__c");
+		Double totalAllowance = (Double) mapResult.get("Total_Allowance__c");
 		  
 		
 		
@@ -68,6 +70,7 @@ public class PyElementHeaderYearlyForceAdapter extends ForceAdapter<PayrollEleme
 		obj.setCurrentYear(currentYear);
 		obj.setJumlahPhBruto(jumlahPhBruto);
 		obj.setTotalDeduction(totalDeduction);
+		obj.setTotalAllowance(totalAllowance);
 			
 		return obj;
 	}
@@ -94,7 +97,7 @@ public class PyElementHeaderYearlyForceAdapter extends ForceAdapter<PayrollEleme
 			payrollElementHeaderYearly.setPph21Terhutang(e.getPph21Terhutang());
 			payrollElementHeaderYearly.setJumlahPhBruto(e.getJumlahPhBruto());
 			payrollElementHeaderYearly.setTotalDeduction(e.getTotalDeduction());
-			
+			payrollElementHeaderYearly.setTotalAllowance(e.getTotalAllowance());
 			
 			Employment employment = null;
 			if(e.getEmploymentExtId() != null)

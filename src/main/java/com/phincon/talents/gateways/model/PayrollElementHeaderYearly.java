@@ -52,6 +52,9 @@ public class PayrollElementHeaderYearly extends AbstractEntity {
 	@Column(name = "total_allowance_net")
 	private Double totalAllowanceNet;
 	
+	
+	@Column(name = "total_allowance")
+	private Double totalAllowance;
 
 	@Column(name = "total_allowance_net_yearly")
 	private Double totalAllowanceNetYearly;
@@ -277,6 +280,15 @@ public class PayrollElementHeaderYearly extends AbstractEntity {
 		this.taxPaid = taxPaid;
 	}
 
+	public Double getTotalAllowance() {
+		return totalAllowance;
+	}
+
+	public void setTotalAllowance(Double totalAllowance) {
+		this.totalAllowance = totalAllowance;
+	}
+
+	
 	
 	
 
