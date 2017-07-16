@@ -55,8 +55,9 @@ public class PyElementHeaderYearlyForceAdapter extends ForceAdapter<PayrollEleme
 //		Double totalDeduction = (Double) mapResult.get("Jumlah_Pengurangan__c");
 		Double totalDeduction = (Double) mapResult.get("Total_Deduction__c");
 		Double totalAllowance = (Double) mapResult.get("Total_Allowance__c");
-		  
-		
+		Double currentTaxAllowance = (Double) mapResult.get("Current_Tax_Allowance__c");  
+		Double currentTaxGross = (Double) mapResult.get("Current_Tax_Gross__c");
+		Double currentTaxPenalty = (Double) mapResult.get("Current_Tax_Penalty__c");
 		
 		PayrollElementHeaderYearly obj = new PayrollElementHeaderYearly();
 		obj.setExtId(extId);
@@ -71,6 +72,9 @@ public class PyElementHeaderYearlyForceAdapter extends ForceAdapter<PayrollEleme
 		obj.setJumlahPhBruto(jumlahPhBruto);
 		obj.setTotalDeduction(totalDeduction);
 		obj.setTotalAllowance(totalAllowance);
+		obj.setCurrentTaxAllowance(currentTaxAllowance);
+		obj.setCurrentTaxGross(currentTaxGross);
+		obj.setCurrentTaxPenalty(currentTaxPenalty);
 			
 		return obj;
 	}
@@ -98,7 +102,9 @@ public class PyElementHeaderYearlyForceAdapter extends ForceAdapter<PayrollEleme
 			payrollElementHeaderYearly.setJumlahPhBruto(e.getJumlahPhBruto());
 			payrollElementHeaderYearly.setTotalDeduction(e.getTotalDeduction());
 			payrollElementHeaderYearly.setTotalAllowance(e.getTotalAllowance());
-			
+			payrollElementHeaderYearly.setCurrentTaxAllowance(e.getCurrentTaxAllowance());
+			payrollElementHeaderYearly.setCurrentTaxGross(e.getCurrentTaxGross());
+			payrollElementHeaderYearly.setCurrentTaxPenalty(e.getCurrentTaxPenalty());
 			Employment employment = null;
 			if(e.getEmploymentExtId() != null)
 				employment = employmentService.findByExtId(e.getEmploymentExtId());
