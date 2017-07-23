@@ -42,7 +42,7 @@ public class PyElementHeaderYearlyForceAdapter extends ForceAdapter<PayrollEleme
 	protected PayrollElementHeaderYearly convertMapResultToObject(Map<String, Object> mapResult){
 		
 		
-		Double taxPaid = (Double) mapResult.get("Tax_Paid__c");
+		// Double taxPaid = (Double) mapResult.get("Tax_Paid__c");
 		String taxStatus = (String) mapResult.get("Tax_Status__c");
 
 		String extId = (String) mapResult.get("Id");
@@ -62,7 +62,7 @@ public class PyElementHeaderYearlyForceAdapter extends ForceAdapter<PayrollEleme
 		PayrollElementHeaderYearly obj = new PayrollElementHeaderYearly();
 		obj.setExtId(extId);
 		obj.setCurrentYear(currentYear);
-		obj.setTaxPaid(taxPaid);
+		//obj.setTaxPaid(taxPaid);
 		obj.setTaxStatus(taxStatus);
 		obj.setTaxType(taxType);
 		obj.setEmploymentExtId(employmentExtId);

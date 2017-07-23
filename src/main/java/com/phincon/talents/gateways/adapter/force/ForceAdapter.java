@@ -227,6 +227,7 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		System.out.println("+++++++++++ REQUEST RESPONSE +++++++++++++++");
 
 		//String urlQuery = instanceUrl + "/services/apexrest/" + this.query;
+		// String urlQuery = instanceUrl + "/services/apexrest/GetAll?SyncObject=" + this.forceModuleName+"&SyncStart=1999&SyncLimit=2000";
 		String urlQuery = instanceUrl + "/services/apexrest/GetAll?SyncObject=" + this.forceModuleName;
 
 		System.out.println(urlQuery);
