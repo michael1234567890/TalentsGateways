@@ -3,12 +3,14 @@ package com.phincon.talents.gateways.adapter.force;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phincon.talents.gateways.model.Organization;
 import com.phincon.talents.gateways.model.Position;
+import com.phincon.talents.gateways.repository.PositionRepository;
 import com.phincon.talents.gateways.services.OrganizationService;
 import com.phincon.talents.gateways.services.PositionService;
 import com.phincon.talents.gateways.utils.Utils;
@@ -18,6 +20,9 @@ public class PositionForceAdapter extends ForceAdapter<Position>{
 	
 	@Autowired
 	PositionService positionService;
+	
+	@Autowired
+	PositionRepository positionRepository;
 	
 	@Autowired
 	OrganizationService organizationService;
@@ -97,7 +102,7 @@ public class PositionForceAdapter extends ForceAdapter<Position>{
 	}
 	
 	@Override
-	public void saveListData(List<Position> listData){
+	public void saveListData(List<Position> listData, boolean isInit){
 		for(Position e : listData){
 			Position position = positionService.findByExtId(e.getExtId());
 			
@@ -109,6 +114,10 @@ public class PositionForceAdapter extends ForceAdapter<Position>{
 			Organization organization = organizationService.findByExtId(e.getOrganizationExtId());
 			if(organization != null)
 				position.setOrganization(organization.getId());
+			
+			
+			if(isInit)
+				position.setAckSync(false);
 			
 			position.setExtId(e.getExtId());
 			position.setCompany(this.companyid);
@@ -139,4 +148,23 @@ public class PositionForceAdapter extends ForceAdapter<Position>{
 			System.out.println("Success Save Position");
 		}
 	}
+	
+	
+	@Override
+	public void sendDataAckSync() {
+
+		List<Object[]> listDataAckSync = positionRepository.findSendAckSync();
+		sendForceDataAckSync(listDataAckSync);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId) {
+		positionService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		positionService.updateAckSyncStatus(status, extId);
+	}
+	
 }

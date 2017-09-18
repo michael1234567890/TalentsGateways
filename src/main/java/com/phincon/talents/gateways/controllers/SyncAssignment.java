@@ -28,14 +28,22 @@ public class SyncAssignment {
 	 @RequestMapping(value = "/assignment/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String certificationPull(){
-		
-    	
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	assignmentForceAdapter.setConfigure(connectedApp,this.moduleName);
-    	assignmentForceAdapter.receive();
+    	assignmentForceAdapter.receive(null,false);
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
     	
     	return "Successfully Pull Assignment";
 	}
+	 
+	 @RequestMapping(value = "/assignment/init", method = RequestMethod.GET)
+		@ResponseBody
+		public String assignmentInit(){
+	    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+	    	assignmentForceAdapter.setConfigure(connectedApp,this.moduleName);
+	    	assignmentForceAdapter.initRetrieve();
+	    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+	    	return "Assignment Init Completed !";
+		}
 	
 }

@@ -32,7 +32,7 @@ public class SyncPyElementDetailGrouping {
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	pyElementDetailForceAdapter.setConfigure(connectedApp,"payslip");
     	
-    	pyElementDetailForceAdapter.receive();
+    	pyElementDetailForceAdapter.receive(null,false);
 
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
     	return "Pyempelementdetailgrouping Pull Completed !";

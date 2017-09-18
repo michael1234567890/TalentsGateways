@@ -3,11 +3,13 @@ package com.phincon.talents.gateways.adapter.force;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phincon.talents.gateways.model.Organization;
+import com.phincon.talents.gateways.repository.OrganizationRepository;
 import com.phincon.talents.gateways.services.AssignmentService;
 import com.phincon.talents.gateways.services.EmployeeService;
 import com.phincon.talents.gateways.services.EmploymentService;
@@ -18,7 +20,8 @@ public class OrganizationForceAdapter extends ForceAdapter<Organization> {
 
 	@Autowired
 	OrganizationService organizationService;
-	
+	@Autowired
+	OrganizationRepository organizationRepository;
 
 	@Autowired
 	EmployeeService employeeService;
@@ -69,9 +72,8 @@ public class OrganizationForceAdapter extends ForceAdapter<Organization> {
 	}
 	
 	@Override
-	public void saveListData(List<Organization> listData){
+	public void saveListData(List<Organization> listData, boolean isInit){
 		for(Organization e : listData){
-			System.out.println("After Ext Id " + e.getExtId());
 			Organization organization = organizationService.findByExtId(e.getExtId());
 			
 			if(organization == null){
@@ -80,6 +82,10 @@ public class OrganizationForceAdapter extends ForceAdapter<Organization> {
 				organization.setCreatedBy("Talents Gateway");
 				
 			}
+			
+			if(isInit)
+				organization.setAckSync(false);
+			
 			organization.setExtId(e.getExtId());
 			organization.setCompany(this.companyid);
 			organization.setName(e.getName());
@@ -92,9 +98,26 @@ public class OrganizationForceAdapter extends ForceAdapter<Organization> {
 			organization.setStartDate(e.getStartDate());
 			organization.setOrganizationStructureName(e.getOrganizationStructureName());
 			organizationService.save(organization);
-			
 			System.out.println("Organization Has been saved");
 		}
+	}
+	
+	
+	@Override
+	public void sendDataAckSync() {
+
+		List<Object[]> listDataAckSync = organizationRepository.findSendAckSync();
+		sendForceDataAckSync(listDataAckSync);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId) {
+		organizationService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		organizationService.updateAckSyncStatus(status, extId);
 	}
 	
 }

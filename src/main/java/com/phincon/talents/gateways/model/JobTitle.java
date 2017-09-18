@@ -43,7 +43,19 @@ public class JobTitle extends AbstractEntity {
 	@Column(name = "end_date")
 	private Date endDate;
 	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
 	
+	
+	
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
+	}
+
 	public String getName() {
 		return name;
 	}

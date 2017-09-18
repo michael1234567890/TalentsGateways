@@ -83,10 +83,22 @@ public class Family extends AbstractEntity {
 	@Column(name="status", length=30)
 	private String status;
 	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
+	
 	
 	
 	@Column(name = "company_id")
 	private Long company;
+
+	
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
+	}
 
 	public String getAliveStatus() {
 		return aliveStatus;

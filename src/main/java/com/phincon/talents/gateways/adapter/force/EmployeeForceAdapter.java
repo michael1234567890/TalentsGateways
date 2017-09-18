@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.phincon.talents.gateways.model.Employee;
-import com.phincon.talents.gateways.model.Family;
+import com.phincon.talents.gateways.repository.EmployeeRepository;
 import com.phincon.talents.gateways.services.EmployeeService;
 import com.phincon.talents.gateways.utils.ForceResponseGetId;
 import com.phincon.talents.gateways.utils.Utils;
@@ -26,6 +27,9 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 
 	@Autowired
 	EmployeeService employeeService;
+	
+	@Autowired
+	EmployeeRepository employeeRepository;
 
 	public EmployeeForceAdapter() {
 		super();
@@ -351,7 +355,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 	}
 
 	@Override
-	public void saveListData(List<Employee> listData) {
+	public void saveListData(List<Employee> listData, boolean isInit) {
 		for (Employee e : listData) {
 			System.out.print("Employee : " + e.getExtId());
 			// check is id is exist
@@ -363,6 +367,9 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 				empDb.setCreatedDate(new Date());
 			}
 			empDb.setEmail(e.getEmail());
+			if(isInit)
+				empDb.setAckSync(false);
+			
 			empDb.setModifiedDate(new Date());
 			empDb.setExtId(e.getExtId());
 			empDb.setFirstName(e.getFirstName());
@@ -511,7 +518,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 				i++;
 			}
 			if(listMap.size() > 0)
-				send(listMap);
+				send(listMap,false);
 			System.out.println(i + " Task Already Sending ");
 		}
 	}
@@ -565,5 +572,37 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 		}
 		
 	}
+	
+	@Override
+	public void sendDataAckSync() {
+
+		List<Object[]> listDataAckSync = employeeRepository.findSendAckSync();
+		
+		List<Map<String, Object>> listMap =  new ArrayList<Map<String, Object>>();
+		if(listDataAckSync != null && listDataAckSync.size() > 0) {
+			for (Object[] objects : listDataAckSync) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("Id", (String)objects[0]);
+				map.put("ExtId__c", (String)objects[1]);
+				listMap.add(map);
+			}
+		}
+		
+		if(listMap.size() >0)
+			send(listMap,true);
+	}
+	
+	
+
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId) {
+		employeeService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		employeeService.updateAckSyncStatus(status, extId);
+	}
+	
 
 }

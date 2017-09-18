@@ -30,7 +30,7 @@ public class SyncCertification {
 
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	certificationForceAdapter.setConfigure(connectedApp,this.moduleName);
-    	certificationForceAdapter.receive();
+    	certificationForceAdapter.receive(null,false);
 
 	 	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
     	return "Certification Pull Completed!";
@@ -40,10 +40,18 @@ public class SyncCertification {
 	@ResponseBody
 	public String certificationSend(){
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-		System.out.println(connectedApp.toString());
-		
-		certificationForceAdapter.setConfigure(connectedApp, "InsertUpdateHRPERCERTIFICATION");
+		certificationForceAdapter.setConfigure(connectedApp, this.moduleName);
 		certificationForceAdapter.sendNewData();
 		return "Certification Send Completed!";
+	}
+	
+	@RequestMapping(value = "/certification/init", method = RequestMethod.GET)
+	@ResponseBody
+	public String certificationInit(){
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	certificationForceAdapter.setConfigure(connectedApp,this.moduleName);
+    	certificationForceAdapter.initRetrieve();
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	return "Certification Init Completed !";
 	}
 }

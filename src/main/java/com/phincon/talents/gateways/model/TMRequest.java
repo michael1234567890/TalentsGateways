@@ -131,6 +131,8 @@ public class TMRequest extends AbstractEntity {
 	
 	
 	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
 	
 	
 //	@ManyToOne(fetch = FetchType.LAZY)
@@ -148,6 +150,16 @@ public class TMRequest extends AbstractEntity {
 	
 	@Column(name = "destination",length=100)
 	private String destination;
+	
+	
+
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
+	}
 
 	public Date getRequestDate() {
 		return requestDate;

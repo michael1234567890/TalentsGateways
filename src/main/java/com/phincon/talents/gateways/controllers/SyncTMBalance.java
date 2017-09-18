@@ -31,10 +31,8 @@ public class SyncTMBalance {
 		
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	tmBalanceForceAdapter.setConfigure(connectedApp,this.moduleName);
-    	tmBalanceForceAdapter.receive();
+    	tmBalanceForceAdapter.receive(null,false);
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
-    	
-    	
     	return this.moduleName + " Pull Completed !";
 	}
 	
@@ -48,6 +46,16 @@ public class SyncTMBalance {
     	tmBalanceForceAdapter.sendNewData();
         return this.moduleName + " Send Completed !";
     }
+	
+	@RequestMapping(value = "/tmbalance/init", method = RequestMethod.GET)
+	@ResponseBody
+	public String tmbalanceInit(){
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	tmBalanceForceAdapter.setConfigure(connectedApp,this.moduleName);
+    	tmBalanceForceAdapter.initRetrieve();
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	return this.moduleName + " Init Completed !";
+	}
 	
 	
 	

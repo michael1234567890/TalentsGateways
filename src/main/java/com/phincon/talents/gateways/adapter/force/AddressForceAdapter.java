@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import com.phincon.talents.gateways.model.Address;
 import com.phincon.talents.gateways.model.Employee;
+import com.phincon.talents.gateways.repository.AddressRepository;
 import com.phincon.talents.gateways.services.AddressService;
 import com.phincon.talents.gateways.services.EmployeeService;
 import com.phincon.talents.gateways.utils.ForceResponseGetId;
@@ -25,6 +27,9 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 
 	@Autowired
 	AddressService addressService;
+	
+	@Autowired
+	AddressRepository addressRepository;
 	
 
 	@Autowired
@@ -69,8 +74,8 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 			addressType = null;
 		}
 		String city = "";
-		if(mapResult.get("City__c") != null){
-			city = (String) mapResult.get("City__c");
+		if(mapResult.get("City2__c") != null){
+			city = (String) mapResult.get("City2__c");
 		}else{
 			city = null;
 		}
@@ -112,8 +117,8 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 			rw = null;
 		}
 		String stateProvince = "";
-		if(mapResult.get("State_Province__c") != null){
-			stateProvince = (String) mapResult.get("State_Province__c");
+		if(mapResult.get("State_Province2__c") != null){
+			stateProvince = (String) mapResult.get("State_Province2__c");
 		}else{
 			stateProvince = null;
 		}
@@ -164,17 +169,21 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 	}
 	
 	@Override
-	public void saveListData(List<Address> listData){
+	public void saveListData(List<Address> listData,boolean isInit){
 		for(Address e : listData){
-			System.out.println("Address : " + e.getExtId());
 			Address addrsDb = addressService.findByExtId(e.getExtId());
-			
 			if(addrsDb == null){
 				addrsDb = new Address();
 				addrsDb.setCreatedDate(new Date());
 			}
+		
 			addrsDb.setExtId(e.getExtId());
+			
+			if(isInit)
+				addrsDb.setAckSync(false);
+			
 			addrsDb.setAddress(e.getAddress());
+			addrsDb.setCompany(this.companyid);
 			addrsDb.setDistance(e.getDistance());
 			addrsDb.setAddressStatus(e.getAddressStatus());
 			addrsDb.setType(e.getType());
@@ -203,6 +212,28 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 		}
 	}
 	
+
+	@Override
+	public void sendDataAckSync() {
+
+		List<Object[]> listDataAckSync = addressRepository.findSendAckSync();
+		
+		List<Map<String, Object>> listMap =  new ArrayList<Map<String, Object>>();
+		if(listDataAckSync != null && listDataAckSync.size() > 0) {
+			for (Object[] objects : listDataAckSync) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("Id", (String)objects[0]);
+				map.put("ExtId__c", (String)objects[1]);
+				listMap.add(map);
+			}
+		}
+		
+		if(listMap.size() >0)
+			send(listMap,true);
+	}
+	
+	
+	
 	public void sendNewData(){
 		// get data with ext id is null
 		System.out.println("Send New Data");
@@ -220,14 +251,14 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 				map.put("Address_Distance__c", address.getDistance());
 				map.put("Address_Status__c", address.getAddressStatus());
 				map.put("Address_Type__c", address.getType());
-				map.put("City__c", address.getCity());
+				map.put("City2__c", address.getCity());
 				map.put("Country__c", address.getCountry());
 				map.put("District__c", address.getDistrict());
 				map.put("Phone__c", address.getPhone());
 				map.put("Residence__c", address.getResidence());
 				map.put("RT__c", address.getRt());
 				map.put("RW__c", address.getRw());
-				map.put("State_Province__c", address.getProvince());
+				map.put("State_Province2__c", address.getProvince());
 				map.put("Stay_Status__c", address.getStayStatus());
 				map.put("Subdistrict__c", address.getSubdistrict());
 				map.put("ZIP_Code__c", address.getZipCode());
@@ -237,16 +268,29 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 				i++;
 			}
 			if(listMap.size() > 0)
-				send(listMap);
+				send(listMap,false);
 			System.out.println(i + " Task Already Sending");
 		}
 	}
+	
+	
+	
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId) {
+		addressService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		addressService.updateAckSyncStatus(status, extId);
+	}
+	
 	
 	@Override
 	public void updateExtId(List<Map<String, Object>> list){
 		List<Map<String, Object>> listMapUpdateId = new ArrayList();
 		
-		System.out.println("Lewat Sini 1");
 		for (Map<String, Object> map : list) {
 			Map<String, Object> mapUpdateId = new HashMap<String, Object>();
 			UUID uuid = (UUID) map.get("ExtId__c");
@@ -254,9 +298,6 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 			listMapUpdateId.add(mapUpdateId);
 			
 		}
-		
-
-		System.out.println("Lewat Sini 2");
 		
 		// prepare sending update Ext ID
 		Map<String, Object> mapPost = new HashMap<String, Object>();
@@ -272,7 +313,6 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 					mapPost, headersPost);
 			String response = restTemplate.postForObject(urlQuery, request,
 					String.class);
-
 			System.out.println("Reponse Post Ext Id " + response);
 			
 			ForceResponseGetId forceResponseGetId = (ForceResponseGetId) objectMapper
@@ -282,8 +322,6 @@ public class AddressForceAdapter extends ForceAdapter<Address> {
 			for (Map<String, Object> map : listResponseGetId) {
 				String extId = (String) map.get("Id");
 				String uuid = (String) map.get("ExtId__c");
-				System.out.println("Ext Id "+ extId);
-				System.out.println("uuid " + uuid);
 				addressService.updateExtIdByUUID(extId, uuid);
 			}
 			

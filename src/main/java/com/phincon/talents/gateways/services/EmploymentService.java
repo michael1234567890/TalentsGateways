@@ -1,5 +1,7 @@
 package com.phincon.talents.gateways.services;
 
+import java.util.Set;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +49,16 @@ public class EmploymentService {
 	@Transactional
 	public void updateExtIdByUUID(String extId, String uuid) {
 		employmentRepository.updateExtIdByUUID(extId, uuid);
+	}
+	
+	@Transactional
+	public void updateAckSyncStatus(boolean status, String extId) {
+		employmentRepository.updateAckSyncStatus(status, extId);
+	}
+	
+
+	@Transactional
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		employmentRepository.updateAckSyncStatus(status, extId);
 	}
 }

@@ -77,6 +77,20 @@ public class PayrollElementDetail extends AbstractEntity {
 	@Column(name="name", length=50)
 	private String name;
 
+	@Column(name="ack_sync")
+	private Boolean ackSync;
+	
+
+	
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
+	}
+
 
 	public String getBudgetItemCode() {
 		return budgetItemCode;

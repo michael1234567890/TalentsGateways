@@ -3,11 +3,13 @@ package com.phincon.talents.gateways.adapter.force;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phincon.talents.gateways.model.JobTitle;
+import com.phincon.talents.gateways.repository.JobTitleRepository;
 import com.phincon.talents.gateways.services.JobTitleService;
 import com.phincon.talents.gateways.utils.Utils;
 
@@ -16,6 +18,9 @@ public class JobTitleForceAdapter extends ForceAdapter<JobTitle> {
 
 	@Autowired
 	JobTitleService jobTitleService;
+	
+	@Autowired
+	JobTitleRepository jobTitleRepository;
 	
 	
 	public JobTitleForceAdapter() {
@@ -64,7 +69,7 @@ public class JobTitleForceAdapter extends ForceAdapter<JobTitle> {
 	}
 	
 	@Override
-	public void saveListData(List<JobTitle> listData){
+	public void saveListData(List<JobTitle> listData, boolean isInit){
 		for(JobTitle e : listData){
 			JobTitle jobTitle = jobTitleService.findByExtId(e.getExtId());
 			
@@ -72,6 +77,9 @@ public class JobTitleForceAdapter extends ForceAdapter<JobTitle> {
 				jobTitle = new JobTitle();
 				jobTitle.setCreatedDate(new Date());
 			}
+			if(isInit)
+				jobTitle.setAckSync(false);
+			
 			jobTitle.setExtId(e.getExtId());
 			jobTitle.setCompany(this.companyid);
 			jobTitle.setEndDate(e.getEndDate());
@@ -91,4 +99,21 @@ public class JobTitleForceAdapter extends ForceAdapter<JobTitle> {
 		}
 	}
 	
+	
+	@Override
+	public void sendDataAckSync() {
+
+		List<Object[]> listDataAckSync = jobTitleRepository.findSendAckSync();
+		sendForceDataAckSync(listDataAckSync);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId) {
+		jobTitleService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		jobTitleService.updateAckSyncStatus(status, extId);
+	}
 }

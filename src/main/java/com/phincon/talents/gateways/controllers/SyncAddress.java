@@ -31,7 +31,7 @@ public class SyncAddress {
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	addressForceAdapter.setConfigure(connectedApp,this.moduleName);
     	
-    	addressForceAdapter.receive();
+    	addressForceAdapter.receive(null,false);
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
        
     	return "Address Pull Completed !";
@@ -41,8 +41,20 @@ public class SyncAddress {
 	@ResponseBody
 	public String sendAddress(){
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-		addressForceAdapter.setConfigure(connectedApp, "InsertUpdateHRPERADDRESS");
+		addressForceAdapter.setConfigure(connectedApp, this.moduleName);
 		addressForceAdapter.sendNewData();
 		return "Address Send Completed !";
+	}
+	
+	@RequestMapping(value = "/address/init", method = RequestMethod.GET)
+	@ResponseBody
+	public String addressInit(){
+		
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	addressForceAdapter.setConfigure(connectedApp,this.moduleName);
+    	addressForceAdapter.initRetrieve();
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+       
+    	return "Address Init Completed !";
 	}
 }

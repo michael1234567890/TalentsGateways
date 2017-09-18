@@ -3,12 +3,14 @@ package com.phincon.talents.gateways.adapter.force;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phincon.talents.gateways.model.Employee;
 import com.phincon.talents.gateways.model.Employment;
+import com.phincon.talents.gateways.repository.EmploymentRepository;
 import com.phincon.talents.gateways.services.EmployeeService;
 import com.phincon.talents.gateways.services.EmploymentService;
 import com.phincon.talents.gateways.utils.Utils;
@@ -18,6 +20,9 @@ public class EmploymentForceAdapter extends ForceAdapter<Employment> {
 
 	@Autowired
 	EmploymentService EmploymentService;
+	
+	@Autowired
+	EmploymentRepository employmentRepository;
 	
 
 	@Autowired
@@ -94,7 +99,7 @@ public class EmploymentForceAdapter extends ForceAdapter<Employment> {
 	}
 	
 	@Override
-	public void saveListData(List<Employment> listData){
+	public void saveListData(List<Employment> listData, boolean isInit){
 		for(Employment e : listData){
 			Employment employment = EmploymentService.findByExtId(e.getExtId());
 			
@@ -103,6 +108,9 @@ public class EmploymentForceAdapter extends ForceAdapter<Employment> {
 				employment.setCreatedDate(new Date());
 			}
 			employment.setExtId(e.getExtId());
+			if(isInit)
+				employment.setAckSync(false);
+			
 			employment.setCompany(this.companyid);
 			employment.setDescription(e.getDescription());
 			employment.setEffectiveDate(e.getEffectiveDate());
@@ -129,4 +137,21 @@ public class EmploymentForceAdapter extends ForceAdapter<Employment> {
 		}
 	}
 	
+	
+	@Override
+	public void sendDataAckSync() {
+
+		List<Object[]> listDataAckSync = employmentRepository.findSendAckSync();
+		sendForceDataAckSync(listDataAckSync);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId) {
+		employmentRepository.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		employmentRepository.updateAckSyncStatus(status, extId);
+	}
 }

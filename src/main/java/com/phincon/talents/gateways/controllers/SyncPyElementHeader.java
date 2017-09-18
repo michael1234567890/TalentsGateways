@@ -14,7 +14,7 @@ import com.phincon.talents.gateways.services.HistorySyncService;
 @Controller
 @RequestMapping("/sync")
 public class SyncPyElementHeader {
-	private String moduleName = "pyelementheader";
+	private String moduleName = "pyempelementheader";
 	@Autowired
 	PyElementHeaderForceAdapter pyElementHeaderForceAdapter;
 	
@@ -31,11 +31,21 @@ public class SyncPyElementHeader {
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	pyElementHeaderForceAdapter.setConfigure(connectedApp,"pyempelementheader");
     	
-    	pyElementHeaderForceAdapter.receive();
+    	pyElementHeaderForceAdapter.receive(null,false);
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
     	
     	
     	return "Pyelementhedaer Pull Completed !";
+	}
+	
+	@RequestMapping(value = "/pyelementheader/init", method = RequestMethod.GET)
+	@ResponseBody
+	public String pyelementhedaerInit(){
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	pyElementHeaderForceAdapter.setConfigure(connectedApp,this.moduleName);
+    	pyElementHeaderForceAdapter.initRetrieve();
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	return "Pyelementhedaer Init Completed !";
 	}
 	
 	

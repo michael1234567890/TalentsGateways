@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import com.phincon.talents.gateways.model.Certification;
 import com.phincon.talents.gateways.model.Employee;
+import com.phincon.talents.gateways.repository.CertificationRepository;
 import com.phincon.talents.gateways.services.CertificationService;
 import com.phincon.talents.gateways.services.EmployeeService;
 import com.phincon.talents.gateways.utils.ForceResponseGetId;
@@ -27,6 +29,9 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 
 	@Autowired
 	CertificationService certificationService;
+	
+	@Autowired
+	CertificationRepository certificationRepository;
 	
 	@Autowired
 	EmployeeService employeeService;
@@ -131,7 +136,7 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 	}
 	
 	@Override
-	public void saveListData(List<Certification> listData){
+	public void saveListData(List<Certification> listData,boolean isInit){
 		for(Certification e : listData){
 			System.out.println("Certification : " + e.getExtId());
 			// check is id is exist
@@ -142,6 +147,9 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 				certDb.setCreatedDate(new Date());
 			}
 			certDb.setExtId(e.getExtId());
+			if(isInit)
+				certDb.setAckSync(false);
+			
 			certDb.setName(e.getName());
 			certDb.setDate(e.getDate());
 			certDb.setDescription(e.getDescription());
@@ -170,16 +178,18 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 	@Override
 	public void sendNewData(){
 		// get data with ext id is null
-		System.out.println("Send New Data");
-		Iterable<Certification> listCertification = certificationService.findNeedSync();
+		List<Certification> listCertification = certificationService.findNeedSync();
 		if(listCertification != null){
+			System.out.println("Jumlah List " + listCertification.size());
 			int i = 0;
 			List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 			for(Certification certification : listCertification){
+				System.out.println("Looping "+ i);
 				Map<String, Object> map = new HashMap<String, Object>();
+				if(certification.getExtId() != null)
+					map.put("Id", certification.getExtId());
 				map.put("Full_Name__c", certification.getEmployeeExtId());
 				map.put("ExtId__c", certification.getUuid());
-				//map.put("Id", certification.getId());
 				map.put("Name", certification.getName());
 				map.put("Certification_Date__c", certification.getDate());
 				map.put("Certification_Description__c", certification.getDescription());
@@ -190,11 +200,10 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 				map.put("Principle__c", certification.getPrinciple());
 				map.put("Year_Certified__c", certification.getYear());
 				listMap.add(map);
-				System.out.println("No " + (i+1) + " : " + certification.toString());
 				i++;
 			}
 			if(listMap.size() > 0)
-				send(listMap);
+				send(listMap,false);
 			System.out.println(i + " Task Already Sending");
 		}
 	}
@@ -232,8 +241,6 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 			for(Map<String, Object> map : listResponseGetId){
 				String extId = (String) map.get("Id");
 				String uuid = (String) map.get("ExtId__c");
-				System.out.println("Ext Id " + extId);
-				System.out.println("uuid " + uuid);
 				certificationService.updateExtIdByUUID(extId, uuid);
 			}
 		}catch(HttpClientErrorException ex){
@@ -243,6 +250,25 @@ public class CertificationForceAdapter extends ForceAdapter<Certification>{
 		}
 		
 	}
+	
+	
+	@Override
+	public void sendDataAckSync() {
+
+		List<Object[]> listDataAckSync = certificationRepository.findSendAckSync();
+		sendForceDataAckSync(listDataAckSync);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId) {
+		certificationService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		certificationService.updateAckSyncStatus(status, extId);
+	}
+	
 	
 
 

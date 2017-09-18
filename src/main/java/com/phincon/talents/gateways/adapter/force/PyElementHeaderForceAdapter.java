@@ -1,9 +1,7 @@
 package com.phincon.talents.gateways.adapter.force;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,41 +37,7 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 	
 	@Override
 	protected PayrollElementHeader convertMapResultToObject(Map<String, Object> mapResult){
-		/* Assignment_No__c,
-		Company_Name__c,
-		Compare_Field__c,
-		Cost_Center_Code__c,
-		
-		Full_Name__c,
-		Grade_Name__c,
-		IrregGross_Income__c,
-		IrregNet_Income__c,
-	
-		Job_Title_Name__c,
-
-	
-		NPWP_Flag__c,
-		Organization_Name__c,
-		
-		Package_Name__c,
-		Percentage_BJBT__c,
-		Period__c,
-		
-		Position_Name__c,
-	
-	
-		Result_YTD_Header_ID__c,
-		Rounding_Type__c,
-	
-		Tax_File_No__c,
-		
-		Tax_Location_Name__c,
-	
-	
-	
-		Work_Location_Name__c 
-		*/
-		
+		Double baseSalary = (Double) mapResult.get("Base_Salary__c");
 		Double ptkp = (Double) mapResult.get("PTKP__c");
 		Double pkp = (Double) mapResult.get("PKP__c");  
 		Double otherPtkpYearly = (Double) mapResult.get("Other_PTKP_Yearly__c");  
@@ -125,6 +89,7 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 		
 		
 		PayrollElementHeader obj = new PayrollElementHeader();
+		obj.setBaseSalary(baseSalary);
 		obj.setBankAccount(bankAccount);
 		obj.setBankBranch(bankBranch);
 		obj.setAccountName(accountName);
@@ -182,7 +147,7 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 	}
 	
 	@Override
-	public void saveListData(List<PayrollElementHeader> listData){
+	public void saveListData(List<PayrollElementHeader> listData, boolean isInit){
 		for(PayrollElementHeader e : listData){
 			System.out.println("After Ext Id " + e.getExtId());
 			PayrollElementHeader payrollElementHeader = payrollElementHeaderService.findByExtId(e.getExtId());
@@ -194,6 +159,8 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 				payrollElementHeader.setExtId(e.getExtId());
 			}
 			
+			if(isInit)
+				payrollElementHeader.setAckSync(false);
 			payrollElementHeader.setBankAccount(e.getBankAccount());
 			payrollElementHeader.setBankBranch(e.getBankBranch());
 			payrollElementHeader.setAccountName(e.getAccountName());
@@ -234,7 +201,7 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 			payrollElementHeader.setTotalDeduction(e.getTotalDeduction());
 			payrollElementHeader.setTotalIncome(e.getTotalIncome());
 			payrollElementHeader.setValueResultTypeTax(e.getValueResultTypeTax());
-			
+			payrollElementHeader.setBaseSalary(e.getBaseSalary());
 			
 			Employee employee = null ;
 			if(e.getEmployeeExtId() != null)

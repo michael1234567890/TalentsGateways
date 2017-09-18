@@ -1,6 +1,7 @@
 package com.phincon.talents.gateways.services;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phincon.talents.gateways.model.Address;
-import com.phincon.talents.gateways.model.Family;
 import com.phincon.talents.gateways.repository.AddressRepository;
 
 @Service
@@ -56,4 +56,18 @@ public class AddressService {
 	public void updateExtIdByUUID(String extId, String uuid) {
 		addressRepository.updateExtIdByUUID(extId, uuid);
 	}
+
+
+	@Transactional
+	public void updateAckSyncStatus(boolean status, String extId) {
+		addressRepository.updateAckSyncStatus(status, extId);
+	}
+	
+
+	@Transactional
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		addressRepository.updateAckSyncStatus(status, extId);
+	}
+	
+	
 }

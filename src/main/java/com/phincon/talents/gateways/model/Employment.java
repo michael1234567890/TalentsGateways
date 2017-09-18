@@ -75,6 +75,9 @@ public class Employment extends AbstractEntity {
 	@Column(name = "employee_type", length = 100)
 	private String employeeType;
 	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
+	
 	
 
 	public Long getCompany() {
@@ -205,6 +208,16 @@ public class Employment extends AbstractEntity {
 
 	public void setEmployeeType(String employeeType) {
 		this.employeeType = employeeType;
+	}
+	
+	
+
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
 	}
 
 	@Override

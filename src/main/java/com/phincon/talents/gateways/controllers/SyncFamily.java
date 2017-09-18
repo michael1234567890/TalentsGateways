@@ -34,7 +34,7 @@ public class SyncFamily {
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	familyAdapter.setConfigure(connectedApp,this.moduleName);
     	
-    	familyAdapter.receive();
+    	familyAdapter.receive(null,false);
 
 	 	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
         return "Family pull completed !";
@@ -44,8 +44,6 @@ public class SyncFamily {
     @ResponseBody
 	public String sendFamilies() {
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-    	System.out.println(connectedApp.toString());
-    	
     	familyAdapter.setConfigure(connectedApp,this.moduleName);
     	familyAdapter.sendNewData();
         return "Family Send Completed !";
@@ -59,10 +57,21 @@ public class SyncFamily {
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	System.out.println(connectedApp.toString());
     	
-    	familyAdapter.setConfigure(connectedApp,"InsertUpdateHRPERFAMILY");
+    	familyAdapter.setConfigure(connectedApp,this.moduleName);
     	familyAdapter.sendUpdatedData();
     	return "Family Update Completed!";
     }
+    
+    
+    @RequestMapping(value = "/family/init", method = RequestMethod.GET)
+	@ResponseBody
+	public String familyInit(){
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	familyAdapter.setConfigure(connectedApp,this.moduleName);
+    	familyAdapter.initRetrieve();
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	return "Family Init Completed !";
+	}
     
     
 }

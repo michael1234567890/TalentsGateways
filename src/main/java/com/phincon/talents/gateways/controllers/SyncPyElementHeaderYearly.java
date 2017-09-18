@@ -30,7 +30,7 @@ public class SyncPyElementHeaderYearly {
 		
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	pyElementHeaderYearlyForceAdapter.setConfigure(connectedApp,this.moduleName);
-    	pyElementHeaderYearlyForceAdapter.receive();
+    	pyElementHeaderYearlyForceAdapter.receive(null,false);
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
     	
     	

@@ -96,10 +96,23 @@ public class TMBalance extends AbstractEntity {
 	@Column(name = "company_id")
 	private Long company;
 	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
+	
+	
 	
 	@Transient
 	private RecordType recordType;
 	
+
+	
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
+	}
 
 	public RecordType getRecordType() {
 		return recordType;

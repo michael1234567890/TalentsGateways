@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,7 +26,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phincon.talents.gateways.adapter.InterfaceAdapter;
 import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.utils.ForcePyDetailGroupingResponse;
-import com.phincon.talents.gateways.utils.ForceResponse;
 
 public class ForceDetailGroupingAdapter<E> implements InterfaceAdapter {
 	protected String instanceUrl = "";
@@ -74,7 +74,7 @@ public class ForceDetailGroupingAdapter<E> implements InterfaceAdapter {
 	 * send data to host salesforce
 	 */
 	@Override
-	public void send(List<Map<String, Object>> listData) {
+	public void send(List<Map<String, Object>> listData,boolean status) {
 		System.out.println("Send Method");
 		// data yg tebaru atau terupdate
 
@@ -181,7 +181,7 @@ public class ForceDetailGroupingAdapter<E> implements InterfaceAdapter {
 	 */
 
 	@Override
-	public void receive() {
+	public void receive(String urlQuery,boolean isInit) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		HttpEntity<String> entity = new HttpEntity<String>("parameters",
@@ -217,7 +217,8 @@ public class ForceDetailGroupingAdapter<E> implements InterfaceAdapter {
 		System.out.println("+++++++++++ REQUEST RESPONSE +++++++++++++++");
 
 		//String urlQuery = instanceUrl + "/services/apexrest/" + this.query;
-		String urlQuery = instanceUrl + "/services/apexrest/GetAll?SyncObject=" + this.forceModuleName;
+		if(urlQuery == null)
+			urlQuery = instanceUrl + "/services/apexrest/GetAll?SyncObject=" + this.forceModuleName;
 
 		System.out.println(urlQuery);
 
@@ -235,8 +236,6 @@ public class ForceDetailGroupingAdapter<E> implements InterfaceAdapter {
 			ForcePyDetailGroupingResponse forceResponse = (ForcePyDetailGroupingResponse) objectMapper
 					.readValue(resultQuery.getBody(), ForcePyDetailGroupingResponse.class);
 			if (forceResponse != null) {
-				/*System.out.println("Total Size : "
-						+ forceResponse.getTotalSize());*/
 				listResponse = convertToListObject(forceResponse.getItems());
 
 				if (listResponse.size() > 0) {
@@ -276,5 +275,25 @@ public class ForceDetailGroupingAdapter<E> implements InterfaceAdapter {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void sendDataAckSync() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateAckSyncStatus(boolean status, String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 
 }

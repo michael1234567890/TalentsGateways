@@ -1,6 +1,7 @@
 package com.phincon.talents.gateways.services;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -51,6 +52,17 @@ public class EmployeeService {
 	@Transactional
 	public void updateExtIdByUUID(String extId, String uuid) {
 		employeeRepository.updateExtIdByUUID(extId, uuid);
+	}
+	
+	@Transactional
+	public void updateAckSyncStatus(boolean status, String extId) {
+		employeeRepository.updateAckSyncStatus(status, extId);
+	}
+	
+
+	@Transactional
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		employeeRepository.updateAckSyncStatus(status, extId);
 	}
 
 

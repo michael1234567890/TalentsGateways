@@ -65,7 +65,7 @@ public class PyElementDetailYearlyForceAdapter extends ForceAdapter<PayrollEleme
 	}
 	
 	@Override
-	public void saveListData(List<PayrollElementDetailYearly> listData){
+	public void saveListData(List<PayrollElementDetailYearly> listData, boolean isInit){
 		for(PayrollElementDetailYearly e : listData){
 			System.out.println("After Ext Id " + e.getExtId());
 			PayrollElementDetailYearly payrollElementDetailYearly = null;
@@ -79,6 +79,10 @@ public class PyElementDetailYearlyForceAdapter extends ForceAdapter<PayrollEleme
 				payrollElementDetailYearly.setCreatedBy("Talents Gateway");
 				payrollElementDetailYearly.setExtId(e.getExtId());
 			}
+			
+			if(isInit)
+				payrollElementDetailYearly.setAckSync(false);
+			
 			payrollElementDetailYearly.setElementNameExtId(e.getElementNameExtId());
 			payrollElementDetailYearly.setTotal(e.getTotal());
 			payrollElementDetailYearly.setPayrollElementHeaderYearlyExtId(e.getPayrollElementHeaderYearlyExtId());

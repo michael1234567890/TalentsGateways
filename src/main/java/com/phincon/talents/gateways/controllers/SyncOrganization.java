@@ -17,23 +17,36 @@ public class SyncOrganization {
 	private String moduleName = "wssetorganization";
 	@Autowired
 	OrganizationForceAdapter organizationForceAdapter;
-	
+
 	@Autowired
 	ConnectedAppService connectedAppService;
 
 	@Autowired
-	HistorySyncService historySyncService ;
-	
+	HistorySyncService historySyncService;
+
 	@RequestMapping(value = "/organization/pull", method = RequestMethod.GET)
 	@ResponseBody
-	public String addressPull(){
+	public String addressPull() {
+
+		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+		organizationForceAdapter.setConfigure(connectedApp, this.moduleName);
+
+		organizationForceAdapter.receive(null, false);
+		historySyncService.createOrUpdateSync(this.moduleName,
+				connectedApp.getCompany());
+
+		return "Organization Pull Completed !";
+	}
+	
+	
+	@RequestMapping(value = "/organization/init", method = RequestMethod.GET)
+	@ResponseBody
+	public String organizationInit(){
 		
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	organizationForceAdapter.setConfigure(connectedApp,this.moduleName);
-    	
-    	organizationForceAdapter.receive();
+    	organizationForceAdapter.initRetrieve();
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
-       
-    	return "Organization Pull Completed !";
+    	return "Organization Init Completed !";
 	}
-	}
+}

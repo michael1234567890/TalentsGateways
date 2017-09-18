@@ -157,7 +157,7 @@ public class Employee extends AbstractEntity {
 	@Column(name="end_date_contract")
 	private Date endDateContract;
 	
-	@Column(name="family_card_no", length=20)
+	@Column(name="family_card_no", length=50)
 	private String familyCardNo;
 	
 	@Column(name="first_name", length=50)
@@ -442,6 +442,9 @@ public class Employee extends AbstractEntity {
 	@Column(name="need_sync")
 	private Boolean needSync;
 	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
+	
 	
 	
 	
@@ -449,6 +452,14 @@ public class Employee extends AbstractEntity {
 //	@JoinColumn(name="company_id")
 //	private Company company;
 	
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
+	}
+
 	public Boolean getNeedSync() {
 		return needSync;
 	}

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import com.phincon.talents.gateways.model.Employment;
 import com.phincon.talents.gateways.model.TMBalance;
-import com.phincon.talents.gateways.model.TMRequest;
+import com.phincon.talents.gateways.repository.TMBalanceRepository;
 import com.phincon.talents.gateways.services.EmploymentService;
 import com.phincon.talents.gateways.services.TMBalanceService;
 import com.phincon.talents.gateways.utils.ForceResponseGetId;
@@ -27,6 +28,9 @@ public class TMBalanceForceAdapter extends ForceAdapter<TMBalance> {
 
 	@Autowired
 	TMBalanceService tmBalanceService;
+	
+	@Autowired
+	TMBalanceRepository tmBalanceRepository;
 	
 
 	@Autowired
@@ -98,7 +102,7 @@ public class TMBalanceForceAdapter extends ForceAdapter<TMBalance> {
 	}
 	
 	@Override
-	public void saveListData(List<TMBalance> listData){
+	public void saveListData(List<TMBalance> listData, boolean isNull){
 		for(TMBalance e : listData){
 			TMBalance obj = tmBalanceService.findByExtId(e.getExtId());
 			
@@ -108,6 +112,9 @@ public class TMBalanceForceAdapter extends ForceAdapter<TMBalance> {
 				obj.setCreatedBy("Talents Gateway");
 				obj.setExtId(e.getExtId());
 			}
+			
+			if(isNull)
+				obj.setAckSync(false);
 			
 			obj.setBalanceEnd(e.getBalanceEnd());
 			obj.setBalanceLimit(e.getBalanceLimit());
@@ -169,7 +176,7 @@ public class TMBalanceForceAdapter extends ForceAdapter<TMBalance> {
 				i++;
 			}
 			if(listMap.size() > 0)
-				send(listMap);
+				send(listMap,false);
 			System.out.println(i + " Task Already Sending ");
 		}
 	}
@@ -218,6 +225,23 @@ public class TMBalanceForceAdapter extends ForceAdapter<TMBalance> {
 
 		}
 		
+	}
+	
+	@Override
+	public void sendDataAckSync() {
+
+		List<Object[]> listDataAckSync = tmBalanceRepository.findSendAckSync();
+		sendForceDataAckSync(listDataAckSync);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId) {
+		tmBalanceService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		tmBalanceService.updateAckSyncStatus(status, extId);
 	}
 	
 }

@@ -1,15 +1,14 @@
 package com.phincon.talents.gateways.services;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.phincon.talents.gateways.model.PayrollElementHeader;
 import com.phincon.talents.gateways.model.TMBalance;
-import com.phincon.talents.gateways.model.TMRequest;
 import com.phincon.talents.gateways.repository.TMBalanceRepository;
 
 /**
@@ -48,6 +47,17 @@ public class TMBalanceService {
 	@Transactional
 	public void updateExtIdByUUID(String extId, String uuid) {
 		tmBalanceRepository.updateExtIdByUUID(extId, uuid);
+	}
+	
+	@Transactional
+	public void updateAckSyncStatus(boolean status, String extId) {
+		tmBalanceRepository.updateAckSyncStatus(status, extId);
+	}
+	
+
+	@Transactional
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		tmBalanceRepository.updateAckSyncStatus(status, extId);
 	}
 	
 	

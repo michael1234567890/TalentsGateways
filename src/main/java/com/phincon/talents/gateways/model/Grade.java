@@ -21,9 +21,21 @@ public class Grade extends AbstractEntity{
 	@Column(name="grade_nominal")
 	private Integer gradeNominal;
 	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
+	
 	
 	@Column(name="remark", length=100)
 	private String remark;
+
+	
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
+	}
 
 	public Long getCompany() {
 		return company;

@@ -17,23 +17,34 @@ public class SyncGrade {
 	private String moduleName = "WSSETGRADE";
 	@Autowired
 	GradeForceAdapter gradeForceAdapter;
-	
+
 	@Autowired
 	ConnectedAppService connectedAppService;
 
 	@Autowired
-	HistorySyncService historySyncService ;
-	
+	HistorySyncService historySyncService;
+
 	@RequestMapping(value = "/grade/pull", method = RequestMethod.GET)
 	@ResponseBody
-	public String addressPull(){
-		
+	public String addressPull() {
+
+		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+		gradeForceAdapter.setConfigure(connectedApp, this.moduleName);
+
+		gradeForceAdapter.receive(null, false);
+		historySyncService.createOrUpdateSync(this.moduleName,
+				connectedApp.getCompany());
+
+		return "Grade Pull Completed !";
+	}
+	
+	@RequestMapping(value = "/grade/init", method = RequestMethod.GET)
+	@ResponseBody
+	public String gradeInit(){
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	gradeForceAdapter.setConfigure(connectedApp,this.moduleName);
-    	
-    	gradeForceAdapter.receive();
+    	gradeForceAdapter.initRetrieve();
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
-       
-    	return "Grade Pull Completed !";
+    	return "Grade Init Completed !";
 	}
-	}
+}

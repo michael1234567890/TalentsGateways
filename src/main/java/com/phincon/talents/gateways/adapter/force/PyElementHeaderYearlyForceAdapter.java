@@ -7,10 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.phincon.talents.gateways.model.Assignment;
-import com.phincon.talents.gateways.model.Employee;
 import com.phincon.talents.gateways.model.Employment;
-import com.phincon.talents.gateways.model.PayrollElementHeader;
 import com.phincon.talents.gateways.model.PayrollElementHeaderYearly;
 import com.phincon.talents.gateways.services.AssignmentService;
 import com.phincon.talents.gateways.services.EmployeeService;
@@ -80,7 +77,7 @@ public class PyElementHeaderYearlyForceAdapter extends ForceAdapter<PayrollEleme
 	}
 	
 	@Override
-	public void saveListData(List<PayrollElementHeaderYearly> listData){
+	public void saveListData(List<PayrollElementHeaderYearly> listData, boolean isInit){
 		for(PayrollElementHeaderYearly e : listData){
 			System.out.println("After Ext Id " + e.getExtId());
 			PayrollElementHeaderYearly payrollElementHeaderYearly = payrollElementHeaderYearlyService.findByExtId(e.getExtId());
@@ -91,6 +88,9 @@ public class PyElementHeaderYearlyForceAdapter extends ForceAdapter<PayrollEleme
 				payrollElementHeaderYearly.setCreatedBy("Talents Gateway");
 				payrollElementHeaderYearly.setExtId(e.getExtId());
 			}
+			
+			if(isInit)
+				payrollElementHeaderYearly.setAckSync(false);
 			
 			payrollElementHeaderYearly.setCurrentYear(e.getCurrentYear());
 			payrollElementHeaderYearly.setTaxPaid(e.getTaxPaid());

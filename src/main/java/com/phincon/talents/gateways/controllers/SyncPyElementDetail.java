@@ -32,8 +32,20 @@ public class SyncPyElementDetail {
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	pyElementDetailForceAdapter.setConfigure(connectedApp,"pyempelementdetail");
     	
-    	pyElementDetailForceAdapter.receive();
+    	pyElementDetailForceAdapter.receive(null,false);
 
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	return "Pyempelementdetail Pull Completed !";
+	}
+	
+	
+	@RequestMapping(value = "/pyelementdetail/init", method = RequestMethod.GET)
+	@ResponseBody
+	public String pyelementhedaerInit(){
+		
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	pyElementDetailForceAdapter.setConfigure(connectedApp,"pyempelementdetail");
+    	pyElementDetailForceAdapter.initRetrieve();
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
     	return "Pyempelementdetail Pull Completed !";
 	}

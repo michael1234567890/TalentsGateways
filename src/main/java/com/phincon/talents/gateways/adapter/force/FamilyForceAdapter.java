@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import com.phincon.talents.gateways.model.Employee;
 import com.phincon.talents.gateways.model.Family;
 import com.phincon.talents.gateways.model.HistorySync;
+import com.phincon.talents.gateways.repository.FamilyRepository;
 import com.phincon.talents.gateways.services.EmployeeService;
 import com.phincon.talents.gateways.services.FamilyService;
 import com.phincon.talents.gateways.services.HistorySyncService;
@@ -28,6 +30,9 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 
 	@Autowired
 	FamilyService familyService;
+	
+	@Autowired
+	FamilyRepository familyRepository;
 
 	@Autowired
 	EmployeeService employeeService;
@@ -37,9 +42,6 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 
 	public FamilyForceAdapter() {
 		super();
-//		query = "select Id,Name, Family_Address__c, Family_Birth_Place__c, Family_Blood_Type__c, Family_Date_of_Birth__c, "
-//				+ "Family_Decease_Date__c, Family_Dependent__c, Family_Last_Education__c, Family_Medical_Status__c, Family_Occupation__c, Family_Phone__c, Family_Relationship__c, Gender__c, Letter_No__c, Marital_Status__c, name__c "
-//				+ "from HRPERFAMILY__c limit 10";
 		query = "GetAllHRPERFAMILY";
 	}
 
@@ -47,8 +49,6 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 	protected Family convertMapResultToObject(Map<String, Object> mapResult) {
 		String name = (String) mapResult.get("Name");
 		String employeeExtId = (String) mapResult.get("Name__c");
-		System.out.println("EMployee Ext id " + employeeExtId);
-
 		String extId = (String) mapResult.get("Id");
 		String address = (String) mapResult.get("Family_Address__c");
 		String birthPlace = (String) mapResult.get("Family_Birth_Place__c");
@@ -61,6 +61,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 				.get("Family_Last_Education__c");
 		String medicalStatus = (String) mapResult
 				.get("Family_Medical_Status__c");
+		String aliveStatus = (String) mapResult.get("Alive_Status__c");
 		String occupation = (String) mapResult.get("Family_Occupation__c");
 		String phone = (String) mapResult.get("Family_Phone__c");
 		String relationship = (String) mapResult.get("Family_Relationship__c");
@@ -75,6 +76,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 			birthDate = Utils.convertStringToDate(strBirthDate);
 
 		Family family = new Family();
+		family.setAliveStatus(aliveStatus);
 		family.setAddress(address);
 		family.setBirthDate(birthDate);
 		family.setBirthPlace(birthPlace);
@@ -98,7 +100,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 	}
 
 	@Override
-	public void saveListData(List<Family> listData) {
+	public void saveListData(List<Family> listData, boolean isInit) {
 		for (Family e : listData) {
 			System.out.print("Employee : " + e.getExtId());
 			// check is id is exist
@@ -109,6 +111,9 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 				family = new Family();
 				family.setCreatedDate(new Date());
 			}
+			
+			if(isInit)
+				family.setAckSync(false);
 
 			family.setAddress(e.getAddress());
 			family.setBirthDate(e.getBirthDate());
@@ -118,7 +123,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 			family.setDependent(e.getDependent());
 			family.setExtId(e.getExtId());
 			family.setGender(e.getGender());
-
+			family.setAliveStatus(e.getAliveStatus());
 			family.setLastEducation(e.getLastEducation());
 			family.setRelationship(e.getRelationship());
 			family.setPhone(e.getPhone());
@@ -160,6 +165,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 				map.put("Family_Birth_Place__c", family.getBirthPlace());
 				map.put("Family_Blood_Type__c", family.getBloodType());
 				map.put("Family_Date_of_Birth__c", family.getBirthDate());
+				map.put("Alive_Status__c",family.getAliveStatus());
 				// map.put("Family_Decease_Date__c", family.getDeceaseDate());
 				map.put("Family_Last_Education__c", family.getLastEducation());
 				// map.put("Family_Medical_Status__c",
@@ -176,7 +182,7 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 				i++;
 			}
 			if(listMap.size() > 0)
-				send(listMap);
+				send(listMap,false);
 			System.out.println(i + " Task Already Sending ");
 		}
 	}
@@ -184,9 +190,27 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 	@Override
 	public void sendNewData() {
 		// get data with ext id is null
-		System.out.println("Send New Data");
 		Iterable<Family> listFamily = familyService.findNeedSync();
 		listFamily(listFamily);
+	}
+	
+	@Override
+	public void sendDataAckSync() {
+
+		List<Object[]> listDataAckSync = familyRepository.findSendAckSync();
+		sendForceDataAckSync(listDataAckSync);
+	}
+	
+	
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId) {
+		familyService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		familyService.updateAckSyncStatus(status, extId);
 	}
 	
 	@Override

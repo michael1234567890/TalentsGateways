@@ -115,6 +115,9 @@ public class Assignment extends AbstractEntity {
 	@Column(name = "employment_ext_id", length=100)
 	private String employmentExtId;
 	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
+	
 
 	public String getMode() {
 		return mode;
@@ -347,6 +350,16 @@ public class Assignment extends AbstractEntity {
 	public void setGradeExtId(String gradeExtId) {
 		this.gradeExtId = gradeExtId;
 	}
+
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
+	}
+	
+	
 
 	
 	

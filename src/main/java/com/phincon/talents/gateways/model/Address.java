@@ -62,6 +62,23 @@ public class Address extends AbstractEntity {
 	@Column(name="need_sync")
 	private Boolean needSync;
 	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
+	
+
+
+	@Column(name="company_id")
+	private Long company;
+
+	public Long getCompany() {
+		return company;
+	}
+
+	public void setCompany(Long company) {
+		this.company = company;
+	}
+	
+	
 
 	@Column(name = "employee_ext_id", length=100)
 	private String employeeExtId;
@@ -215,6 +232,14 @@ public class Address extends AbstractEntity {
 
 	public void setNeedSync(Boolean needSync) {
 		this.needSync = needSync;
+	}
+
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
 	}
 	
 	

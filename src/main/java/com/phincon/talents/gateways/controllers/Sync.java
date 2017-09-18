@@ -33,7 +33,7 @@ public class Sync {
     	//employeeForceAdapter.setConfigure(url,clientId, cleintSecret, username, password);
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	employeeForceAdapter.setConfigure(connectedApp,"GetAllHRPERINFO");
-    	employeeForceAdapter.receive();
+    	employeeForceAdapter.receive(null,false);
         return "Employee Pull Completed !";
     }
     

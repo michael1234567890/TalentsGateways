@@ -31,10 +31,20 @@ public class SyncEmployment {
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
 		employmentForceAdapter.setConfigure(connectedApp, this.moduleName);
 
-		employmentForceAdapter.receive();
+		employmentForceAdapter.receive(null,false);
 	 	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
     	
-		return "Address Pull Completed !";
+		return "Employment Pull Completed !";
+	}
+	
+	@RequestMapping(value = "/employment/init", method = RequestMethod.GET)
+	@ResponseBody
+	public String jobtitleInit(){
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	employmentForceAdapter.setConfigure(connectedApp,this.moduleName);
+    	employmentForceAdapter.initRetrieve();
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	return "Employment Init Completed !";
 	}
 
 }

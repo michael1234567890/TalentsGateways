@@ -10,8 +10,6 @@ import javax.persistence.Table;
 @Table(name = "hr_payroll_element_header")
 public class PayrollElementHeader extends AbstractEntity {
 
-	
-
 	@Column(name = "ptkp")
 	private Double ptkp;
 	
@@ -23,6 +21,9 @@ public class PayrollElementHeader extends AbstractEntity {
 	
 	@Column(name = "pkp")
 	private Double pkp;
+	
+	@Column(name = "base_salary")
+	private Double baseSalary;
 	
 	@Column(name = "name", length = 100)
 	private String name;
@@ -164,6 +165,20 @@ public class PayrollElementHeader extends AbstractEntity {
 
 	@Column(name = "account_name", length = 50)
 	private String accountName;
+	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
+	
+
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
+	}
+
 
 	public Employee getEmployee() {
 		return employee;
@@ -550,6 +565,18 @@ public class PayrollElementHeader extends AbstractEntity {
 
 	public void setBankBranch(String bankBranch) {
 		this.bankBranch = bankBranch;
+	}
+	
+	
+
+
+	public Double getBaseSalary() {
+		return baseSalary;
+	}
+
+
+	public void setBaseSalary(Double baseSalary) {
+		this.baseSalary = baseSalary;
 	}
 
 

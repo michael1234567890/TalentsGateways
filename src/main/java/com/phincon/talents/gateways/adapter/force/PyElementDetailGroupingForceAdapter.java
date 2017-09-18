@@ -1,17 +1,12 @@
 package com.phincon.talents.gateways.adapter.force;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.phincon.talents.gateways.model.Assignment;
-import com.phincon.talents.gateways.model.Employee;
-import com.phincon.talents.gateways.model.Employment;
 import com.phincon.talents.gateways.model.PayrollElementDetail;
-import com.phincon.talents.gateways.model.PayrollElementHeader;
 import com.phincon.talents.gateways.services.AssignmentService;
 import com.phincon.talents.gateways.services.EmployeeService;
 import com.phincon.talents.gateways.services.EmploymentService;

@@ -103,6 +103,19 @@ public class PayrollElementHeaderYearly extends AbstractEntity {
 	@Column(name = "current_tax_penalty")
 	private Double currentTaxPenalty;
 	
+	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
+	
+	
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
+	}
+
 	public Double getJumlahPhBruto() {
 		return jumlahPhBruto;
 	}

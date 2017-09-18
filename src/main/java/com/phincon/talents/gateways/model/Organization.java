@@ -52,6 +52,20 @@ public class Organization extends AbstractEntity{
 	@Column(name="remark", length=100)
 	private String remark;
 
+	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
+	
+	
+	
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
+	}
+
 	public Long getCompany() {
 		return company;
 	}

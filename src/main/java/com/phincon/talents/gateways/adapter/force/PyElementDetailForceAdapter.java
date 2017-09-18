@@ -7,9 +7,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.phincon.talents.gateways.model.Assignment;
-import com.phincon.talents.gateways.model.Employee;
-import com.phincon.talents.gateways.model.Employment;
 import com.phincon.talents.gateways.model.PayrollElementDetail;
 import com.phincon.talents.gateways.model.PayrollElementHeader;
 import com.phincon.talents.gateways.services.AssignmentService;
@@ -90,7 +87,7 @@ public class PyElementDetailForceAdapter extends ForceAdapter<PayrollElementDeta
 	}
 	
 	@Override
-	public void saveListData(List<PayrollElementDetail> listData){
+	public void saveListData(List<PayrollElementDetail> listData, boolean isInit){
 		for(PayrollElementDetail e : listData){
 		
 			PayrollElementDetail payrollElementDetail = payrollElementDetailService.findByExtId(e.getExtId());
@@ -101,6 +98,9 @@ public class PyElementDetailForceAdapter extends ForceAdapter<PayrollElementDeta
 				payrollElementDetail.setCreatedBy("Talents Gateway");
 				payrollElementDetail.setExtId(e.getExtId());
 			}
+			
+			if(isInit)
+				payrollElementDetail.setAckSync(false);
 			
 			payrollElementDetail.setExtId(e.getExtId());
 			 payrollElementDetail.setBudgetItemCode(e.getBudgetItemCode());

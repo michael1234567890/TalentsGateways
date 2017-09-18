@@ -1,5 +1,7 @@
 package com.phincon.talents.gateways.services;
 
+import java.util.Set;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,17 @@ public class PositionService {
 	@Transactional
 	public void save(Position obj){
 		positionRepository.save(obj);
+	}
+	
+	@Transactional
+	public void updateAckSyncStatus(boolean status, String extId) {
+		positionRepository.updateAckSyncStatus(status, extId);
+	}
+	
+
+	@Transactional
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		positionRepository.updateAckSyncStatus(status, extId);
 	}
 	
 }

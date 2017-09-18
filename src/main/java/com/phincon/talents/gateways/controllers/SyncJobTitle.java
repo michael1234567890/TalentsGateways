@@ -9,12 +9,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.phincon.talents.gateways.adapter.force.JobTitleForceAdapter;
 import com.phincon.talents.gateways.model.ConnectedApp;
 import com.phincon.talents.gateways.services.ConnectedAppService;
+import com.phincon.talents.gateways.services.HistorySyncService;
 
 @Controller
 @RequestMapping("/sync")
 public class SyncJobTitle {
+	private String moduleName = "WSSETJOBTITLE__c";
+	
 	@Autowired
 	JobTitleForceAdapter jobTitleForceAdapter;
+	@Autowired
+	HistorySyncService historySyncService;
 
 	@Autowired
 	ConnectedAppService connectedAppService;
@@ -24,9 +29,19 @@ public class SyncJobTitle {
 	public String addressPull() {
 
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-		jobTitleForceAdapter.setConfigure(connectedApp, "WSSETJOBTITLE__c");
-		jobTitleForceAdapter.receive();
+		jobTitleForceAdapter.setConfigure(connectedApp, this.moduleName);
+		jobTitleForceAdapter.receive(null,false);
 		return "Job Title Pull Completed !";
+	}
+	
+	@RequestMapping(value = "/jobtitle/init", method = RequestMethod.GET)
+	@ResponseBody
+	public String jobtitleInit(){
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	jobTitleForceAdapter.setConfigure(connectedApp,this.moduleName);
+    	jobTitleForceAdapter.initRetrieve();
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	return "Job Title Init Completed !";
 	}
 
 }

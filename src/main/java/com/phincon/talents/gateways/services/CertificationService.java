@@ -1,6 +1,7 @@
 package com.phincon.talents.gateways.services;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phincon.talents.gateways.model.Certification;
-import com.phincon.talents.gateways.model.Employee;
 import com.phincon.talents.gateways.repository.CertificationRepository;
 
 @Service
@@ -55,5 +55,16 @@ public class CertificationService {
 	@Transactional
 	public void updateExtIdByUUID(String extId, String uuid){
 		certificationRepository.updateExtIdByUUID(extId, uuid);
+	}
+	
+	@Transactional
+	public void updateAckSyncStatus(boolean status, String extId) {
+		certificationRepository.updateAckSyncStatus(status, extId);
+	}
+	
+
+	@Transactional
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		certificationRepository.updateAckSyncStatus(status, extId);
 	}
 }

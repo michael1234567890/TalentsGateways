@@ -57,6 +57,9 @@ public class Certification extends AbstractEntity {
 
 	@Column(name = "year", length = 15)
 	private String year;
+	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
 
 	public String getName() {
 		return name;
@@ -152,6 +155,14 @@ public class Certification extends AbstractEntity {
 
 	public void setNeedSync(Boolean needSync) {
 		this.needSync = needSync;
+	}
+
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
 	}
 	
 	

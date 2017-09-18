@@ -3,6 +3,7 @@ package com.phincon.talents.gateways.adapter.force;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import com.phincon.talents.gateways.model.Employment;
 import com.phincon.talents.gateways.model.Grade;
 import com.phincon.talents.gateways.model.JobTitle;
 import com.phincon.talents.gateways.model.Position;
+import com.phincon.talents.gateways.repository.AssignmentRepository;
 import com.phincon.talents.gateways.repository.GradeRepository;
 import com.phincon.talents.gateways.services.AssignmentService;
 import com.phincon.talents.gateways.services.EmploymentService;
@@ -24,6 +26,11 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 
 	@Autowired
 	AssignmentService assignmentService;
+	
+	
+	@Autowired
+	AssignmentRepository assignmentRepository;
+	
 
 	@Autowired
 	EmploymentService employmentService;
@@ -39,14 +46,15 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 
 	public AssignmentForceAdapter() {
 		super();
-		// query =
-		// "select Id,Name, Family_Address__c, Family_Birth_Place__c, Family_Blood_Type__c, Family_Date_of_Birth__c, "
-		// +
-		// "Family_Decease_Date__c, Family_Dependent__c, Family_Last_Education__c, Family_Medical_Status__c, Family_Occupation__c, Family_Phone__c, Family_Relationship__c, Gender__c, Letter_No__c, Marital_Status__c, name__c "
-		// + "from HRPERFAMILY__c limit 10";
 		query = "HREMPASSIGNMENT";
 	}
+	
 
+	/*
+	 * convert result from Force to Object Assignment
+	 * input : map String Object
+	 * output : Object Assignment
+	 */
 	@Override
 	protected Assignment convertMapResultToObject(Map<String, Object> mapResult) {
 		String name = (String) mapResult.get("Name");
@@ -114,9 +122,13 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 		// assignment.setDeparment(department);
 		return assignment;
 	}
+	
 
+	/*
+	 * save list object into Table
+	 */
 	@Override
-	public void saveListData(List<Assignment> listData) {
+	public void saveListData(List<Assignment> listData,boolean isInit) {
 		for (Assignment e : listData) {
 			Assignment assignment = assignmentService.findByExtId(e.getExtId());
 
@@ -131,7 +143,11 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 			assignment.setExtId(e.getExtId());
 			assignment.setEmploymentExtId(e.getEmploymentExtId());
 			assignment.setPositionExtId(e.getPositionExtId());
-
+			
+			// flag ack sync as false if doing init action
+			if(isInit)
+				assignment.setAckSync(false);
+			
 			assignment.setExtId(e.getExtId());
 			assignment.setName(e.getName());
 			assignment.setJobTitleExtId(e.getJobTitleExtId());
@@ -200,8 +216,25 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 			assignment.setModifiedBy("Talents Gateway");
 			assignment.setCreatedBy("Talents Gateway");
 			assignmentService.save(assignment);
-			System.out.println("Success Save Assignment");
 		}
+	}
+	
+
+	@Override
+	public void sendDataAckSync() {
+
+		List<Object[]> listDataAckSync = assignmentRepository.findSendAckSync();
+		sendForceDataAckSync(listDataAckSync);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId) {
+		assignmentService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		assignmentService.updateAckSyncStatus(status, extId);
 	}
 
 }

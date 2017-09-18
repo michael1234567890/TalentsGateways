@@ -15,7 +15,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.phincon.talents.gateways.model.Employment;
-import com.phincon.talents.gateways.model.Family;
 import com.phincon.talents.gateways.model.TMRequest;
 import com.phincon.talents.gateways.services.EmploymentService;
 import com.phincon.talents.gateways.services.TMRequestService;
@@ -96,7 +95,7 @@ public class TMRequestForceAdapter extends ForceAdapter<TMRequest> {
 	}
 
 	@Override
-	public void saveListData(List<TMRequest> listData) {
+	public void saveListData(List<TMRequest> listData, boolean isNull) {
 		for (TMRequest e : listData) {
 			TMRequest obj = tmRequestService.findByExtId(e.getExtId());
 
@@ -107,6 +106,8 @@ public class TMRequestForceAdapter extends ForceAdapter<TMRequest> {
 				obj.setExtId(e.getExtId());
 			}
 
+			if(isNull)
+				obj.setAckSync(false);
 			obj.setAmount(e.getAmount());
 			// obj.setCategoryType(categoryType);
 			obj.setEndDate(e.getEndDate());
@@ -180,16 +181,30 @@ public class TMRequestForceAdapter extends ForceAdapter<TMRequest> {
 				map.put("Employee_No__c", request.getEmploymentExtId());
 				map.put("Requester__c", request.getRequesterEmploymentExtId());
 				
-				// name belum dimasukan di TMRequest (local)
-				
-				// transaction date belum ada di force
+				//Start_Date__c /datetime
+				map.put("Start_Date__c", request.getStartDate());
+				//Start_Time_Break__c / datetime
+				map.put("Start_Time_Break__c", request.getStartTimeBreak());
+				//Total_Day__c /Number(3, 2) 
+				map.put("Total_Day__c", request.getTotalDay());
+				//Total_Work_Day__c /Number(3, 2) 
+				map.put("Total_Work_Day__c", request.getTotalWorkDay());
+				//End_Date__c / datetime
+				map.put("End_Date__c", request.getEndDate());
+				//End_Time_Break__c /datetime
+				map.put("End_Time_Break__c", request.getEndTimeBreak());
+				//Destination__c
+				map.put("Destination__c", request.getDestination());
+				//Origination__c
+				map.put("Origination__c", request.getOrigin());
+				//Subtitute_To_Employee_No__c	Lookup(Employment) 
 				
 				listMap.add(map);
 				
 				i++;
 			}
 			if(listMap.size() > 0)
-				send(listMap);
+				send(listMap,false);
 			System.out.println(i + " Task Already Sending ");
 		}
 	}

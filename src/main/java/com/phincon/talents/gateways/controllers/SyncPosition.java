@@ -17,20 +17,34 @@ public class SyncPosition {
 	private String moduleName = "wssetposition";
 	@Autowired
 	PositionForceAdapter positionForceAdaptor;
-	
+
 	@Autowired
 	ConnectedAppService connectedAppService;
 
 	@Autowired
-	HistorySyncService historySyncService ;
+	HistorySyncService historySyncService;
+
 	@RequestMapping(value = "/position/pull", method = RequestMethod.GET)
 	@ResponseBody
-	public String positionPull(){
+	public String positionPull() {
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
 		positionForceAdaptor.setConfigure(connectedApp, this.moduleName);
-		positionForceAdaptor.receive();
-		historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
-    	
+		positionForceAdaptor.receive(null, false);
+		historySyncService.createOrUpdateSync(this.moduleName,
+				connectedApp.getCompany());
+
 		return "Position Pull Completed!";
+	}
+
+	@RequestMapping(value = "/position/init", method = RequestMethod.GET)
+	@ResponseBody
+	public String positionInit() {
+
+		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+		positionForceAdaptor.setConfigure(connectedApp, this.moduleName);
+		positionForceAdaptor.initRetrieve();
+		historySyncService.createOrUpdateSync(this.moduleName,
+				connectedApp.getCompany());
+		return "Position Init Completed !";
 	}
 }

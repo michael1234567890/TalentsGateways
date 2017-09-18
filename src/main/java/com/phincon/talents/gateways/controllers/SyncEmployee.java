@@ -30,7 +30,7 @@ public class SyncEmployee {
 
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	employeeForceAdapter.setConfigure(connectedApp,this.moduleName);
-    	employeeForceAdapter.receive();
+    	employeeForceAdapter.receive(null,false);
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
         return "Employee Pull Completed !";
     }
@@ -39,10 +39,20 @@ public class SyncEmployee {
     @ResponseBody
 	public String sendFamilies() {
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-    	employeeForceAdapter.setConfigure(connectedApp,"InsertUpdateHRPERINFO");
+    	employeeForceAdapter.setConfigure(connectedApp,this.moduleName);
     	employeeForceAdapter.sendNewData();
         return "Employee Send Completed !";
     }
+    
+    @RequestMapping(value = "/employee/init", method = RequestMethod.GET)
+	@ResponseBody
+	public String employeeInit(){
+    	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+    	employeeForceAdapter.setConfigure(connectedApp,this.moduleName);
+    	employeeForceAdapter.initRetrieve();
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	return "Employee Init Completed !";
+	}
     
 
 }

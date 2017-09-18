@@ -31,7 +31,7 @@ public class SyncTMRequest {
 		
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	tmRequestForceAdapter.setConfigure(connectedApp,this.moduleName);
-    	tmRequestForceAdapter.receive();
+    	tmRequestForceAdapter.receive(null,false);
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
     	return this.moduleName + " Pull Completed !";
 	}
@@ -44,7 +44,7 @@ public class SyncTMRequest {
     	
     	tmRequestForceAdapter.setConfigure(connectedApp,this.moduleName);
     	tmRequestForceAdapter.sendNewData();
-        return "Family Send Completed !";
+        return this.moduleName + " Send Completed !";
     }
 	
 	

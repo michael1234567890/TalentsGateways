@@ -2,6 +2,7 @@ package com.phincon.talents.gateways.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -73,5 +74,18 @@ public class FamilyService {
 	public List<Family> findNeedSync() {
 		return familyRepository.findNeedSync();
 	}
+	
+	@Transactional
+	public void updateAckSyncStatus(boolean status, String extId) {
+		familyRepository.updateAckSyncStatus(status, extId);
+	}
+	
+
+	@Transactional
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		familyRepository.updateAckSyncStatus(status, extId);
+	}
+	
+
 
 }

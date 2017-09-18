@@ -40,6 +40,19 @@ public class PayrollElementDetailYearly extends AbstractEntity {
 	@Column(name="payroll_element_header_yearly_ext_id", length=100)
 	private String payrollElementHeaderYearlyExtId;
 
+	@Column(name="ack_sync")
+	private Boolean ackSync;
+	
+	
+	
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
+	}
+
 	public String getCurrentYear() {
 		return currentYear;
 	}

@@ -42,7 +42,7 @@ public class Position extends AbstractEntity{
 	@Column(name = "to_grade", length = 30)
 	private String toGrade;
 	
-	@Column(name = "name", length = 50)
+	@Column(name = "name", length = 255)
 	private String name;
 	
 	@Column(name = "direct_position_name", length = 50)
@@ -89,6 +89,19 @@ public class Position extends AbstractEntity{
 	
 	@Column(name = "total_number")
 	private Integer totalNumber;
+	
+	@Column(name="ack_sync")
+	private Boolean ackSync;
+	
+	
+
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
+	}
 
 	public Long getCompany() {
 		return company;
