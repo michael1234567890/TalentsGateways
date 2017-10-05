@@ -271,7 +271,6 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 	}
 
 	private List<Map<String, Object>> getDataSendAckSync() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
