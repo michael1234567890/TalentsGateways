@@ -115,6 +115,9 @@ public class EmployeePayroll extends AbstractEntity {
 	
 	@Column(name = "company_id")
 	private Long company;
+	
+	@Column(name = "ack_sync")
+	private Boolean ackSync;
 
 	public String getAccountName() {
 		return accountName;
@@ -402,6 +405,14 @@ public class EmployeePayroll extends AbstractEntity {
 
 	public void setCompany(Long company) {
 		this.company = company;
+	}
+
+	public Boolean getAckSync() {
+		return ackSync;
+	}
+
+	public void setAckSync(Boolean ackSync) {
+		this.ackSync = ackSync;
 	}
 	
 	

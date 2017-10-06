@@ -1,6 +1,7 @@
 package com.phincon.talents.gateways.services;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -40,4 +41,20 @@ public class EmployeePayrollService {
 	public void save(EmployeePayroll obj){
 		employeePayrollRepository.save(obj);
 	}
+	
+	@Transactional
+	public void updateExtIdByUUID(String extId, String uuid){
+		employeePayrollRepository.updateExtIdByUUID(extId, uuid);
+	}
+	
+	@Transactional
+	public void updateAckSyncStatus(boolean status, String extId){
+		employeePayrollRepository.updateAckSyncStatus(status, extId);
+	}
+	
+	@Transactional
+	public void updateAckSyncStatus(boolean status, Set<String> extId){
+		employeePayrollRepository.updateAckSyncStatus(status, extId);
+	}
+	
 }

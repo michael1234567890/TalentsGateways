@@ -5,11 +5,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phincon.talents.gateways.model.EmployeePayroll;
+import com.phincon.talents.gateways.repository.EmployeePayrollRepository;
 import com.phincon.talents.gateways.services.EmployeePayrollService;
 
 @Service
@@ -17,6 +19,9 @@ public class EmployeePayrollForceAdapeter extends ForceAdapter<EmployeePayroll>{
 	
 	@Autowired
 	EmployeePayrollService employeePayrollService;
+	
+	@Autowired
+	EmployeePayrollRepository employeePayrollRepository;
 	
 	public EmployeePayrollForceAdapeter(){
 		super();
@@ -240,7 +245,7 @@ public class EmployeePayrollForceAdapeter extends ForceAdapter<EmployeePayroll>{
 	}
 	
 	@Override
-	public void saveListData(List<EmployeePayroll> listData, boolean isAckSend){
+	public void saveListData(List<EmployeePayroll> listData, boolean isInit){
 		for(EmployeePayroll e : listData){
 			System.out.print("Employee Payroll : " +e.getExtId());
 			// check is id exist
@@ -250,8 +255,14 @@ public class EmployeePayrollForceAdapeter extends ForceAdapter<EmployeePayroll>{
 				empPayroll = new EmployeePayroll();
 				empPayroll.setCreatedDate(new Date());
 			}
+			if(isInit)
+				empPayroll.setAckSync(false);
+			
+			empPayroll.setModifiedDate(new Date());
 			empPayroll.setExtId(e.getExtId());
 			empPayroll.setCompany(this.companyid);
+			empPayroll.setModifiedBy("Talents Gateway");
+			empPayroll.setCreatedBy("Talents Gateway");
 			empPayroll.setAccountName(e.getAccountName());
 			empPayroll.setAttendanceGroupCode(e.getAttendanceGroupCode());
 			empPayroll.setBankAccount(e.getBankAccount());
@@ -343,4 +354,33 @@ public class EmployeePayrollForceAdapeter extends ForceAdapter<EmployeePayroll>{
 			System.out.println(i + "Task Already Sending");
 		}
 	}
+	
+	@Override
+	public void sendDataAckSync(){
+		List<Object[]> listDataAckSync = employeePayrollRepository.findSendAckSync();
+		
+		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+		if(listDataAckSync != null && listDataAckSync.size() > 0){
+			for(Object[] objects : listDataAckSync){
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("Id", (String) objects[0]);
+				map.put("ExtId__c", (String) objects[1]);
+				listMap.add(map);
+			}
+		}
+		
+		if(listMap.size() > 0)
+			send(listMap, true);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId){
+		employeePayrollService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId){
+		employeePayrollService.updateAckSyncStatus(status, extId);
+	}
+	
 }

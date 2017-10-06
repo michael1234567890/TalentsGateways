@@ -44,7 +44,7 @@ public class SyncEmployeePayroll {
 
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
 		empPayrollForceAdapter.setConfigure(connectedApp, this.moduleName);
-		empPayrollForceAdapter.receive(null,false);
+		empPayrollForceAdapter.initRetrieve();
 		historySyncService.createOrUpdateSync(this.moduleName,
 				connectedApp.getCompany());
 		return "Employee Payroll Init Completed !";
