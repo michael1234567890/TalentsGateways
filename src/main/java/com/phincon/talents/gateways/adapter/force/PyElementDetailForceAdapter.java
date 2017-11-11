@@ -125,14 +125,9 @@ public class PyElementDetailForceAdapter extends ForceAdapter<PayrollElementDeta
 					PayrollElementHeader payrollElementHeader = payrollElementHeaderService.findByExtId(e.getPayrollElementHeaderExtId());
 					payrollElementDetail.setPayrollElementHeader(payrollElementHeader);
 			 }
-			 
-			
-			
-			
 			payrollElementDetail.setModifiedDate(new Date());
 			payrollElementDetail.setModifiedBy("Talents Gateway");
 			payrollElementDetailService.save(payrollElementDetail);
-			
 			System.out.println("PayrollElementDetail Save");
 		}
 	}

@@ -68,6 +68,20 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 		String gender = (String) mapResult.get("Gender__c");
 		String letterNo = (String) mapResult.get("Letter_No__c");
 		String maritalStatus = (String) mapResult.get("Marital_Status__c");
+		
+		String district =(String) mapResult.get("District__c"); 
+		String subdistrict = (String) mapResult.get("Subdistrict__c");
+		String nircNo = (String) mapResult.get("NRIC_No__c");
+		String familyCardNo = (String) mapResult.get("Letter_No__c");
+		String rw = (String) mapResult.get("RW__c");
+		String rt = (String) mapResult.get("RT__c");
+		String nationality = (String) mapResult.get("Nationality__c");
+		String polisNo = (String) mapResult.get("Nomor_Polis_Asuransi__c");
+		String assuranceName = (String) mapResult.get("Nama_Asuransi__c");
+		String npwpNo = (String) mapResult.get("No_NPWP__c");
+		String passportNo = (String) mapResult.get("No_Passport__c");
+		String zipCode = (String) mapResult.get("ZIP_Code__c");
+		
 		Date birthDate = null;
 		Date deceaseDate = null;
 		if (strDeceaseDate != null)
@@ -76,6 +90,19 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 			birthDate = Utils.convertStringToDate(strBirthDate);
 
 		Family family = new Family();
+		family.setZipCode(zipCode);
+		family.setPassportNo(passportNo);
+		family.setNpwpNo(npwpNo);
+		family.setAssuranceName(assuranceName);
+		family.setPolisNo(polisNo);
+		family.setNationality(nationality);
+		family.setRt(rt);
+		family.setRw(rw);
+		family.setFamilyCardNo(familyCardNo);
+		family.setNircNo(nircNo);
+		family.setSubDistrict(subdistrict);
+		family.setDistrict(district);
+		
 		family.setAliveStatus(aliveStatus);
 		family.setAddress(address);
 		family.setBirthDate(birthDate);
@@ -133,7 +160,20 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 			family.setMaritalStatus(e.getMaritalStatus());
 			family.setLetterNo(e.getLetterNo());
 			family.setEmployeeExtId(e.getEmployeeExtId());
-
+			family.setZipCode(e.getZipCode());
+			family.setPassportNo(e.getPassportNo());
+			family.setNpwpNo(e.getNpwpNo());
+			family.setAssuranceName(e.getAssuranceName());
+			family.setPolisNo(e.getPolisNo());
+			family.setNationality(e.getNationality());
+			family.setRt(e.getRt());
+			family.setRw(e.getRw());
+			family.setFamilyCardNo(e.getFamilyCardNo());
+			family.setNircNo(e.getNircNo());
+			family.setSubDistrict(e.getSubDistrict());
+			family.setDistrict(e.getDistrict());
+			
+			
 			Employee employee = employeeService.findByExtId(e
 					.getEmployeeExtId());
 			if (employee != null) {
@@ -175,8 +215,23 @@ public class FamilyForceAdapter extends ForceAdapter<Family> {
 				map.put("Family_Relationship__c", family.getRelationship());
 				map.put("Gender__c", family.getGender());
 				map.put("Marital_Status__c", family.getMaritalStatus());
-				map.put("Letter_No__c", family.getLetterNo());
+				//map.put("Letter_No__c", family.getLetterNo());
 				map.put("Name__c", family.getEmployeeExtId());
+				
+				map.put("District__c", family.getDistrict());
+				map.put("Subdistrict__c", family.getSubDistrict());
+				map.put("NRIC_No__c", family.getNircNo());
+				map.put("Letter_No__c", family.getFamilyCardNo());
+				map.put("RW__c", family.getRw());
+				map.put("RT__c", family.getRt());
+				
+				map.put("Nationality__c", family.getNationality());
+				map.put("Nomor_Polis_Asuransi__c", family.getPolisNo());
+				map.put("Nama_Asuransi__c", family.getAssuranceName());
+				map.put("No_NPWP__c", family.getNpwpNo());
+				map.put("No_Passport__c", family.getPassportNo());
+				map.put("ZIP_Code__c", family.getZipCode());
+				
 				listMap.add(map);
 				System.out.println("No " + (i + 1) + " : " + family.toString());
 				i++;

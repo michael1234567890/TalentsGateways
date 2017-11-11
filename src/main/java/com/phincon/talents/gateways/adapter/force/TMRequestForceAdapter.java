@@ -180,7 +180,6 @@ public class TMRequestForceAdapter extends ForceAdapter<TMRequest> {
 				map.put("Request_Date__c", request.getRequestDate());
 				map.put("Employee_No__c", request.getEmploymentExtId());
 				map.put("Requester__c", request.getRequesterEmploymentExtId());
-				
 				//Start_Date__c /datetime
 				map.put("Start_Date__c", request.getStartDate());
 				//Start_Time_Break__c / datetime
@@ -198,6 +197,11 @@ public class TMRequestForceAdapter extends ForceAdapter<TMRequest> {
 				//Origination__c
 				map.put("Origination__c", request.getOrigin());
 				//Subtitute_To_Employee_No__c	Lookup(Employment) 
+				map.put("Overtime_In__c", request.getOvertimeIn());
+				map.put("Overtime_Out__c", request.getOvertimeOut());
+				map.put("End_Date_Time__c", request.getAttendanceOutTime());
+				map.put("Start_Date_Time__c", request.getAttendanceInTime());
+				map.put("Transaction_Code__c", request.getTypeDesc());
 				
 				listMap.add(map);
 				

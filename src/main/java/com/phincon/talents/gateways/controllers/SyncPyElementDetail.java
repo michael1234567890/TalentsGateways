@@ -14,7 +14,7 @@ import com.phincon.talents.gateways.services.HistorySyncService;
 @Controller
 @RequestMapping("/sync")
 public class SyncPyElementDetail {
-	private String moduleName = "pyelementdetail";
+	private String moduleName = "pyempelementdetail";
 	
 	@Autowired
 	PyElementDetailForceAdapter pyElementDetailForceAdapter;
@@ -44,7 +44,7 @@ public class SyncPyElementDetail {
 	public String pyelementhedaerInit(){
 		
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-    	pyElementDetailForceAdapter.setConfigure(connectedApp,"pyempelementdetail");
+    	pyElementDetailForceAdapter.setConfigure(connectedApp,this.moduleName);
     	pyElementDetailForceAdapter.initRetrieve();
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
     	return "Pyempelementdetail Pull Completed !";

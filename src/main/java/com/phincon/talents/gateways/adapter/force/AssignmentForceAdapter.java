@@ -12,9 +12,11 @@ import com.phincon.talents.gateways.model.Assignment;
 import com.phincon.talents.gateways.model.Employment;
 import com.phincon.talents.gateways.model.Grade;
 import com.phincon.talents.gateways.model.JobTitle;
+import com.phincon.talents.gateways.model.Organization;
 import com.phincon.talents.gateways.model.Position;
 import com.phincon.talents.gateways.repository.AssignmentRepository;
 import com.phincon.talents.gateways.repository.GradeRepository;
+import com.phincon.talents.gateways.repository.OrganizationRepository;
 import com.phincon.talents.gateways.services.AssignmentService;
 import com.phincon.talents.gateways.services.EmploymentService;
 import com.phincon.talents.gateways.services.JobTitleService;
@@ -37,6 +39,9 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 	
 	@Autowired
 	GradeRepository gradeRepository;
+	
+	@Autowired
+	OrganizationRepository organizationRepository;
 	
 	@Autowired
 	PositionService positionService;
@@ -91,9 +96,11 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 		String workLocation = (String) mapResult.get("Work_Location_Name__c");
 		String positionExtId = (String) mapResult.get("Position_Name__c");
 		String gradeExtId = (String) mapResult.get("Grade_Name__c");
+		String organizationExtId = (String) mapResult.get("Organization_Name__c");
 		
 		
 		Assignment assignment = new Assignment();
+		assignment.setOrganizationExtId(organizationExtId);
 		assignment.setPositionExtId(positionExtId);
 		assignment.setEmploymentExtId(employmentExtId);;
 		assignment.setEmployeeType(type);
@@ -167,11 +174,20 @@ public class AssignmentForceAdapter extends ForceAdapter<Assignment> {
 			assignment.setLevel(e.getLevel());
 			assignment.setWorkLocation(e.getWorkLocation());
 			assignment.setGradeExtId(e.getGradeExtId());
-
+			assignment.setOrganizationExtId(e.getOrganizationExtId());
+			
 			if(e.getPositionExtId() != null){
 				Position position = positionService.findByExtId(e.getPositionExtId());
 				if (position != null) {
 					assignment.setPosition(position.getId());
+				}
+				
+			}
+			
+			if(e.getOrganizationExtId() != null){
+				Organization organization = organizationRepository.findByExtId(e.getOrganizationExtId());
+				if (organization != null) {
+					assignment.setOrganization(organization.getId());
 				}
 				
 			}

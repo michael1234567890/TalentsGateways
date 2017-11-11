@@ -51,9 +51,14 @@ public class TMBalanceForceAdapter extends ForceAdapter<TMBalance> {
 		Double balance = (Double) mapResult.get("Balance__c");
 		String employeeExtId = (String) mapResult.get("Employee_No__c");
 		String strEndDate = (String) mapResult.get("End_Date__c");
+		String strEndDateFinal = (String) mapResult.get("End_Date_Final__c");
 		Date endDate = null;
 		if(strEndDate != null)
 			endDate = Utils.convertStringToDate(strEndDate);
+		Date endDateFinal = null;
+		if(strEndDateFinal != null) 
+			endDateFinal = Utils.convertStringToDate(strEndDateFinal);
+		
 		String module = (String) mapResult.get("Module__c");
 		String name = (String) mapResult.get("Name");
 		String period = (String) mapResult.get("Period__c");
@@ -95,6 +100,7 @@ public class TMBalanceForceAdapter extends ForceAdapter<TMBalance> {
 		obj.setModule(module);
 		obj.setName(name);
 		obj.setPeriod(period);
+		obj.setEndDateFinal(endDateFinal);
 		obj.setRemark("");
 		obj.setType(type);
 			
@@ -129,6 +135,7 @@ public class TMBalanceForceAdapter extends ForceAdapter<TMBalance> {
 			obj.setModule(e.getModule());
 			obj.setName(e.getName());
 			obj.setPeriod(e.getPeriod());
+			obj.setEndDateFinal(e.getEndDateFinal());
 			obj.setRemark("");
 			obj.setType(e.getType());
 			

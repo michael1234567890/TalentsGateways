@@ -32,6 +32,12 @@ public class Assignment extends AbstractEntity {
 	@Column(name="position_ext_id")
 	private String positionExtId;
 	
+	@Column(name="organization_id")
+	private Long organization;
+	
+	@Column(name="organization_ext_id")
+	private String organizationExtId;
+	
 	@Column(name="grade_id")
 	private Long grade;
 	
@@ -357,6 +363,22 @@ public class Assignment extends AbstractEntity {
 
 	public void setAckSync(Boolean ackSync) {
 		this.ackSync = ackSync;
+	}
+
+	public Long getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(Long organization) {
+		this.organization = organization;
+	}
+
+	public String getOrganizationExtId() {
+		return organizationExtId;
+	}
+
+	public void setOrganizationExtId(String organizationExtId) {
+		this.organizationExtId = organizationExtId;
 	}
 	
 	

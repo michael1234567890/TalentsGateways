@@ -2,6 +2,7 @@ package com.phincon.talents.gateways.adapter.force;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,13 +87,25 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 		String bankAccount = (String) mapResult.get("Bank_Account__c");  
 		String bankBranch = (String) mapResult.get("Bank_Branch__c");  
 		String accountName = (String) mapResult.get("Account_Name__c");  
+		String bankNameId = (String) mapResult.get("Bank_Name__c");
+		Double allowancePayslip = (Double) mapResult.get("Allowance_Payslip__c");
+		Double deductionPayslip= (Double) mapResult.get("Deduction_Payslip__c"); 
+		Double totalAllowancePayslip = (Double) mapResult.get("Total_Allowance_Payslip__c");
+		Double totalDeductionPayslip= (Double) mapResult.get("Total_Deduction_Payslip__c"); 
 		
+		String bankName = null;
+		if(bankNameId != null) {
+			Map<String, Object> recordType = (Map<String, Object>) mapResult.get("Bank_Name__r");
+			if(recordType != null)
+				bankName = (String) recordType.get("Name");
+		}
 		
 		PayrollElementHeader obj = new PayrollElementHeader();
 		obj.setBaseSalary(baseSalary);
 		obj.setBankAccount(bankAccount);
 		obj.setBankBranch(bankBranch);
 		obj.setAccountName(accountName);
+		obj.setBankName(bankName);
 		obj.setPtkp(ptkp);
 		obj.setOtherPtkp(otherPtkp);
 		obj.setOtherPtkpYearly(otherPtkpYearly);
@@ -101,13 +114,6 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 		obj.setEmployeeExtId(employeeExtId);
 		obj.setEmploymentExtId(employmentExtId);
 		obj.setExtId(extId);
-		
-		
-//		obj.setAccountName(accountName);
-//		obj.setBankAccount(bankAccount);
-//		obj.setBankName(bankName);
-		
-		
 		
 		obj.setGrossBJBT(grossBJBT);
 		obj.setIrregGrossIncomeYearly(irregGrossIncomeYearly);
@@ -142,14 +148,16 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 		obj.setTotalDeduction(totalDeduction);
 		obj.setTotalIncome(totalIncome);
 		obj.setValueResultTypeTax(valueResultTypeTax);
-		
+		obj.setAllowancePayslip(allowancePayslip);
+		obj.setDeductionPayslip(deductionPayslip);
+		obj.setTotalAllowancePayslip(totalAllowancePayslip);
+		obj.setTotalDeductionPayslip(totalDeductionPayslip);
 		return obj;
 	}
 	
 	@Override
 	public void saveListData(List<PayrollElementHeader> listData, boolean isInit){
 		for(PayrollElementHeader e : listData){
-			System.out.println("After Ext Id " + e.getExtId());
 			PayrollElementHeader payrollElementHeader = payrollElementHeaderService.findByExtId(e.getExtId());
 			
 			if(payrollElementHeader == null){
@@ -161,6 +169,8 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 			
 			if(isInit)
 				payrollElementHeader.setAckSync(false);
+			
+			payrollElementHeader.setBankName(e.getBankName());
 			payrollElementHeader.setBankAccount(e.getBankAccount());
 			payrollElementHeader.setBankBranch(e.getBankBranch());
 			payrollElementHeader.setAccountName(e.getAccountName());
@@ -202,7 +212,10 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 			payrollElementHeader.setTotalIncome(e.getTotalIncome());
 			payrollElementHeader.setValueResultTypeTax(e.getValueResultTypeTax());
 			payrollElementHeader.setBaseSalary(e.getBaseSalary());
-			
+			payrollElementHeader.setTotalDeductionPayslip(e.getTotalDeductionPayslip());
+			payrollElementHeader.setTotalAllowancePayslip(e.getTotalAllowancePayslip());
+			payrollElementHeader.setDeductionPayslip(e.getDeductionPayslip());
+			payrollElementHeader.setAllowancePayslip(e.getAllowancePayslip());
 			Employee employee = null ;
 			if(e.getEmployeeExtId() != null)
 				employee = employeeService.findByExtId(e.getEmployeeExtId());
@@ -219,12 +232,10 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 			payrollElementHeader.setEmployee(employee);
 			payrollElementHeader.setEmployment(employment);
 			payrollElementHeader.setAssignment(assignment);
-			
 			payrollElementHeader.setCompany(this.companyid);
 			payrollElementHeader.setModifiedDate(new Date());
 			payrollElementHeader.setModifiedBy("Talents Gateway");
 			payrollElementHeaderService.save(payrollElementHeader);
-			
 			System.out.println("PayrollElementHeader Save");
 		}
 	}

@@ -169,6 +169,20 @@ public class PayrollElementHeader extends AbstractEntity {
 	@Column(name="ack_sync")
 	private Boolean ackSync;
 	
+	@Column(name = "total_deduction_payslip")
+	private Double totalDeductionPayslip;
+	
+	@Column(name = "total_allowance_payslip")
+	private Double totalAllowancePayslip;
+	
+	
+	@Column(name = "deduction_payslip")
+	private Double deductionPayslip;
+	
+	@Column(name = "allowance_payslip")
+	private Double allowancePayslip;
+
+	
 
 	public Boolean getAckSync() {
 		return ackSync;
@@ -577,6 +591,50 @@ public class PayrollElementHeader extends AbstractEntity {
 
 	public void setBaseSalary(Double baseSalary) {
 		this.baseSalary = baseSalary;
+	}
+
+	
+
+	public Double getTotalDeductionPayslip() {
+		return totalDeductionPayslip;
+	}
+
+
+	public void setTotalDeductionPayslip(Double totalDeductionPayslip) {
+		this.totalDeductionPayslip = totalDeductionPayslip;
+	}
+
+
+	public Double getTotalAllowancePayslip() {
+		return totalAllowancePayslip;
+	}
+
+
+	public void setTotalAllowancePayslip(Double totalAllowancePayslip) {
+		this.totalAllowancePayslip = totalAllowancePayslip;
+	}
+	
+	
+	
+
+
+	public Double getDeductionPayslip() {
+		return deductionPayslip;
+	}
+
+
+	public void setDeductionPayslip(Double deductionPayslip) {
+		this.deductionPayslip = deductionPayslip;
+	}
+
+
+	public Double getAllowancePayslip() {
+		return allowancePayslip;
+	}
+
+
+	public void setAllowancePayslip(Double allowancePayslip) {
+		this.allowancePayslip = allowancePayslip;
 	}
 
 

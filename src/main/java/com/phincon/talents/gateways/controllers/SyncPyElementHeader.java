@@ -30,7 +30,6 @@ public class SyncPyElementHeader {
 		
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	pyElementHeaderForceAdapter.setConfigure(connectedApp,"pyempelementheader");
-    	
     	pyElementHeaderForceAdapter.receive(null,false);
     	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
     	
