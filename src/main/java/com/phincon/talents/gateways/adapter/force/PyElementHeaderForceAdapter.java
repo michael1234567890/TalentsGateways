@@ -2,14 +2,13 @@ package com.phincon.talents.gateways.adapter.force;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.phincon.talents.gateways.model.Assignment;
-import com.phincon.talents.gateways.model.Employee;
-import com.phincon.talents.gateways.model.Employment;
 import com.phincon.talents.gateways.model.PayrollElementHeader;
+import com.phincon.talents.gateways.repository.PayrollElementHeaderRepository;
 import com.phincon.talents.gateways.services.AssignmentService;
 import com.phincon.talents.gateways.services.EmployeeService;
 import com.phincon.talents.gateways.services.EmploymentService;
@@ -21,6 +20,8 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 	@Autowired
 	PayrollElementHeaderService payrollElementHeaderService;
 	
+	@Autowired
+	PayrollElementHeaderRepository payrollElementHeaderRepository;
 
 	@Autowired
 	EmployeeService employeeService;
@@ -88,6 +89,7 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 		String bankBranch = (String) mapResult.get("Bank_Branch__c");  
 		String accountName = (String) mapResult.get("Account_Name__c");  
 		String bankNameId = (String) mapResult.get("Bank_Name__c");
+		
 		Double allowancePayslip = (Double) mapResult.get("Allowance_Payslip__c");
 		Double deductionPayslip= (Double) mapResult.get("Deduction_Payslip__c"); 
 		Double totalAllowancePayslip = (Double) mapResult.get("Total_Allowance_Payslip__c");
@@ -216,6 +218,8 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 			payrollElementHeader.setTotalAllowancePayslip(e.getTotalAllowancePayslip());
 			payrollElementHeader.setDeductionPayslip(e.getDeductionPayslip());
 			payrollElementHeader.setAllowancePayslip(e.getAllowancePayslip());
+			payrollElementHeader.setEmploymentExtId(e.getEmploymentExtId());
+			/*
 			Employee employee = null ;
 			if(e.getEmployeeExtId() != null)
 				employee = employeeService.findByExtId(e.getEmployeeExtId());
@@ -228,16 +232,35 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 			Assignment assignment = null ;
 			if(e.getAssignmentExtId() != null)
 				assignment = assignmentService.findByExtId(e.getAssignmentExtId());
-
+			
 			payrollElementHeader.setEmployee(employee);
 			payrollElementHeader.setEmployment(employment);
-			payrollElementHeader.setAssignment(assignment);
+			 payrollElementHeader.setAssignment(assignment);
+			*/
 			payrollElementHeader.setCompany(this.companyid);
 			payrollElementHeader.setModifiedDate(new Date());
 			payrollElementHeader.setModifiedBy("Talents Gateway");
 			payrollElementHeaderService.save(payrollElementHeader);
 			System.out.println("PayrollElementHeader Save");
 		}
+	}
+	
+	
+
+	@Override
+	public void sendDataAckSync() {
+		List<Object[]> listDataAckSync = payrollElementHeaderRepository.findSendAckSync();
+		sendForceDataAckSync(listDataAckSync);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId) {
+		payrollElementHeaderService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		payrollElementHeaderService.updateAckSyncStatus(status, extId);
 	}
 	
 }

@@ -15,7 +15,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 
-import com.phincon.talents.gateways.model.Employment;
 import com.phincon.talents.gateways.model.TMBalance;
 import com.phincon.talents.gateways.repository.TMBalanceRepository;
 import com.phincon.talents.gateways.services.EmploymentService;
@@ -139,12 +138,12 @@ public class TMBalanceForceAdapter extends ForceAdapter<TMBalance> {
 			obj.setRemark("");
 			obj.setType(e.getType());
 			
-			Employment employment = null;
-			if(e.getEmploymentExtId() != null){
-				employment = employmentService.findByExtId(e.getEmploymentExtId());
-				if(employment != null)
-					obj.setEmployment(employment.getId());
-			}
+//			Employment employment = null;
+//			if(e.getEmploymentExtId() != null){
+//				employment = employmentService.findByExtId(e.getEmploymentExtId());
+//				if(employment != null)
+//					obj.setEmployment(employment.getId());
+//			}
 			obj.setCompany(this.companyid);
 			obj.setModifiedDate(new Date());
 			obj.setModifiedBy("Talents Gateway");

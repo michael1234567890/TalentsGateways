@@ -3,12 +3,14 @@ package com.phincon.talents.gateways.adapter.force;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phincon.talents.gateways.model.PayrollElementDetail;
 import com.phincon.talents.gateways.model.PayrollElementHeader;
+import com.phincon.talents.gateways.repository.PayrollElementDetailRepository;
 import com.phincon.talents.gateways.services.AssignmentService;
 import com.phincon.talents.gateways.services.EmployeeService;
 import com.phincon.talents.gateways.services.EmploymentService;
@@ -24,6 +26,9 @@ public class PyElementDetailForceAdapter extends ForceAdapter<PayrollElementDeta
 
 	@Autowired
 	PayrollElementDetailService payrollElementDetailService;
+	
+	@Autowired
+	PayrollElementDetailRepository payrollElementDetailRepository;
 	
 	@Autowired
 	EmployeeService employeeService;
@@ -102,7 +107,7 @@ public class PyElementDetailForceAdapter extends ForceAdapter<PayrollElementDeta
 			if(isInit)
 				payrollElementDetail.setAckSync(false);
 			
-			payrollElementDetail.setExtId(e.getExtId());
+			 payrollElementDetail.setExtId(e.getExtId());
 			 payrollElementDetail.setBudgetItemCode(e.getBudgetItemCode());
 			 payrollElementDetail.setName(e.getName());
 			 payrollElementDetail.setEffectiveDate(e.getEffectiveDate());
@@ -114,22 +119,41 @@ public class PyElementDetailForceAdapter extends ForceAdapter<PayrollElementDeta
 			 payrollElementDetail.setGroupDisplay(e.getGroupDisplay());
 			 payrollElementDetail.setGroupOrder(e.getGroupOrder());
 			 payrollElementDetail.setIsNet(e.getIsNet());
-			 payrollElementDetail.setOnPaySlip(e.getOnPaySlip());
+			//  payrollElementDetail.setOnPaySlip(e.getOnPaySlip());
+			 payrollElementDetail.setOnPaySlip(true);
 			 payrollElementDetail.setPayrollElement(e.getPayrollElement());
 			 payrollElementDetail.setPrevElementValue(e.getPrevElementValue());
 			 payrollElementDetail.setPayrollElementHeaderExtId(e.getPayrollElementHeaderExtId()); // Header Element
 			 payrollElementDetail.setRemark(e.getRemark());
 			 payrollElementDetail.setTax(e.getTax());
 			 payrollElementDetail.setTotalElement(e.getTotalElement());
-			 if(e.getPayrollElementHeaderExtId() != null){
+			 
+			 /*if(e.getPayrollElementHeaderExtId() != null){
 					PayrollElementHeader payrollElementHeader = payrollElementHeaderService.findByExtId(e.getPayrollElementHeaderExtId());
 					payrollElementDetail.setPayrollElementHeader(payrollElementHeader);
 			 }
+			 */
 			payrollElementDetail.setModifiedDate(new Date());
 			payrollElementDetail.setModifiedBy("Talents Gateway");
 			payrollElementDetailService.save(payrollElementDetail);
 			System.out.println("PayrollElementDetail Save");
 		}
+	}
+	
+	@Override
+	public void sendDataAckSync() {
+		List<Object[]> listDataAckSync = payrollElementDetailRepository.findSendAckSync();
+		sendForceDataAckSync(listDataAckSync);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId) {
+		payrollElementDetailService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		payrollElementDetailService.updateAckSyncStatus(status, extId);
 	}
 	
 }
