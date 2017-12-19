@@ -1,5 +1,7 @@
 package com.phincon.talents.gateways.controllers;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,14 +31,14 @@ public class SyncFamily {
     @ResponseBody
 	public String getFamilies() {
 
-    	
+		Date startSync = new Date();
     	//familyAdapter.setConfigure(url,clientId, cleintSecret, username, password);
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	familyAdapter.setConfigure(connectedApp,this.moduleName);
     	
     	familyAdapter.receive(null,false);
 
-	 	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+	 	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
         return "Family pull completed !";
     }
     
@@ -66,10 +68,11 @@ public class SyncFamily {
     @RequestMapping(value = "/family/init", method = RequestMethod.GET)
 	@ResponseBody
 	public String familyInit(){
+    	Date startSync = new Date();
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	familyAdapter.setConfigure(connectedApp,this.moduleName);
     	familyAdapter.initRetrieve();
-    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
     	return "Family Init Completed !";
 	}
     
