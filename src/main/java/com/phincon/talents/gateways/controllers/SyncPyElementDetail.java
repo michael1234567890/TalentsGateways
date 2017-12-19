@@ -1,5 +1,7 @@
 package com.phincon.talents.gateways.controllers;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,13 +30,13 @@ public class SyncPyElementDetail {
 	@RequestMapping(value = "/pyelementdetail/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String pyelementhedaerPull(){
-		
+		Date startSync = new Date();
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	pyElementDetailForceAdapter.setConfigure(connectedApp,"pyempelementdetail");
     	
     	pyElementDetailForceAdapter.receive(null,false);
 
-    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
     	return "Pyempelementdetail Pull Completed !";
 	}
 	
@@ -42,11 +44,11 @@ public class SyncPyElementDetail {
 	@RequestMapping(value = "/pyelementdetail/init", method = RequestMethod.GET)
 	@ResponseBody
 	public String pyelementhedaerInit(){
-		
+		Date startSync = new Date();
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	pyElementDetailForceAdapter.setConfigure(connectedApp,this.moduleName);
     	pyElementDetailForceAdapter.initRetrieve();
-    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
     	return "Pyempelementdetail Pull Completed !";
 	}
 	
