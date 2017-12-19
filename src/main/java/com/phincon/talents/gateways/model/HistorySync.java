@@ -19,6 +19,14 @@ public class HistorySync extends AbstractEntity{
 	private String moduleName;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="start_sync")
+	private Date startSync;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="end_sync")
+	private Date endSync;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="last_sync")
 	private Date lastSync;
 	
@@ -59,6 +67,18 @@ public class HistorySync extends AbstractEntity{
 	}
 	public void setNextSyncTime(Date nextSyncTime) {
 		this.nextSyncTime = nextSyncTime;
+	}
+	public Date getStartSync() {
+		return startSync;
+	}
+	public void setStartSync(Date startSync) {
+		this.startSync = startSync;
+	}
+	public Date getEndSync() {
+		return endSync;
+	}
+	public void setEndSync(Date endSync) {
+		this.endSync = endSync;
 	}
 	
 	
