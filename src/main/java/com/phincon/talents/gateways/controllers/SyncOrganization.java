@@ -1,5 +1,7 @@
 package com.phincon.talents.gateways.controllers;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,13 +29,13 @@ public class SyncOrganization {
 	@RequestMapping(value = "/organization/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String addressPull() {
-
+		Date startSync = new Date();
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
 		organizationForceAdapter.setConfigure(connectedApp, this.moduleName);
 
 		organizationForceAdapter.receive(null, false);
 		historySyncService.createOrUpdateSync(this.moduleName,
-				connectedApp.getCompany());
+				connectedApp.getCompany(),startSync);
 
 		return "Organization Pull Completed !";
 	}
@@ -42,11 +44,11 @@ public class SyncOrganization {
 	@RequestMapping(value = "/organization/init", method = RequestMethod.GET)
 	@ResponseBody
 	public String organizationInit(){
-		
+		Date startSync = new Date();
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	organizationForceAdapter.setConfigure(connectedApp,this.moduleName);
     	organizationForceAdapter.initRetrieve();
-    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
     	return "Organization Init Completed !";
 	}
 }

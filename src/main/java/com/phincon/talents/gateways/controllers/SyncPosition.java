@@ -1,5 +1,7 @@
 package com.phincon.talents.gateways.controllers;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,11 +29,12 @@ public class SyncPosition {
 	@RequestMapping(value = "/position/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String positionPull() {
+		Date startSync = new Date();
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
 		positionForceAdaptor.setConfigure(connectedApp, this.moduleName);
 		positionForceAdaptor.receive(null, false);
 		historySyncService.createOrUpdateSync(this.moduleName,
-				connectedApp.getCompany());
+				connectedApp.getCompany(),startSync);
 
 		return "Position Pull Completed!";
 	}
@@ -39,12 +42,12 @@ public class SyncPosition {
 	@RequestMapping(value = "/position/init", method = RequestMethod.GET)
 	@ResponseBody
 	public String positionInit() {
-
+		Date startSync = new Date();
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
 		positionForceAdaptor.setConfigure(connectedApp, this.moduleName);
 		positionForceAdaptor.initRetrieve();
 		historySyncService.createOrUpdateSync(this.moduleName,
-				connectedApp.getCompany());
+				connectedApp.getCompany(),startSync);
 		return "Position Init Completed !";
 	}
 }
