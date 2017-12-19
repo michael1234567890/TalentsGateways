@@ -1,5 +1,7 @@
 package com.phincon.talents.gateways.controllers;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,13 +29,13 @@ public class SyncGrade {
 	@RequestMapping(value = "/grade/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String addressPull() {
-
+		Date startSync = new Date();
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
 		gradeForceAdapter.setConfigure(connectedApp, this.moduleName);
 
 		gradeForceAdapter.receive(null, false);
 		historySyncService.createOrUpdateSync(this.moduleName,
-				connectedApp.getCompany());
+				connectedApp.getCompany(),startSync);
 
 		return "Grade Pull Completed !";
 	}
@@ -41,10 +43,11 @@ public class SyncGrade {
 	@RequestMapping(value = "/grade/init", method = RequestMethod.GET)
 	@ResponseBody
 	public String gradeInit(){
+		Date startSync = new Date();
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	gradeForceAdapter.setConfigure(connectedApp,this.moduleName);
     	gradeForceAdapter.initRetrieve();
-    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
     	return "Grade Init Completed !";
 	}
 }
