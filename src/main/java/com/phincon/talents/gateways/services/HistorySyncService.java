@@ -60,7 +60,7 @@ public class HistorySyncService {
 	}
 
 	@Transactional
-	public void createOrUpdateSync(String moduleName, Long companyId) {
+	public void createOrUpdateSync(String moduleName, Long companyId, Date startSync) {
 		List<HistorySync> historySync = findByModuleNameAndCompanyId(
 				moduleName, companyId);
 		HistorySync historySyncObj = null;
@@ -76,7 +76,8 @@ public class HistorySyncService {
 				nextSyncTime.setTime(historySyncObj.getLastSync().getTime()
 						+ (int) (historySyncObj.getDiffNextSync() * 1000));
 			}
-
+			historySyncObj.setStartSync(startSync);
+			historySyncObj.setEndSync(new Date());
 			historySyncObj.setNextSyncTime(nextSyncTime);
 
 		} else {
@@ -89,6 +90,8 @@ public class HistorySyncService {
 			historySyncObj.setModifiedDate(new Date());
 			historySyncObj.setModuleName(moduleName);
 			historySyncObj.setModifiedBy("talent gateway");
+			historySyncObj.setStartSync(startSync);
+			historySyncObj.setEndSync(new Date());
 			Date nextSyncTime = new Date();
 			nextSyncTime.setTime(historySyncObj.getLastSync().getTime()
 					+ (int) (HistorySync.DIFF_SYNC * 1000));
