@@ -1,5 +1,7 @@
 package com.phincon.talents.gateways.controllers;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,16 +25,16 @@ public class SyncCertification {
 	
 	@Autowired
 	ConnectedAppService connectedAppService;
-	
+	Date startSync = new Date();
 	 @RequestMapping(value = "/certification/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String certificationPull(){
-
+		Date startSync = new Date();
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	certificationForceAdapter.setConfigure(connectedApp,this.moduleName);
     	certificationForceAdapter.receive(null,false);
 
-	 	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+	 	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
     	return "Certification Pull Completed!";
 	}
 	
@@ -48,10 +50,11 @@ public class SyncCertification {
 	@RequestMapping(value = "/certification/init", method = RequestMethod.GET)
 	@ResponseBody
 	public String certificationInit(){
+		Date startSync = new Date();
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	certificationForceAdapter.setConfigure(connectedApp,this.moduleName);
     	certificationForceAdapter.initRetrieve();
-    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
     	return "Certification Init Completed !";
 	}
 }
