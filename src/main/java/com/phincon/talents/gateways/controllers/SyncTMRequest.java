@@ -1,5 +1,7 @@
 package com.phincon.talents.gateways.controllers;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,11 +30,11 @@ public class SyncTMRequest {
 	@RequestMapping(value = "/tmrequest/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String pyelementhedaerPull(){
-		
+		Date startSync = new Date();
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	tmRequestForceAdapter.setConfigure(connectedApp,this.moduleName);
     	tmRequestForceAdapter.receive(null,false);
-    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
     	return this.moduleName + " Pull Completed !";
 	}
 	
@@ -40,8 +42,6 @@ public class SyncTMRequest {
     @ResponseBody
 	public String sendRequest() {
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
-    	System.out.println(connectedApp.toString());
-    	
     	tmRequestForceAdapter.setConfigure(connectedApp,this.moduleName);
     	tmRequestForceAdapter.sendNewData();
         return this.moduleName + " Send Completed !";

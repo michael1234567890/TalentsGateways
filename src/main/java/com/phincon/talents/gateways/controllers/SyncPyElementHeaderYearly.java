@@ -1,5 +1,7 @@
 package com.phincon.talents.gateways.controllers;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,11 +29,11 @@ public class SyncPyElementHeaderYearly {
 	@RequestMapping(value = "/pyelementheaderyearly/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String pyelementhedaerPull(){
-		
+		Date startSync = new Date();
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	pyElementHeaderYearlyForceAdapter.setConfigure(connectedApp,this.moduleName);
     	pyElementHeaderYearlyForceAdapter.receive(null,false);
-    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
     	
     	
     	return "PyelementhedaerYearly Pull Completed !";

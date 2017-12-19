@@ -1,5 +1,7 @@
 package com.phincon.talents.gateways.controllers;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,12 +44,12 @@ public class SyncShift {
 	@RequestMapping(value = "/shift/init", method = RequestMethod.GET)
 	@ResponseBody
 	public String sihftInit() {
-
+		Date startSync = new Date();
 		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
 		shiftForceAdapter.setConfigure(connectedApp, this.moduleName);
 		shiftForceAdapter.receive(null,false);
 		historySyncService.createOrUpdateSync(this.moduleName,
-				connectedApp.getCompany());
+				connectedApp.getCompany(),startSync);
 		return "Shift Init Completed !";
 	}
 }
