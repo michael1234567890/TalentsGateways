@@ -109,7 +109,9 @@ public class TMBalanceForceAdapter extends ForceAdapter<TMBalance> {
 	@Override
 	public void saveListData(List<TMBalance> listData, boolean isNull){
 		for(TMBalance e : listData){
-			TMBalance obj = tmBalanceService.findByExtId(e.getExtId());
+			//TMBalance obj = tmBalanceService.findByExtId(e.getExtId());
+			
+			TMBalance obj = null;
 			
 			if(obj == null){
 				obj = new TMBalance() ;
@@ -137,6 +139,7 @@ public class TMBalanceForceAdapter extends ForceAdapter<TMBalance> {
 			obj.setEndDateFinal(e.getEndDateFinal());
 			obj.setRemark("");
 			obj.setType(e.getType());
+			obj.setLastClaimDate(e.getLastClaimDate());
 			
 //			Employment employment = null;
 //			if(e.getEmploymentExtId() != null){

@@ -219,6 +219,7 @@ public class PyElementHeaderForceAdapter extends ForceAdapter<PayrollElementHead
 			payrollElementHeader.setDeductionPayslip(e.getDeductionPayslip());
 			payrollElementHeader.setAllowancePayslip(e.getAllowancePayslip());
 			payrollElementHeader.setEmploymentExtId(e.getEmploymentExtId());
+			
 			/*
 			Employee employee = null ;
 			if(e.getEmployeeExtId() != null)

@@ -178,7 +178,7 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 		Set<String> extIds = new HashSet<String>();
 		for (Map<String, Object> map : listData) {
 			String extId = (String) map.get("Id");
-			// updateAckSyncStatus(status, extId);
+			//updateAckSyncStatus(status, extId);
 			extIds.add(extId);
 		}
 		

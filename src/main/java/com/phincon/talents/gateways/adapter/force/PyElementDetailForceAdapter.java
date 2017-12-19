@@ -4,12 +4,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.phincon.talents.gateways.model.PayrollElementDetail;
-import com.phincon.talents.gateways.model.PayrollElementHeader;
 import com.phincon.talents.gateways.repository.PayrollElementDetailRepository;
 import com.phincon.talents.gateways.services.AssignmentService;
 import com.phincon.talents.gateways.services.EmployeeService;
@@ -95,7 +92,8 @@ public class PyElementDetailForceAdapter extends ForceAdapter<PayrollElementDeta
 	public void saveListData(List<PayrollElementDetail> listData, boolean isInit){
 		for(PayrollElementDetail e : listData){
 		
-			PayrollElementDetail payrollElementDetail = payrollElementDetailService.findByExtId(e.getExtId());
+			// PayrollElementDetail payrollElementDetail = payrollElementDetailService.findByExtId(e.getExtId());
+			PayrollElementDetail payrollElementDetail = null;
 			
 			if(payrollElementDetail == null){
 				payrollElementDetail = new PayrollElementDetail() ;
