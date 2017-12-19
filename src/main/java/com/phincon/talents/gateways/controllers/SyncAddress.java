@@ -1,5 +1,7 @@
 package com.phincon.talents.gateways.controllers;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,12 +29,12 @@ public class SyncAddress {
 	@RequestMapping(value = "/address/pull", method = RequestMethod.GET)
 	@ResponseBody
 	public String addressPull(){
-		
+		Date startSync = new Date();
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	addressForceAdapter.setConfigure(connectedApp,this.moduleName);
     	
     	addressForceAdapter.receive(null,false);
-    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
        
     	return "Address Pull Completed !";
 	}
@@ -49,11 +51,11 @@ public class SyncAddress {
 	@RequestMapping(value = "/address/init", method = RequestMethod.GET)
 	@ResponseBody
 	public String addressInit(){
-		
+		Date startSync = new Date();
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	addressForceAdapter.setConfigure(connectedApp,this.moduleName);
     	addressForceAdapter.initRetrieve();
-    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
        
     	return "Address Init Completed !";
 	}
