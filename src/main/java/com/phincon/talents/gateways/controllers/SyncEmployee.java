@@ -1,4 +1,6 @@
 package com.phincon.talents.gateways.controllers;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,11 +29,11 @@ public class SyncEmployee {
     @RequestMapping(value="/employee/pull", method = RequestMethod.GET)
     @ResponseBody
 	public String employeePull() {
-
+    	Date startSync = new Date();
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	employeeForceAdapter.setConfigure(connectedApp,this.moduleName);
     	employeeForceAdapter.receive(null,false);
-    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
         return "Employee Pull Completed !";
     }
     
@@ -47,10 +49,11 @@ public class SyncEmployee {
     @RequestMapping(value = "/employee/init", method = RequestMethod.GET)
 	@ResponseBody
 	public String employeeInit(){
+    	Date startSync = new Date();
     	ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
     	employeeForceAdapter.setConfigure(connectedApp,this.moduleName);
     	employeeForceAdapter.initRetrieve();
-    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany());
+    	historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(),startSync);
     	return "Employee Init Completed !";
 	}
     
