@@ -202,6 +202,11 @@ public class TMRequestForceAdapter extends ForceAdapter<TMRequest> {
 				map.put("End_Date_Time__c", request.getAttendanceOutTime());
 				map.put("Start_Date_Time__c", request.getAttendanceInTime());
 				map.put("Transaction_Code__c", request.getTypeDesc());
+				map.put("Start_Date_In_Time__c", request.getStartDateInTime());
+				map.put("End_Date_In_Time__c", request.getEndDateInTime());
+				map.put("Start_Date_Out_Time__c", request.getStartDateOutTime());
+				map.put("End_Date_Out_Time__c", request.getEndDateOutTime());
+				
 				
 				listMap.add(map);
 				

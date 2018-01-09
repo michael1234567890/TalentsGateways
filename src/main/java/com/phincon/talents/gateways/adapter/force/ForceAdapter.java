@@ -252,8 +252,11 @@ public class ForceAdapter<E> implements InterfaceAdapter {
 					
 					int total = getTotal(forceResponse.getItems());
 					int loop = (total/TOTAL_ROW_PER_REQUEST )+ 1;
+//					int loop =1;
 					for(int i =0; i<loop ;i++){
 						String queryGetData = instanceUrl + "/services/apexrest/GetAll?SyncObject=" + this.forceModuleName+"&SyncExtId=null&SyncStart=0&SyncLimit="+TOTAL_ROW_PER_REQUEST;
+//						String queryGetData = instanceUrl + "/services/apexrest/GetAll?SyncObject=" + this.forceModuleName+"&SyncExtId=null&SyncStart=2998&SyncLimit="+TOTAL_ROW_PER_REQUEST;
+						
 						receive(queryGetData,true);
 						sendDataAckSync();
 						
