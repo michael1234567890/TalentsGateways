@@ -43,18 +43,13 @@ public class EmployeePayrollService {
 	}
 	
 	@Transactional
-	public void updateExtIdByUUID(String extId, String uuid){
-		employeePayrollRepository.updateExtIdByUUID(extId, uuid);
-	}
-	
-	@Transactional
-	public void updateAckSyncStatus(boolean status, String extId){
+	public void updateAckSyncStatus(boolean status, String extId) {
 		employeePayrollRepository.updateAckSyncStatus(status, extId);
 	}
 	
+
 	@Transactional
-	public void updateAckSyncStatus(boolean status, Set<String> extId){
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
 		employeePayrollRepository.updateAckSyncStatus(status, extId);
 	}
-	
 }

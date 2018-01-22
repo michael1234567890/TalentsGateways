@@ -17,28 +17,25 @@ public interface EmployeePayrollRepository extends PagingAndSortingRepository<Em
 	@Query
 	EmployeePayroll findByExtId(String extId);
 	
-	@Query("SELECT u FROM EmployeePayroll u WHERE u.extId is NULL")
-	List<EmployeePayroll> findAllExtIdNull();
-	
 	@Query("SELECT u FROM EmployeePayroll u WHERE u.needSync=true")
 	List<EmployeePayroll> findNeedSync();
 	
-	@Modifying
-	@Query("UPDATE EmployeePayroll SET extId = :extId WHERE id = :id")
-	void updateExtIdById(@Param("extId") String extId, @Param("id") Long id);
 	
-	@Modifying
-	@Query("UPDATE EmployeePayroll SET extId = :extId, ackSync = true WHERE uuidStr = :uuid")
-	void updateExtIdByUUID(@Param("extId") String extId, @Param("uuid") String uuid);
-	
-	@Query("SELECT extId, uuidStr FROM EmployeePayroll WHERE ackSync = false AND extId != null")
+	@Query("SELECT extId,uuidStr FROM EmployeePayroll where ackSync=false AND extId != null")
 	List<Object[]> findSendAckSync();
 	
 	@Modifying
-	@Query("UPDATE EmployeePayroll SET ackSync = :ackSync WHERE extId IN :extIdIn")
-	void updateAckSyncStatus(@Param("ackSync") boolean ackSync, @Param("extIdIn") Set<String> extIdIn);
+	@Query("UPDATE EmployeePayroll SET ackSync=:ackSync WHERE extId IN :extIdIn")
+	void updateAckSyncStatus(@Param("ackSync") boolean ackSync,
+			@Param("extIdIn") Set<String> extIdIn);
+
+	@Modifying
+	@Query("UPDATE EmployeePayroll SET ackSync=:ackSync WHERE extId=:extIdIn")
+	void updateAckSyncStatus(@Param("ackSync") boolean ackSync,
+			@Param("extIdIn") String extIdIn);
 	
 	@Modifying
-	@Query("UPDATE EmployeePayroll SET ackSync = :ackSync WHERE extId = :extIdIn")
-	void updateAckSyncStatus(@Param("ackSync") boolean ackSync, @Param("extIdIn") String extIdIn);
+	@Query("UPDATE EmployeePayroll SET needSync=false,ackSync=true, extId=:extId WHERE uuidStr=:uuid")
+	void updateExtIdByUUID(@Param("extId") String extId,
+			@Param("uuid") String uuid);
 }

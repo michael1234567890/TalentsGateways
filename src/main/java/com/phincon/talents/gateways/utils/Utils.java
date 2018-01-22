@@ -23,4 +23,16 @@ public class Utils {
 		}
 		return oldDate;
 	}
+	
+	public static Date converStringToDatetime(String strDate){
+		DateFormat df = new SimpleDateFormat(DB_TIMESTAMP_FORMAT);
+		Date oldDate = null;
+		try {
+			oldDate = df.parse(strDate);
+		}catch (ParseException e){
+			e.printStackTrace();
+		}
+		
+		return oldDate;
+	}
 }

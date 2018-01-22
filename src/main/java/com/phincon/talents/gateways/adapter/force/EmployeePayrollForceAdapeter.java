@@ -6,13 +6,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.phincon.talents.gateways.model.EmployeePayroll;
 import com.phincon.talents.gateways.repository.EmployeePayrollRepository;
 import com.phincon.talents.gateways.services.EmployeePayrollService;
+import com.phincon.talents.gateways.utils.ForceResponseGetId;
 
 @Service
 public class EmployeePayrollForceAdapeter extends ForceAdapter<EmployeePayroll>{
@@ -245,24 +251,17 @@ public class EmployeePayrollForceAdapeter extends ForceAdapter<EmployeePayroll>{
 	}
 	
 	@Override
-	public void saveListData(List<EmployeePayroll> listData, boolean isInit){
+	public void saveListData(List<EmployeePayroll> listData, boolean isAckSend){
 		for(EmployeePayroll e : listData){
-			System.out.print("Employee Payroll : " +e.getExtId());
-			// check is id exist
-			EmployeePayroll empPayroll = employeePayrollService.findByExtId(e.getExtId());
+			// EmployeePayroll empPayroll = employeePayrollService.findByExtId(e.getExtId());
+			EmployeePayroll empPayroll  = null;
 			// if exist doing update
 			if(empPayroll == null){
 				empPayroll = new EmployeePayroll();
 				empPayroll.setCreatedDate(new Date());
 			}
-			if(isInit)
-				empPayroll.setAckSync(false);
-			
-			empPayroll.setModifiedDate(new Date());
 			empPayroll.setExtId(e.getExtId());
 			empPayroll.setCompany(this.companyid);
-			empPayroll.setModifiedBy("Talents Gateway");
-			empPayroll.setCreatedBy("Talents Gateway");
 			empPayroll.setAccountName(e.getAccountName());
 			empPayroll.setAttendanceGroupCode(e.getAttendanceGroupCode());
 			empPayroll.setBankAccount(e.getBankAccount());
@@ -296,7 +295,8 @@ public class EmployeePayrollForceAdapeter extends ForceAdapter<EmployeePayroll>{
 			empPayroll.setTaxStatus(e.getTaxStatus());
 			empPayroll.setTaxType(e.getTaxType());
 			empPayroll.setIsReguler(e.getIsReguler());
-			
+			if(isAckSend)
+				empPayroll.setAckSync(false);
 			employeePayrollService.save(empPayroll);
 			System.out.println("Success Save PyEmpPayroll");
 		}
@@ -355,32 +355,71 @@ public class EmployeePayrollForceAdapeter extends ForceAdapter<EmployeePayroll>{
 		}
 	}
 	
+	
 	@Override
-	public void sendDataAckSync(){
+	public void sendDataAckSync() {
+
 		List<Object[]> listDataAckSync = employeePayrollRepository.findSendAckSync();
-		
-		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
-		if(listDataAckSync != null && listDataAckSync.size() > 0){
-			for(Object[] objects : listDataAckSync){
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("Id", (String) objects[0]);
-				map.put("ExtId__c", (String) objects[1]);
-				listMap.add(map);
-			}
+		sendForceDataAckSync(listDataAckSync);
+	}
+	
+	
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, String extId) {
+		employeePayrollService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateAckSyncStatus(boolean status, Set<String> extId) {
+		employeePayrollService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void updateExtId( List<Map<String, Object>> list) {
+		//System.out.println("ID " + id + " , ExtId " + extId);
+		List<Map<String, Object>> listMapUpdateId = new ArrayList();
+		for (Map<String, Object> map : list) {
+			Map<String, Object> mapUpdateId = new HashMap<String, Object>();
+			UUID uuid = (UUID) map.get("ExtId__c");
+			mapUpdateId.put("ExtId__c", uuid);
+			listMapUpdateId.add(mapUpdateId);
+			
 		}
 		
-		if(listMap.size() > 0)
-			send(listMap, true);
+		// prepare sending update Ext ID
+		Map<String, Object> mapPost = new HashMap<String, Object>();
+		mapPost.put("items", listMapUpdateId);
+		MultiValueMap<String, String> headersPost = new LinkedMultiValueMap<String, String>();
+		headersPost.add("Authorization", "Bearer " + accessToken);
+		headersPost.add("Content-Type", "application/json");
+		String urlQuery = this.instanceUrl + "/services/apexrest/GetIdbyExtId?SyncObject=PYEMPPAYROLL__c";
+		try {
+			HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String, Object>>(
+					mapPost, headersPost);
+			String response = restTemplate.postForObject(urlQuery, request,
+					String.class);
+
+			System.out.println("Reponse Post " + response);
+			
+			ForceResponseGetId forceResponseGetId = (ForceResponseGetId) objectMapper
+					.readValue(response, ForceResponseGetId.class);
+			List<Map<String,Object>> listResponseGetId = forceResponseGetId.getResults();
+			
+			for (Map<String, Object> map : listResponseGetId) {
+				String extId = (String) map.get("Id");
+				String uuid = (String) map.get("ExtId__c");
+				System.out.println("Ext Id "+ extId);
+				System.out.println("uuid " + uuid);
+				employeePayrollRepository.updateExtIdByUUID(extId, uuid);
+			}
+			
+		} catch (HttpClientErrorException ex) {
+			System.out.println("Error HTTP Client " + ex.getMessage());
+		} catch (Exception ex) {
+			System.out.println("Error " + ex.getMessage());
+
+		}
+		
 	}
-	
-	@Override
-	public void updateAckSyncStatus(boolean status, String extId){
-		employeePayrollService.updateAckSyncStatus(status, extId);
-	}
-	
-	@Override
-	public void updateAckSyncStatus(boolean status, Set<String> extId){
-		employeePayrollService.updateAckSyncStatus(status, extId);
-	}
-	
 }
