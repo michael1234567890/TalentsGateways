@@ -1,5 +1,6 @@
 package com.phincon.talents.gateways.services;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -7,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.phincon.talents.gateways.model.Employee;
 import com.phincon.talents.gateways.model.Employment;
 import com.phincon.talents.gateways.repository.EmploymentRepository;
 
@@ -61,4 +63,14 @@ public class EmploymentService {
 	public void updateAckSyncStatus(boolean status, Set<String> extId) {
 		employmentRepository.updateAckSyncStatus(status, extId);
 	}
+	
+	
+	
+	//user provisioning
+	public List<Employment> findByEmployee(Long employeeID){
+		return employmentRepository.findByEmployee(employeeID);
+	}
+	
+	
+	
 }

@@ -43,4 +43,12 @@ public interface EmploymentRepository extends
 	void updateAckSyncStatus(@Param("ackSync") boolean ackSync,
 			@Param("extIdIn") String extIdIn);
 
+
+
+	//user provisioning
+	@Query("SELECT u FROM Employment u WHERE employee_id = :employeeID")
+	List<Employment> findByEmployee(@Param("employeeID") Long employeeID);
+
+	
+
 }

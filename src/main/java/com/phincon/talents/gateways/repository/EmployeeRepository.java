@@ -47,4 +47,18 @@ public interface EmployeeRepository extends
 	void updateExtIdByUUID(@Param("extId") String extId,
 			@Param("uuid") String uuid);
 
+	
+	
+	//user provisioning
+	@Query("    SELECT emp FROM Employment e, Employee emp, Assignment asg WHERE "
+			+ " e.employee = emp.id AND"
+			+ " emp.officeMail IS NOT NULL AND"
+			+ " LOWER(emp.officeMail) != 'hcm.cloud@acc.co.id' AND"
+			+ " LOWER(emp.officeMail) LIKE '%acc.co.id' AND "
+			+ " NOT EXISTS (SELECT 'X' FROM Users u WHERE u.employee_id = e.employee) AND "
+			+ " e.id = asg.employment AND"
+			+ " asg.employeeStatus != 'Bekas Karyawan' AND "
+			+ " asg.employment IS NOT NULL "
+			+ "")
+	List<Employee> findActiveEmployeeNoUser();
 }

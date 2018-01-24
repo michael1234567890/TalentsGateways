@@ -66,5 +66,12 @@ public class EmployeeService {
 	}
 
 
+	
+	
+	//user provisioning
+	@Transactional
+	public List<Employee> findActiveEmployeeNoUser() {
+		return employeeRepository.findActiveEmployeeNoUser();
+	}
 
 }
