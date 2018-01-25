@@ -199,14 +199,17 @@ public class TMRequestForceAdapter extends ForceAdapter<TMRequest> {
 				//Subtitute_To_Employee_No__c	Lookup(Employment) 
 				map.put("Overtime_In__c", request.getOvertimeIn());
 				map.put("Overtime_Out__c", request.getOvertimeOut());
-				map.put("End_Date_Time__c", request.getAttendanceOutTime());
-				map.put("Start_Date_Time__c", request.getAttendanceInTime());
-				map.put("Transaction_Code__c", request.getTypeDesc());
+				map.put("End_Date_Time__c", request.getAttendanceOutTime()); // edit_in_time 
+				map.put("Start_Date_Time__c", request.getAttendanceInTime()); // edit_out_time 
+				map.put("Transaction_Code__c", request.getTypeDesc()); // reason
+				map.put("Request_remark__c", request.getType()); // remark (value nya sama kaya reason sesuai permintaan pak yadi udah bahas bu lidya)
 				map.put("Start_Date_In_Time__c", request.getStartDateInTime());
 				map.put("End_Date_In_Time__c", request.getEndDateInTime());
 				map.put("Start_Date_Out_Time__c", request.getStartDateOutTime());
 				map.put("End_Date_Out_Time__c", request.getEndDateOutTime());
 				
+				if(request.getCategoryType().equalsIgnoreCase("Attendance Edit"));
+					map.put("Process_flag__c", 0);
 				
 				listMap.add(map);
 				

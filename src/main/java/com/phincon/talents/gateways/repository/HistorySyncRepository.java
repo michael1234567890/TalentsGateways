@@ -30,5 +30,8 @@ public interface HistorySyncRepository extends PagingAndSortingRepository<Histor
 	@Query
 	List<HistorySync> findByModuleNameAndCompanyId(String module, Long companyId);
 	
+	@Query
+	HistorySync findByModuleName(String module);
+	
 	
 }

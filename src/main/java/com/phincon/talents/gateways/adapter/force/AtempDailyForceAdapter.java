@@ -1,5 +1,6 @@
 package com.phincon.talents.gateways.adapter.force;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,11 +9,21 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import com.phincon.talents.gateways.model.AtempDaily;
+import com.phincon.talents.gateways.model.HistorySync;
+import com.phincon.talents.gateways.model.SyncSettings;
 import com.phincon.talents.gateways.repository.AtempDailyRepository;
+import com.phincon.talents.gateways.repository.HistorySyncRepository;
+import com.phincon.talents.gateways.repository.SyncSettingsRepository;
 import com.phincon.talents.gateways.services.AtempDailyService;
+import com.phincon.talents.gateways.utils.ForceResponse;
 import com.phincon.talents.gateways.utils.Utils;
 
 @Service
@@ -23,6 +34,12 @@ public class AtempDailyForceAdapter extends ForceAdapter<AtempDaily>{
 	
 	@Autowired
 	AtempDailyRepository atempDailyRepository;
+	
+	@Autowired
+	HistorySyncRepository historySyncRepository;
+	
+	@Autowired
+	SyncSettingsRepository syncSettingsRepository;
 	
 	public AtempDailyForceAdapter(){
 		super();
@@ -366,6 +383,18 @@ public class AtempDailyForceAdapter extends ForceAdapter<AtempDaily>{
 		else 
 			remark = null;
 		
+		String editReason = "";
+		if(mapResult.get("Edit_Reason__c") != null)
+			editReason = (String) mapResult.get("Edit_Reason__c");
+		else 
+			editReason = null;
+		
+		String editRemark = "";
+		if(mapResult.get("Edit_Remark__c") != null)
+			editRemark = (String) mapResult.get("Edit_Remark__c");
+		else 
+			editRemark = null;
+		
 		Integer requestOvertimeIn = null;
 		if(mapResult.get("Req_Ot_In__c") != null)
 			requestOvertimeIn = (Integer) mapResult.get("Req_Ot_In__c");
@@ -552,6 +581,8 @@ public class AtempDailyForceAdapter extends ForceAdapter<AtempDaily>{
 		atempDaily.setQuickOutTime(quickOutTime);
 		atempDaily.setReason(reason);
 		atempDaily.setRemark(remark);
+		atempDaily.setEditReason(editReason);
+		atempDaily.setEditRemark(editRemark);
 		atempDaily.setRequestOvertimeIn(requestOvertimeIn);
 		atempDaily.setRequestOvertimeOut(requestOvertimeOut);
 		atempDaily.setShiftBreakEnd(shiftBreakEnd);
@@ -645,6 +676,8 @@ public class AtempDailyForceAdapter extends ForceAdapter<AtempDaily>{
 			atempDailyDb.setPTSWP(e.getPTSWP());
 			atempDailyDb.setQuickOutTime(e.getQuickOutTime());
 			atempDailyDb.setReason(e.getReason());
+			atempDailyDb.setEditReason(e.getEditReason());
+			atempDailyDb.setEditRemark(e.getEditRemark());
 			atempDailyDb.setRemark(e.getRemark());
 			atempDailyDb.setRequestOvertimeIn(e.getRequestOvertimeIn());
 			atempDailyDb.setRequestOvertimeOut(e.getRequestOvertimeOut());
@@ -778,6 +811,74 @@ public class AtempDailyForceAdapter extends ForceAdapter<AtempDaily>{
 	@Override
 	public void updateAckSyncStatus(boolean status, Set<String> extId) {
 		atempDailyService.updateAckSyncStatus(status, extId);
+	}
+	
+	@Override
+	public void initRetrieve(){
+//		System.out.println("Masuk 1");
+		
+		SyncSettings syncSettings = syncSettingsRepository.findByModuleName(this.forceModuleName);
+		Date today = new Date();
+		Date syncFromDate = syncSettings.getLastSyncDate();
+		Date syncToDate = null;
+		String strsyncToDate = "";
+		try {
+			syncToDate = Utils.addDay(syncFromDate, syncSettings.getSyncDays());
+			strsyncToDate = Utils.convertDateToString(syncToDate);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		Map<String,Object> mapLoginResult = loginForce();
+		if(mapLoginResult != null) {
+			accessToken = (String) mapLoginResult.get("access_token");
+			instanceUrl = (String) mapLoginResult.get("instance_url");
+			tokenType = (String) mapLoginResult.get("token_type");
+			
+			// get count of row
+			String urlQueryGetCount = instanceUrl + "/services/apexrest/GetAll?SyncObject=" + this.forceModuleName+"&SyncCount=true&SyncExtId=null&SyncFromDate="+syncFromDate+"&SyncToDate="+strsyncToDate;
+			System.out.println("request URL : " + urlQueryGetCount);
+			MultiValueMap<String, String> multiValueHeaders = new LinkedMultiValueMap<String, String>();
+			String strAuthorization = tokenType + " " + accessToken;
+			multiValueHeaders.add("Authorization", strAuthorization);
+			HttpEntity<Object> entityQuery = new HttpEntity<Object>(
+					multiValueHeaders);
+			ResponseEntity<String> resultQuery = restTemplate.exchange(urlQueryGetCount,
+					HttpMethod.GET, entityQuery, String.class);
+			try {
+				ForceResponse forceResponse = (ForceResponse) objectMapper
+						.readValue(resultQuery.getBody(), ForceResponse.class);
+				if (forceResponse != null) {
+					
+					int total = getTotal(forceResponse.getItems());
+					int loop = (total/TOTAL_ROW_PER_REQUEST )+ 1;
+//					int loop =1;
+					for(int i =0; i<loop ;i++){
+						String queryGetData = instanceUrl + "/services/apexrest/GetAll?SyncObject=" + this.forceModuleName+"&SyncExtId=null&SyncStart=0&SyncLimit="+TOTAL_ROW_PER_REQUEST+"&SyncFromDate="+syncFromDate+"&SyncToDate="+strsyncToDate;
+//						String queryGetData = instanceUrl + "/services/apexrest/GetAll?SyncObject=" + this.forceModuleName+"&SyncExtId=null&SyncStart=2998&SyncLimit="+TOTAL_ROW_PER_REQUEST;
+						
+						receive(queryGetData,true);
+						sendDataAckSync();
+						
+					}
+					
+					
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			try {
+				syncSettings.setLastSyncDate(Utils.addDay(today, -1));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}else {
+			
+		}
 	}
 	
 }
