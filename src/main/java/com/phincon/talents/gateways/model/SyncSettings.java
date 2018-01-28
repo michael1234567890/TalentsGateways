@@ -15,6 +15,9 @@ public class SyncSettings extends AbstractEntity{
 	@Column(name = "module_name", length=100)
 	private String moduleName;
 	
+	@Column(name = "sync_type", length=100)
+	private String syncType;
+	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "last_sync_date")
 	private Date lastSyncDate;
@@ -89,6 +92,14 @@ public class SyncSettings extends AbstractEntity{
 
 	public void setIsAdhoc(Boolean isAdhoc) {
 		this.isAdhoc = isAdhoc;
+	}
+
+	public String getSyncType() {
+		return syncType;
+	}
+
+	public void setSyncType(String syncType) {
+		this.syncType = syncType;
 	}
 	
 	
