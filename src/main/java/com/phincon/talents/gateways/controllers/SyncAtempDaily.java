@@ -39,4 +39,16 @@ public class SyncAtempDaily {
 		
 		return "AtEmpDaily Init Completed";
 	}
+	
+	@RequestMapping(value = "/atempdaily/update", method = RequestMethod.GET)
+	@ResponseBody
+	public String atempDailyPull(){
+		Date startSync = new Date();
+		ConnectedApp connectedApp = connectedAppService.findByCompany(1L);
+		atempDailyForceAdapter.setConfigure(connectedApp, this.moduleName);
+		atempDailyForceAdapter.receive(null, false);
+		historySyncService.createOrUpdateSync(this.moduleName, connectedApp.getCompany(), startSync);
+		
+		return "AtEmpDaily Pull Completed";
+	}
 }
