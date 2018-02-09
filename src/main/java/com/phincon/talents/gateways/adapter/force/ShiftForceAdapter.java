@@ -75,7 +75,7 @@ public class ShiftForceAdapter extends ForceAdapter<Shift>{
 		
 		Shift shift = new Shift();
 		shift.setExtId(extId);
-		shift.setMasterCode(masterCode);
+		shift.setMasterCode(name);
 		shift.setName(name);
 		shift.setOwnerId(ownerId);
 		shift.setStartDate(startDate);
