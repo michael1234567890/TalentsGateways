@@ -149,7 +149,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 		String interest = (String) mapResult.get("Interest__c");
 		//String isUpdate = (String) mapResult.get("isUpdate__c");
 		String jobTitleName = (String) mapResult.get("Job_Title_Name__c");
-		//String lastEducation = (String) mapResult.get("Last_Education__c");
+		String lastEducation = (String) mapResult.get("Last_Education__c");
 		String strDateLetter = (String) mapResult.get("Letter_Date__c");
 		Date dateLetter = null;
 		if(strDateLetter != null)
@@ -351,6 +351,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 		employee.setWeight(weight);
 		employee.setWorkInterest(workInterest);
 		employee.setNationality(nationality);
+		employee.setLastEducation(lastEducation);
 		return employee;
 	}
 
@@ -471,6 +472,7 @@ public class EmployeeForceAdapter extends ForceAdapter<Employee> {
 			empDb.setWearGlasses(e.getWearGlasses());
 			empDb.setWeight(e.getWeight());
 			empDb.setWorkInterest(e.getWorkInterest());
+			empDb.setLastEducation(e.getLastEducation());
 			employeeService.save(empDb);
 			System.out.println("Success Save Employee");
 		}
