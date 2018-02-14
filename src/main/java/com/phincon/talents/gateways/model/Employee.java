@@ -446,6 +446,9 @@ public class Employee extends AbstractEntity {
 	private Boolean ackSync;
 	
 	
+	@Column(name="last_education", length=100)
+	private String lastEducation;
+	
 	
 	
 //	@ManyToOne(fetch = FetchType.LAZY)
@@ -1298,6 +1301,16 @@ public class Employee extends AbstractEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public String getLastEducation() {
+		return lastEducation;
+	}
+
+	public void setLastEducation(String lastEducation) {
+		this.lastEducation = lastEducation;
+	}
+	
+	
 	
 	
 
