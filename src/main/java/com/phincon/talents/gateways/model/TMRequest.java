@@ -74,6 +74,41 @@ public class TMRequest extends AbstractEntity {
 	@Column(name = "remark", length=255)
 	private String remark;
 	
+	@Column(name = "Bank_Account__c", length=100)
+	private String bankAccount;
+	
+	
+	@Column(name = "Bank_Name__c", length=100)
+	private String bankName;
+	
+	
+	@Column(name = "Account_Name__c", length=100)
+	private String accountName;
+	
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+
+	public String getBankAccount() {
+		return bankAccount;
+	}
+
+	public void setBankAccount(String bankAccount) {
+		this.bankAccount = bankAccount;
+	}
+
 	/*
 	 * '1' Request, '2'  Waiting, '3' Reject, '5' Approved, '6' Cancel
 	 */

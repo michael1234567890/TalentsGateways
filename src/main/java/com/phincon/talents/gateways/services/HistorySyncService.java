@@ -79,7 +79,6 @@ public class HistorySyncService {
 			historySyncObj.setStartSync(startSync);
 			historySyncObj.setEndSync(new Date());
 			historySyncObj.setNextSyncTime(nextSyncTime);
-
 		} else {
 			historySyncObj = new HistorySync();
 			historySyncObj.setCompanyId(companyId);

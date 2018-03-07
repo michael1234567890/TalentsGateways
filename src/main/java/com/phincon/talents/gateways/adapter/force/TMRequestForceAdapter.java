@@ -207,6 +207,9 @@ public class TMRequestForceAdapter extends ForceAdapter<TMRequest> {
 				map.put("End_Date_In_Time__c", request.getEndDateInTime());
 				map.put("Start_Date_Out_Time__c", request.getStartDateOutTime());
 				map.put("End_Date_Out_Time__c", request.getEndDateOutTime());
+				map.put("Bank_Account__c", request.getBankAccount());
+				map.put("Bank_Name__c", request.getBankName());
+				map.put("Account_Name__c", request.getAccountName());
 				
 				if(request.getCategoryType().equalsIgnoreCase("Attendance Edit"));
 					map.put("Process_flag__c", 0);
